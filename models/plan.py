@@ -24,13 +24,13 @@ class Plan:
         self.description = description
         self.geographical_area = geographical_area
         self.start_date = start_date
-        self.camps: set[Camp] = set(camps) or set()
+        self.camps: set[Camp] = set(camps) if camps else set()
 
     def __str__(self):
-        return f'Plan "{self.name}"'
+        return f"Plan '{self.name}'"
 
     def open_camps(self, *camps):
-        self.camps.update(*camps)
+        self.camps.update(camps)
 
     def close_camps(self, *camps):
-        self.camps.difference_update(*camps)
+        self.camps.difference_update(camps)
