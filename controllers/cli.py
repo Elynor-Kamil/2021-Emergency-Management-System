@@ -1,5 +1,9 @@
-import functools
 from cmd import Cmd
+
+from data.users import users_catalog
+from models.admin import Admin
+from models.user import User, require_role
+from models.volunteer import Volunteer
 
 
 class EmsShell(Cmd):
@@ -7,7 +11,7 @@ class EmsShell(Cmd):
     EmsShell is the main class for the command line interface.
     """
     prompt = '> '
-    user = None  # TODO: type hint for user
+    user: User = None
 
     def login(self) -> None:
         """
@@ -18,10 +22,18 @@ class EmsShell(Cmd):
             username = input('Username: ')
             password = input('Password: ')
             try:
-                self.user = 'volunteer'
-                # raise Exception     # TODO: implement login
-            except Exception:
-                print('Invalid username or password, please try again.')
+                self.user = users_catalog[username].login(password)
+                print(f'Welcome {self.user.username}')
+            except (KeyError, User.InvalidPassword):
+                print('Invalid username or password. Please try again.')
+
+    def do_logout(self, args):
+        """
+        Logout the current user, prompting for a new username and password.
+        """
+        self.user = None
+        print('Logged out. Re-log in to continue')
+        self.login()
 
     def preloop(self) -> None:
         """
@@ -31,30 +43,31 @@ class EmsShell(Cmd):
         print('Welcome to EMS, please login.')
         self.login()
 
-    def require_user_type(self, *user_types):
-        def decorator_require_user_type(func):
-            @functools.wraps(func)
-            def wrapper_require_user_type(*args, **kwargs):
-                session = args[0]
-                if session.user in user_types:  # TODO: implement user type checking
-                    return func(*args, **kwargs)
-                else:
-                    print('You do not have permission to perform this action.')
-
-            return wrapper_require_user_type
-
-        return decorator_require_user_type
-
-    @require_user_type('admin', 'volunteer')
+    @require_role(User)
     def do_profile(self, args):
         """
-        Permission control demo.
+        Print user info
         """
-        print(f'user: {self.user}')
+        print(f'username: {self.user.username}'
+              f'role: {self.user.__class__.__name__}')
 
-    @require_user_type('admin')
-    def do_plans(self, args):
+    def do_create(self, args: str):
         """
-        Permission control demo.
+        create methods
         """
-        print('Not implemented')
+        entity, *args = args.split()
+        args = ' '.join(args)
+        if entity == 'volunteer':
+            self.do_create_volunteer(args)
+        else:
+            print(f'Unknown entity {entity}')
+
+    @require_role(Admin)
+    def do_create_volunteer(self, args):
+        """
+        Create a volunteer user
+        """
+        username = input('Username: ')
+        password = input('Password: ')
+        user = Volunteer(username, password)
+        users_catalog[username] = user
