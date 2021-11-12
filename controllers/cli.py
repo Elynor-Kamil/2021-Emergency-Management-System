@@ -71,4 +71,8 @@ class EmsShell(Cmd):
         username = input('Username: ')
         password = input('Password: ')
         user = Volunteer(username, password)
-        users_catalog[username] = user
+        if user in users_catalog.values():
+            print('Username already exists')
+        else:
+            users_catalog[username] = user  # TODO: persist new user
+            print(f'User {username} created')
