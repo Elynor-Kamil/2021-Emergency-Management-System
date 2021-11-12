@@ -1,16 +1,26 @@
 from collections import Iterable
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 
 from models.camp import Camp
 
 
 class Plan:
+    """
+    An emergency plan consisting of camps.
+    """
+
     class EmergencyType(Enum):
+        """
+        Predefined types of emergencies supported by the system.
+        """
         EARTHQUAKE = 'earthquake'
         FIRE = 'fire'
         TSUNAMI = 'tsunami'
         STORM = 'storm'
+        PANDEMIC = 'pandemic'
+        FLOOD = 'flood'
+        OTHER = 'other'
 
     def __init__(self,
                  name: str,
@@ -19,20 +29,36 @@ class Plan:
                  geographical_area: str,
                  start_date: date,
                  camps: Iterable[Camp] = None):
+        """
+        Initialize a new plan.
+        :param name: name of the plan
+        :param emergency_type: type of emergency, one of the predefined types
+        :param description: description of the plan
+        :param geographical_area: geographical area affected by the emergency
+        :param start_date: start date of the plan
+        :param camps: camps to be included in the plan
+        """
         self.name = name
         self.emergency_type = emergency_type
         self.description = description
         self.geographical_area = geographical_area
+        self.__check_start_date(start_date)
         self.start_date = start_date
         self.camps: set[Camp] = set(camps) if camps else set()
 
     def __str__(self):
         return f"Plan '{self.name}'"
 
-    def open_camps(self, *camps):
+    def open_camps(self, *camps: Camp) -> None:
+        """
+        Open one or more camps.
+        """
         self.camps.update(camps)
 
-    def close_camps(self, *camps):
+    def close_camps(self, *camps: Camp) -> None:
+        """
+        Close one or more camps.
+        """
         self.camps.difference_update(camps)
 
     class PastStartDateException(Exception):
