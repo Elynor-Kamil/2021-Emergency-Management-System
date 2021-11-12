@@ -1,7 +1,9 @@
 from cmd import Cmd
 
 from data.users import users_catalog
-from models.user import User
+from models.admin import Admin
+from models.user import User, require_role
+from models.volunteer import Volunteer
 
 
 class EmsShell(Cmd):
@@ -37,6 +39,7 @@ class EmsShell(Cmd):
     def preloop(self) -> None:
         """
         Ask the user to login before entering the shell.
+        :return:
         """
         print('Welcome to EMS, please login.')
         self.login()
@@ -52,6 +55,7 @@ class EmsShell(Cmd):
                 return 'help ' + action_word + '_' + line[len(action_word) + 6:]
         return line
 
+    @require_role(User)
     def do_profile(self, arg):
         """
         Print user info
@@ -59,3 +63,16 @@ class EmsShell(Cmd):
         print(f'username: {self.user.username}\n'
               f'role: {self.user.__class__.__name__}')
 
+    @require_role(Admin)
+    def do_create_volunteer(self, arg):
+        """
+        Create a new volunteer user
+        """
+        username = input('Username: ')
+        password = input('Password: ')
+        user = Volunteer(username, password)
+        if user in users_catalog.values():
+            print('Username already exists')
+        else:
+            users_catalog[username] = user  # TODO: persist new user
+            print(f'User {username} created')
