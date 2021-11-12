@@ -9,7 +9,7 @@ class Refugee:
                  identificationOfCamp: str,
                  medicalCondition: str,
                  numOfFamilyMember: int,
-                 dateOfClosing:None):
+                 dateOfClosing=None):
 
         """
         Initialise a new refugee.
