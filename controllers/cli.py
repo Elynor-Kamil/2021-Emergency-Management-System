@@ -10,7 +10,7 @@ class EmsShell(Cmd):
     """
     EmsShell is the main class for the command line interface.
     """
-    prompt = '> '
+    action_words = ['create']  # prefix words for two-word commands
     user: User = None
 
     def login(self) -> None:
@@ -23,6 +23,7 @@ class EmsShell(Cmd):
             password = input('Password: ')
             try:
                 self.user = users_catalog[username].login(password)
+                self.prompt = f'{self.user.username}> '
                 print(f'Welcome {self.user.username}')
             except (KeyError, User.InvalidPassword):
                 print('Invalid username or password. Please try again.')
@@ -43,29 +44,29 @@ class EmsShell(Cmd):
         print('Welcome to EMS, please login.')
         self.login()
 
+    def precmd(self, line: str) -> str:
+        """
+        Handles two-word commands made with action words
+        """
+        for action_word in self.action_words:
+            if line.startswith(action_word + ' '):
+                return action_word + '_' + line[len(action_word) + 1:]
+            elif line.startswith('help ' + action_word + ' '):
+                return 'help ' + action_word + '_' + line[len(action_word) + 6:]
+        return line
+
     @require_role(User)
-    def do_profile(self, args):
+    def do_profile(self, arg):
         """
         Print user info
         """
-        print(f'username: {self.user.username}'
+        print(f'username: {self.user.username}\n'
               f'role: {self.user.__class__.__name__}')
 
-    def do_create(self, args: str):
-        """
-        create methods
-        """
-        entity, *args = args.split()
-        args = ' '.join(args)
-        if entity == 'volunteer':
-            self.do_create_volunteer(args)
-        else:
-            print(f'Unknown entity {entity}')
-
     @require_role(Admin)
-    def do_create_volunteer(self, args):
+    def do_create_volunteer(self, arg):
         """
-        Create a volunteer user
+        Create a new volunteer user
         """
         username = input('Username: ')
         password = input('Password: ')
