@@ -34,3 +34,19 @@ class Plan:
 
     def close_camps(self, *camps):
         self.camps.difference_update(camps)
+
+    class PastStartDateException(Exception):
+        """
+        Exception raised when start date entered is in the past.
+        """
+
+        def __init__(self):
+            super().__init__('Start date is in the past. Please enter a valid start date.')
+
+    def __check_start_date(self, start_date: date) -> None:
+        """
+        Validate start date. PastStartDateException is raised if start date is in the past.
+        """
+        today = datetime.today().date()
+        if start_date < today:
+            raise self.PastStartDateException()
