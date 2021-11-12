@@ -55,7 +55,6 @@ class EmsShell(Cmd):
                 return 'help ' + action_word + '_' + line[len(action_word) + 6:]
         return line
 
-    @require_role(User)
     def do_profile(self, arg):
         """
         Print user info
