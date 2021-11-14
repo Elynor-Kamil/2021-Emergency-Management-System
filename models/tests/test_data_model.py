@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from models.data_model import Document
+from models.data_model import Document, EmbeddedDocument
 
 
 class DocumentTest(TestCase):
@@ -35,3 +35,26 @@ class DocumentTest(TestCase):
 
     def tearDown(self) -> None:
         self.DemoDocument.delete_all()
+
+
+class EmbeddedDocumentTest(TestCase):
+    class DemoEmbeddedDocument(EmbeddedDocument):
+        def __init__(self, name):
+            self.name = name
+
+    class DemoNestedDocument(Document):
+        def __init__(self, key, children):
+            self.children = children
+
+            super().__init__(key)
+
+    def setUp(self) -> None:
+        children = [
+            self.DemoEmbeddedDocument(name='a'),
+            self.DemoEmbeddedDocument(name='b'),
+            self.DemoEmbeddedDocument(name='c')
+        ]
+        self.DemoNestedDocument(key=1, children=children)
+
+    def tearDown(self) -> None:
+        self.DemoNestedDocument.delete_all()
