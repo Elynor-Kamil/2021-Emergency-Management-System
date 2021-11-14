@@ -40,13 +40,16 @@ class Document(BaseModel):
     def key(self):
         return self.__key
 
+    @classmethod
+    def reload(cls):
+        try:
+            cls.__objects = pickle.load(open(f'{cls.persistence_path}', 'rb'))
+        except FileNotFoundError:
+            cls.__objects = {}
+
     def save(self):
         self.__class__.__objects[self.key] = self
         os.makedirs(os.path.dirname(self.persistence_path), exist_ok=True)
-        pickle.dump(self.__class__.__objects, open(self.persistence_path, 'wb'))
-
-    def delete(self):
-        del self.__class__.__objects[self.key]
         pickle.dump(self.__class__.__objects, open(self.persistence_path, 'wb'))
 
     @classmethod
@@ -57,12 +60,9 @@ class Document(BaseModel):
     def all(cls):
         return cls.__objects.values()
 
-    @classmethod
-    def reload(cls):
-        try:
-            cls.__objects = pickle.load(open(f'{cls.persistence_path}', 'rb'))
-        except FileNotFoundError:
-            cls.__objects = {}
+    def delete(self):
+        del self.__class__.__objects[self.key]
+        pickle.dump(self.__class__.__objects, open(self.persistence_path, 'wb'))
 
     @classmethod
     def delete_all(cls):
@@ -70,9 +70,10 @@ class Document(BaseModel):
             os.remove(cls.persistence_path)
         except FileNotFoundError:
             pass
+        cls.__objects = {}
 
-    def __del__(self):
-        self.delete()
+    def __str__(self):
+        return f'{self.__class__.__name__}({self.key})'
 
 
 class EmbeddedDocument(BaseModel):
