@@ -20,12 +20,13 @@ class Refugee:
         :param start date of refugee family
         :param closing date of refugee family
         """
+
         self.name = name
-        self.numOfFamilyMember = numOfFamilyMember + 1
-        self.camp =camp
+        self.numOfFamilyMember = self.__checkNumOfFamilyMember(numOfFamilyMember)
+        self.camp = camp
         self.medicalCondition = medicalCondition
         self.dateOfCreation = datetime.today().date()
-        self.dateOfClosing = dateOfClosing
+        self.dateOfClosing = self.__checkDateOfClosing(dateOfClosing)
 
     def formatName(self, name):
         """
@@ -34,13 +35,13 @@ class Refugee:
         self.name = name
         #error handling if invalid name is inputed
 
-    def formatNumOfFamilyMember(self, numOfFamilyMember):
+    def __checkNumOfFamilyMember(self, numOfFamilyMember):
         """
         format number of family member
         """
-        if numOfFamilyMember is not int or numOfFamilyMember < 0:
-            raise self.InvalidNumIfFamilyMemberException()
-        self.numOfFamilyMember = numOfFamilyMember + 1
+        if not isinstance(numOfFamilyMember, int) or numOfFamilyMember < 0:
+            raise self.InvalidNumOfFamilyMemberException()
+        return numOfFamilyMember + 1
 
     def formatCamp(self, newCamp):
         """
@@ -56,14 +57,17 @@ class Refugee:
         """
         self.medicalCondition = medicalCondition
 
-    def formatDateOfClosing(self, dateOfClosing: date): #for removing and archive
+    def __checkDateOfClosing(self, dateOfClosing: date): #for removing and archive
         """
         format closing date of refugee family
         """
         today = datetime.today().date()
         if today >= dateOfClosing:
             raise self.InvalidClosingDateException()
-        self.dateOfClosing = dateOfClosing
+        elif dateOfClosing == None:
+            return dateOfClosing
+        else:
+            return dateOfClosing
 
 
     def __str__(self):
@@ -97,18 +101,5 @@ class Refugee:
         """
         def __init__(self):
             super().__init__(f"Invalid closing date. Closing date must be after current date.")
-
-
-
-
-
-
-
-
-
-r = Refugee("Chan", "London", "severe", 3, date(2022,3,4))
-r.formatDateOfClosing(date(2020, 4, 5))
-print(r.__str__())
-
 
 
