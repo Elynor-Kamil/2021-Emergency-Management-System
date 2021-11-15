@@ -9,7 +9,7 @@ class Refugee:
                  identificationOfCamp: str,
                  medicalCondition: str,
                  numOfFamilyMember: int,
-                 dateOfClosing=None):
+                 dateOfClosing: date):
 
         """
         Initialise a new refugee.
@@ -53,14 +53,14 @@ class Refugee:
         """
         self.medicalCondition = medicalCondition
 
-    def formatDateOfClosing(self, closingDate: date): #for removing and archive
+    def formatDateOfClosing(self, dateOfClosing: date): #for removing and archive
         """
         format closing date of refugee family
         """
-        if datetime.today().date() < closingDate:
-            self.dateOfClosing = closingDate
-        else:
-            pass #raise InvalidDateError
+        today = datetime.today().date()
+        if today > dateOfClosing:
+            raise self.InvalidDateException()
+        return dateOfClosing
 
 
     def __str__(self):
