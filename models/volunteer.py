@@ -1,66 +1,57 @@
 import datetime
+from models import camp
+
 
 class Volunteer:
     """
     A class used to represent a volunteer.
-
-    Attributes
-    ----------
-    name : str
-        the name of the volunteer
-    phone : str
-        the phone number of the volunteer
-    volunteercamp : string
-        the camp that the volunteer belongs to
-    availability: boolean
-        whether the is available to be involved in a new plan
-    creationdate : date
-        the date when the volunteer account is created
-
-
-    Methods
-    -------
-    changeVolunteerName(newName)
-        change the name of the volunteer and check if the new name is valid
-    changeVolunteerName(newPhone)
-        change the phone number of the volunteer
     """
 
-    def __init__(self,
-                 name: str,
+    def __init__(self, name: str,
                  phone: str,
                  volunteercamp: list,
                  availability = True):
+        """
+           Initialize a new volunteer.
+           :param name: the name of the volunteer
+           :param phone: the phone number of the volunteer
+           :param volunteercamp: the camp that the volunteer belongs to
+           :param availability:  whether the volunteer is available to join a new emergency plan
+           :param creationdate: the date that this volunteer is created
+           """
         currentdate = datetime.datetime.now()
 
-
-        self.name = name
-        self.phone = phone
+        self.name = self.__checkVolunteerName(name)
+        self.phone = self.__checkVolunteerPhone(phone)
         self.camp = volunteercamp
         self.availability = availability
         self.creationdate = currentdate.date()
 
 
-    def changeVolunteerName(self, newName):
-        if len(newName) > 1:
-            self.name = newName
-        else:
-            pass #ask to re-enter valid name
+    def __checkVolunteerName(self, name):
+        if len(name) <= 1:
+            raise self.InvalidNameException(name)
+        return name
 
-    def changeVolunteerPhone(self,newPhone):
-        self.phone = newPhone
+
+
+    def __checkVolunteerPhone(self, phone):
+        if phone[0] != "+":
+            raise self.InvalidPhoneException("Phone should include country code and be in format \"+XXXXXXXXXXX\".")
+        elif len(phone) < 5:
+            raise self.InvalidPhoneException("The phone number is too short.")
+        return phone
+
+    def changeCamp(self, newcamp):
+        if newcamp not in camp.Camp.camps:
+            raise self.InvalidCampException(newcamp)
+        self.camp = newcamp
+
 
     def changeAvailability(self):
-        self.availability = False
+        self.availability = not (self.availability)
 
-    def changeCamp(self, newCamp):
-        self.camp = newCamp
-        #if newCamp not in self.camp:
-        #    self.camp.append(newCamp)
 
-    def removeCamp(self, camp):
-        if camp in self.camp:
-            self.camp.remove(camp)
 
     def __str__(self):
         return f"Volunteer {self.name} belongs to camp {self.camp}.\n" \
@@ -68,32 +59,27 @@ class Volunteer:
                f"Availability: {self.availability}\n" \
                f"Joined date: {self.creationdate}\n"
 
-if __name__ == "__main__":
 
-    volunteerA = Volunteer(name="Vanessa", phone="+4477123456", volunteercamp="UCL")
-    print(volunteerA)
-    volunteerA.changeCamp("UCL2")
-    print(volunteerA)
+    class InvalidNameException(Exception):
+        """
+         Raise exception when the name entered is too short.
+        """
+        def __init__(self, name):
+            super().__init__(f"Invalid name: {name}. Name should be more than 1 character.")
 
-def createVolunteerAccount():
-    volunteerAccount_file = open('volunteerAccount.txt', 'a')
-    volunteerAccount_dict = {}
-    volunteerAccount_dict_newUsername = input('New Volunteer Username: ')
-    volunteerAccount_dict[volunteerAccount_dict_newUsername] = input('New Volunteer Password: ')
-    for k, v in volunteerAccount_dict.items():
-        volunteerAccount_file.write(str(k)+' '+str(v)+'\n')
-    volunteerAccount_file.close()
-    volunteerAccount_file = open('volunteerAccount.txt', 'r')
-    for line in volunteerAccount_file:
-        line = line.strip()
-        k = line.split(' ')[0]
-        v = line.split(' ')[1]
-        volunteerAccount_dict[k] = v
-    volunteerAccount_file.close()
-    name = input('Volunteer Name: ')
-    phone = input('Volunteer Phone Number: ')
-    volunteer = Volunteer(name, phone, volunteercamp="UCL", availability=True)
-    print(volunteer)
+    class InvalidPhoneException(Exception):
+        """
+         Raise exception when the phone number is invalid (length, no country code).
+        """
+        def __init__(self, msg):
+            super().__init__(msg)
 
-if __name__ == "__main__":
-    createVolunteerAccount()
+    class InvalidCampException(Exception):
+        """
+         Raise exception when the camp entered does not exist.
+        """
+        def __init__(self, camp):
+            super().__init__(f"Camp {camp} does not exist.")
+
+
+
