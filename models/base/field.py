@@ -11,7 +11,7 @@ class Field:
             super().__init__(f"Primary key {field_name} not set")
 
     class MultiplePrimaryKeyError(Exception):
-        def __init__(self, field_name):
+        def __init__(self):
             super().__init__(f"Only one primary key is allowed")
 
     def __init__(self, primary_key=False):

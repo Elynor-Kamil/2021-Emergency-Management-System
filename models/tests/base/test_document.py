@@ -4,6 +4,14 @@ from models.base.document import Document, EmbeddedDocument
 from models.base.field import Field
 
 
+class MetaDocumentTest(TestCase):
+    def test_multiple_primary_key(self):
+        with self.assertRaises(Field.MultiplePrimaryKeyError):
+            class DemoDocument(Document):
+                id = Field(primary_key=True)
+                name = Field(primary_key=True)
+
+
 class BasicDocumentTest(TestCase):
     class DemoDocument(Document):
         name = Field(primary_key=True)
