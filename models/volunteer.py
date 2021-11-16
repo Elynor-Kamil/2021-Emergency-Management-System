@@ -68,12 +68,7 @@ class Volunteer:
                f"Availability: {self.availability}\n" \
                f"Joined date: {self.creationdate}\n"
 
-if __name__ == "__main__":
 
-    volunteerA = Volunteer(name="Vanessa", phone="+4477123456", volunteercamp="UCL")
-    print(volunteerA)
-    volunteerA.changeCamp("UCL2")
-    print(volunteerA)
 
 def createVolunteerAccount():
     volunteerAccount_file = open('volunteerAccount.txt', 'a')
