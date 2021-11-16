@@ -5,7 +5,8 @@ class Refugee:
     A class to represent a refugee family.
     """
     def __init__(self,
-                 name: str,
+                 firstname: str,
+                 lastname:str,
                  camp: str,
                  medicalCondition: str,
                  numOfFamilyMember: int,
@@ -21,18 +22,25 @@ class Refugee:
         :param closing date of refugee family
         """
 
-        self.name = name
+        self.name = self.__checkAndFormatName(firstname, lastname)
         self.numOfFamilyMember = self.__checkNumOfFamilyMember(numOfFamilyMember)
         self.camp = camp
         self.medicalCondition = medicalCondition
         self.dateOfCreation = datetime.today().date()
         self.dateOfClosing = self.__checkDateOfClosing(dateOfClosing)
 
-    def formatName(self, name):
+
+    def __checkAndFormatName(self, firstname, lastname):
         """
         format name to a new name
         """
-        self.name = name
+        if not isinstance(firstname, str) or not isinstance(lastname, str):
+            raise self.InvalidNameException()
+        elif not firstname.isalpha() or not lastname.isalpha():
+            raise self.InvalidNameException()
+        else:
+            fullname = firstname + " " + lastname
+            return fullname
         #error handling if invalid name is inputed
 
     def __checkNumOfFamilyMember(self, numOfFamilyMember):
@@ -102,4 +110,9 @@ class Refugee:
         def __init__(self):
             super().__init__(f"Invalid closing date. Closing date must be after current date.")
 
-
+    class InvalidNameException(Exception):
+        """
+        Raise exception when the firstname or/and lastname is invalid.
+        """
+        def __init__(self):
+            super().__init__(f"Invalid name. The firstname and lastname must be in alphabet.")
