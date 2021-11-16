@@ -18,8 +18,21 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1))
+                    start_date=date(2999, 1, 1),
+                    camps=[Camp('TestCamp')])
         self.assertEqual("Plan 'My Plan'", str(plan))
+
+    def test_missing_camps(self):
+        """
+        Test that missing camps are rejected
+        """
+        with self.assertRaises(Plan.MissingCampsError):
+            Plan('My Plan',
+                 emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                 description='Test emergency plan',
+                 geographical_area='',
+                 start_date=date(2999, 1, 1),
+                 camps=[])
 
     def test_open_camps(self):
         """
@@ -33,8 +46,9 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1))
-        plan.open_camps(camp_1, camp_2, camp_3)
+                    start_date=date(2999, 1, 1),
+                    camps=[camp_1])
+        plan.open_camps(camp_2, camp_3)
         self.assertEqual({camp_1, camp_2, camp_3}, plan.camps)
         plan.open_camps(camp_3, camp_4)
         self.assertEqual({camp_1, camp_2, camp_3, camp_4}, plan.camps)
@@ -51,8 +65,8 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1))
-        plan.open_camps(camp_1, camp_2, camp_3)
+                    start_date=date(2999, 1, 1),
+                    camps=[camp_1, camp_2, camp_3])
         plan.close_camps(camp_3)
         self.assertEqual({camp_1, camp_2}, plan.camps)
         plan.close_camps(camp_2, camp_4)
@@ -67,4 +81,5 @@ class PlanTest(unittest.TestCase):
                  emergency_type=Plan.EmergencyType.EARTHQUAKE,
                  description='Test emergency plan',
                  geographical_area='',
-                 start_date=date(2000, 1, 1))
+                 start_date=date(2000, 1, 1),
+                 camps=[Camp('TestCamp')])

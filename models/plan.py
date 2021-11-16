@@ -22,13 +22,22 @@ class Plan:
         FLOOD = 'flood'
         OTHER = 'other'
 
+    class MissingCampsError(Exception):
+        """
+        It is mandatory to supply at least one camp when you are creating an emergency plan.
+        When no camps are provided, this exception will be raised.
+        """
+
+        def __init__(self):
+            super().__init__("It is mandatory to provide at least one camp")
+
     def __init__(self,
                  name: str,
                  emergency_type: EmergencyType,
                  description: str,
                  geographical_area: str,
                  start_date: date,
-                 camps: Iterable[Camp] = None):
+                 camps: Iterable[Camp]):
         """
         Initialize a new plan.
         :param name: name of the plan
@@ -44,7 +53,9 @@ class Plan:
         self.geographical_area = geographical_area
         self.__check_start_date(start_date)
         self.start_date = start_date
-        self.camps: set[Camp] = set(camps) if camps else set()
+        if not camps:
+            raise self.MissingCampsError()
+        self.camps: set[Camp] = set(camps)
 
     def __str__(self):
         return f"Plan '{self.name}'"
