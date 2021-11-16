@@ -7,13 +7,15 @@ class Volunteer:
     A class used to represent a volunteer.
     """
 
-    def __init__(self, name: str,
+    def __init__(self, firstname: str,
+                 lastname: str,
                  phone: str,
                  volunteercamp: list,
                  availability = True):
         """
            Initialize a new volunteer.
-           :param name: the name of the volunteer
+           :param firstname: the firstname of the volunteer
+           :param lastname: the lastname of the volunteer
            :param phone: the phone number of the volunteer
            :param volunteercamp: the camp that the volunteer belongs to
            :param availability:  whether the volunteer is available to join a new emergency plan
@@ -28,12 +30,13 @@ class Volunteer:
         self.creationdate = currentdate.date()
 
 
-    def __checkVolunteerName(self, name):
-        if len(name) <= 1:
-            raise self.InvalidNameException(name)
+    def __checkVolunteerName(self, firstname):
+        if len(firstname) <= 1:
+            raise self.InvalidFirstnameException(name)
+        elif len(lastname) <= 1:
+            raise self.InvalidLastnameException(name)
+        name = f"({firstname}+' '+{lastname})
         return name
-
-
 
     def __checkVolunteerPhone(self, phone):
         if phone[0] != "+":
@@ -60,12 +63,19 @@ class Volunteer:
                f"Joined date: {self.creationdate}\n"
 
 
-    class InvalidNameException(Exception):
+    class InvalidFirstnameException(Exception):
         """
-         Raise exception when the name entered is too short.
+         Raise exception when the firstname entered is too short.
         """
-        def __init__(self, name):
-            super().__init__(f"Invalid name: {name}. Name should be more than 1 character.")
+        def __init__(self, firstname):
+            super().__init__(f"Invalid name: {firstname}. First name should be more than 1 character.")
+
+    class InvalidLastnameException(Exception):
+        """
+         Raise exception when the lastname entered is too short.
+        """
+        def __init__(self, lastname):
+            super().__init__(f"Invalid name: {lastname}. Last name should be more than 1 character.")
 
     class InvalidPhoneException(Exception):
         """
