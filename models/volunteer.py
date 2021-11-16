@@ -30,11 +30,11 @@ class Volunteer:
         self.creationdate = currentdate.date()
 
 
-    def __checkVolunteerName(self, firstname):
+    def __checkVolunteerName(self, firstname, lastname):
         if len(firstname) <= 1:
-            raise self.InvalidFirstnameException(name)
+            raise self.InvalidFirstnameException(firstname)
         elif len(lastname) <= 1:
-            raise self.InvalidLastnameException(name)
+            raise self.InvalidLastnameException(lastname)
         name = f"({firstname}+' '+{lastname})
         return name
 
