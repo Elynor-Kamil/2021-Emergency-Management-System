@@ -35,7 +35,7 @@ class Volunteer:
             raise self.InvalidFirstnameException(firstname)
         elif len(lastname) <= 1:
             raise self.InvalidLastnameException(lastname)
-        name = f"({firstname}+' '+{lastname})
+        name = f"({firstname}+' '+{lastname})"
         return name
 
     def __checkVolunteerPhone(self, phone):
