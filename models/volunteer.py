@@ -23,7 +23,7 @@ class Volunteer:
            """
         currentdate = datetime.datetime.now()
 
-        self.name = self.__checkVolunteerName(name)
+        self.name = self.__checkVolunteerName(firstname, lastname)
         self.phone = self.__checkVolunteerPhone(phone)
         self.camp = volunteercamp
         self.availability = availability
