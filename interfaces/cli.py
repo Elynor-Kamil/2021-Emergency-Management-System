@@ -39,7 +39,6 @@ class EmsShell(Cmd):
     def preloop(self) -> None:
         """
         Ask the user to login before entering the shell.
-        :return:
         """
         print('Welcome to EMS, please login.')
         self.login()

@@ -15,14 +15,14 @@ class UserTest(TestCase):
 
     def test_login_fail(self):
         user = User(username='test_username', password='test_password')
-        with self.assertRaises(User.InvalidPassword) as context:
+        with self.assertRaises(User.InvalidPassword):
             user.login('invalid_password')
 
     def test_update_password(self):
         user = User(username='test_username', password='test_password')
         user.update_password('new_password')
         self.assertEqual(user.login('new_password').username, 'test_username')
-        with self.assertRaises(User.InvalidPassword) as context:
+        with self.assertRaises(User.InvalidPassword):
             user.login('test_password')
 
     class MockSession:
