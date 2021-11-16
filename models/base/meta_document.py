@@ -1,9 +1,11 @@
+import abc
+
 from models.base.field import Field
 
 
-class MetaDocument(type):
+class MetaDocument(abc.ABCMeta):
 
-    def __new__(typ, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
 
         # Discover document fields
         doc_fields = {}
@@ -18,4 +20,7 @@ class MetaDocument(type):
                 else:
                     primary_key = attr_name
             doc_fields[attr_name] = attr_value
+        attrs["_primary_key"] = primary_key
         attrs["_fields"] = doc_fields
+
+        return super().__new__(mcs, name, bases, attrs)

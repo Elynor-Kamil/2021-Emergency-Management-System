@@ -1,18 +1,33 @@
 from unittest import TestCase
 
-from models.data_model import Document, EmbeddedDocument
+from models.base.document import Document, EmbeddedDocument
+from models.base.field import Field
 
 
-class DocumentTest(TestCase):
+class BasicDocumentTest(TestCase):
     class DemoDocument(Document):
-        def __init__(self, key, name):
-            self.name = name
-            super().__init__(key)
+        name = Field(primary_key=True)
+        password = Field()
+
+    def test_create_document(self):
+        doc = self.DemoDocument(name='test', password='test')
+        self.assertEqual(doc.name, 'test')
+        self.assertEqual(doc.password, 'test')
+
+    def test_compulsory_primary_key(self):
+        with self.assertRaises(Field.PrimaryKeyNotSetError):
+            self.DemoDocument(password='test')
+
+
+class DocumentPersistenceTest(TestCase):
+    class DemoDocument(Document):
+        id = Field(primary_key=True)
+        name = Field()
 
     def setUp(self) -> None:
-        self.DemoDocument(key=1, name='a')
-        self.DemoDocument(key=2, name='b')
-        self.DemoDocument(key=3, name='c')
+        self.DemoDocument(id=1, name='a')
+        self.DemoDocument(id=2, name='b')
+        self.DemoDocument(id=3, name='c')
 
     def test_persistence(self):
         self.DemoDocument.reload()
@@ -25,7 +40,7 @@ class DocumentTest(TestCase):
         self.assertIsNone(document)
 
     def test_delete(self):
-        self.DemoDocument(key=4, name='d')
+        self.DemoDocument(id=4, name='d')
         document = self.DemoDocument.find(4)
         self.assertIsNotNone(document)
         document.delete()
@@ -39,14 +54,10 @@ class DocumentTest(TestCase):
 
 class EmbeddedDocumentTest(TestCase):
     class DemoEmbeddedDocument(EmbeddedDocument):
-        def __init__(self, name):
-            self.name = name
+        name = Field()
 
     class DemoNestedDocument(Document):
-        def __init__(self, key, children):
-            self.children = children
-
-            super().__init__(key)
+        children = Field()  # TODO: reference field list class
 
     def setUp(self) -> None:
         children = [
@@ -54,7 +65,7 @@ class EmbeddedDocumentTest(TestCase):
             self.DemoEmbeddedDocument(name='b'),
             self.DemoEmbeddedDocument(name='c')
         ]
-        self.DemoNestedDocument(key=1, children=children)
+        document = self.DemoNestedDocument(key=1, children=children)
 
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()
