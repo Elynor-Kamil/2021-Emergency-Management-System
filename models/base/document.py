@@ -15,12 +15,12 @@ def persist(func):
     return wrapper_persist
 
 
-class BaseModel(ABC):
-    _data = {}
+class BaseModel(ABC, metaclass=MetaDocument):
     _initialised = False
 
     @persist
     def __init__(self, **kwargs):
+        self._data = {}
         for field_name, field in self._fields.items():
             if field.primary_key and field_name not in kwargs:
                 raise Field.PrimaryKeyNotSetError(field_name)
@@ -32,7 +32,7 @@ class BaseModel(ABC):
         pass
 
 
-class Document(BaseModel, metaclass=MetaDocument):
+class Document(BaseModel):
     __key = None
 
     @classmethod
@@ -47,7 +47,7 @@ class Document(BaseModel, metaclass=MetaDocument):
 
     @property
     def key(self):
-        return self.__key
+        return getattr(self, self._primary_key)
 
     @classmethod
     def reload(cls):
