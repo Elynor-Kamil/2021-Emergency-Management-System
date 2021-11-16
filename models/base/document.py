@@ -2,6 +2,9 @@ import os
 import pickle
 from abc import ABC, abstractmethod
 
+from models.base.field import Field
+from models.base.meta_document import MetaDocument
+
 
 def persist(func):
     def wrapper_persist(*args, **kwargs):
@@ -13,13 +16,23 @@ def persist(func):
 
 
 class BaseModel(ABC):
+    _data = {}
+    _initialised = False
+
+    @persist
+    def __init__(self, **kwargs):
+        for field_name, field in self._fields.items():
+            if field.primary_key and field_name not in kwargs:
+                raise Field.PrimaryKeyNotSetError(field_name)
+            self.__setattr__(field_name, kwargs.get(field_name))
+        self._initialised = True
 
     @abstractmethod
     def save(self):
         pass
 
 
-class Document(BaseModel):
+class Document(BaseModel, metaclass=MetaDocument):
     __key = None
 
     @classmethod
@@ -31,10 +44,6 @@ class Document(BaseModel):
         __objects = pickle.load(open(f'{persistence_path}.p', 'rb'))
     except FileNotFoundError:
         __objects = {}
-
-    @persist
-    def __init__(self, key):
-        self.__key = key
 
     @property
     def key(self):
@@ -76,7 +85,7 @@ class Document(BaseModel):
         return f'{self.__class__.__name__}({self.key})'
 
 
-class EmbeddedDocument(BaseModel):
+class EmbeddedDocument(BaseModel, metaclass=MetaDocument):
     parent = set()
 
     def save(self):
