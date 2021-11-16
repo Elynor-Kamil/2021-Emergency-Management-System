@@ -8,15 +8,19 @@ from models.base.meta_document import MetaDocument
 
 def persist(func):
     def wrapper_persist(*args, **kwargs):
-        instance: BaseModel = args[0]
+        instance: BaseDocument = args[0]
         func(*args, **kwargs)
         instance.save()
 
     return wrapper_persist
 
 
-class BaseModel(ABC, metaclass=MetaDocument):
+class BaseDocument(ABC, metaclass=MetaDocument):
     _initialised = False
+
+    class PrimaryKeyNotDefinedError(Exception):
+        def __init__(self, document):
+            super().__init__(f"Primary key not defined for {document.__class__.__name__}")
 
     @persist
     def __init__(self, **kwargs):
@@ -26,14 +30,34 @@ class BaseModel(ABC, metaclass=MetaDocument):
                 raise Field.PrimaryKeyNotSetError(field_name)
             self.__setattr__(field_name, kwargs.get(field_name))
         self._initialised = True
+        self._referrers = []
 
     @abstractmethod
     def save(self):
         pass
 
+    @property
+    def key(self):
+        return getattr(self, self._primary_key)
 
-class Document(BaseModel):
-    __key = None
+    def __eq__(self, other):
+        return self._data == other._data
+
+    def add_referrer(self, referer):
+        if referer not in self._referrers:
+            self._referrers.append(referer)
+
+    def remove_referrer(self, referer):
+        if referer in self._referrers:
+            self._referrers.remove(referer)
+
+
+class Document(BaseDocument):
+
+    def __init__(self, **kwargs):
+        if not self._primary_key:
+            raise BaseDocument.PrimaryKeyNotDefinedError(self)
+        super().__init__(**kwargs)
 
     @classmethod
     @property
@@ -44,10 +68,6 @@ class Document(BaseModel):
         __objects = pickle.load(open(f'{persistence_path}.p', 'rb'))
     except FileNotFoundError:
         __objects = {}
-
-    @property
-    def key(self):
-        return getattr(self, self._primary_key)
 
     @classmethod
     def reload(cls):
@@ -85,7 +105,7 @@ class Document(BaseModel):
         return f'{self.__class__.__name__}({self.key})'
 
 
-class EmbeddedDocument(BaseModel, metaclass=MetaDocument):
+class EmbeddedDocument(BaseDocument, metaclass=MetaDocument):
     parent = set()
 
     def save(self):

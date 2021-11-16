@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from models.base.document import Document, EmbeddedDocument
-from models.base.field import Field
+from models.base.field import Field, ReferenceDocumentSetField
 
 
 class MetaDocumentTest(TestCase):
@@ -65,7 +65,8 @@ class EmbeddedDocumentTest(TestCase):
         name = Field()
 
     class DemoNestedDocument(Document):
-        children = Field()  # TODO: reference field list class
+        name = Field(primary_key=True)
+        children = ReferenceDocumentSetField()  # TODO: reference field list class
 
     def setUp(self) -> None:
         children = [
@@ -73,7 +74,18 @@ class EmbeddedDocumentTest(TestCase):
             self.DemoEmbeddedDocument(name='b'),
             self.DemoEmbeddedDocument(name='c')
         ]
-        document = self.DemoNestedDocument(key=1, children=children)
+        self.document = self.DemoNestedDocument(name='test', children=children)
+
+    def test_retrieval(self):
+        self.assertEqual(3, len(self.document.children))
+
+    def test_add(self):
+        self.document.children.add(self.DemoEmbeddedDocument(name='d'))
+        self.assertEqual(4, len(self.document.children))
+
+    def test_remove(self):
+        self.document.children.remove(self.DemoEmbeddedDocument(name='a'))
+        self.assertFalse(self.DemoEmbeddedDocument(name='a') in self.document.children)
 
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()
