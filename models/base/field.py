@@ -1,4 +1,4 @@
-from typing import Iterable, Sequence
+from typing import Sequence
 
 
 class Field:
@@ -8,14 +8,6 @@ class Field:
     class PrimaryKeyMutationError(Exception):
         def __init__(self):
             super().__init__("Primary key cannot be mutated")
-
-    class PrimaryKeyNotSetError(Exception):
-        def __init__(self, field_name):
-            super().__init__(f"Primary key {field_name} not set")
-
-    class MultiplePrimaryKeyError(Exception):
-        def __init__(self):
-            super().__init__(f"Only one primary key is allowed")
 
     class InvalidValueError(Exception):
         def __init__(self, value):
