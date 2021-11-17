@@ -2,7 +2,7 @@ import os
 import pickle
 from abc import ABC, abstractmethod
 
-from models.base.field import Field
+from models.base.field import Field, ReferenceDocumentSetField
 from models.base.meta_document import MetaDocument
 
 
@@ -51,6 +51,22 @@ class BaseDocument(ABC, metaclass=MetaDocument):
         if referer in self._referrers:
             self._referrers.remove(referer)
 
+    def unlink_referee(self, referee):
+        for field_name, field in self._fields.items():
+            if isinstance(field, ReferenceDocumentSetField):
+                documents = getattr(self, field_name)
+                if referee in documents:
+                    documents.remove(referee)
+        for referrer in self._referrers:
+            referrer.unlink_referee(referee)
+
+    def delete(self):
+        for referrer in self._referrers:
+            referrer.unlink_referee(self)
+
+    def __del__(self):
+        self.delete()
+
 
 class Document(BaseDocument):
 
@@ -92,6 +108,7 @@ class Document(BaseDocument):
     def delete(self):
         del self.__class__.__objects[self.key]
         pickle.dump(self.__class__.__objects, open(self.persistence_path, 'wb'))
+        super().delete()
 
     @classmethod
     def delete_all(cls):
