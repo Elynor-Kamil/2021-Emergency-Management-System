@@ -60,8 +60,8 @@ class DocumentPersistenceTest(TestCase):
         self.DemoIndexedDocument.delete_all()
 
 
-class EmbeddedDocumentTest(TestCase):
-    class DemoEmbeddedDocument(Document):
+class DocumentReferenceTest(TestCase):
+    class DemoDocument(Document):
         name = Field()
 
     class DemoNestedDocument(IndexedDocument):
@@ -70,9 +70,9 @@ class EmbeddedDocumentTest(TestCase):
 
     def setUp(self) -> None:
         children = [
-            self.DemoEmbeddedDocument(name='a'),
-            self.DemoEmbeddedDocument(name='b'),
-            self.DemoEmbeddedDocument(name='c')
+            self.DemoDocument(name='a'),
+            self.DemoDocument(name='b'),
+            self.DemoDocument(name='c')
         ]
         self.document = self.DemoNestedDocument(name='test', children=children)
 
@@ -80,21 +80,45 @@ class EmbeddedDocumentTest(TestCase):
         self.assertEqual(3, len(self.document.children))
 
     def test_add(self):
-        self.document.children.add(self.DemoEmbeddedDocument(name='d'))
+        self.document.children.add(self.DemoDocument(name='d'))
         self.assertEqual(4, len(self.document.children))
 
     def test_remove(self):
-        self.document.children.remove(self.DemoEmbeddedDocument(name='a'))
-        self.assertFalse(self.DemoEmbeddedDocument(name='a') in self.document.children)
+        self.document.children.remove(self.DemoDocument(name='a'))
+        self.assertFalse(self.DemoDocument(name='a') in self.document.children)
 
     def test_delete_referee(self):
         referee = next(iter(self.document.children))
         referee.delete()
         self.assertEqual(len(self.document.children), 2)
 
-    # TODO: test delete multiple references
-    # TODO: test delete Document with referrer
-    # TODO: test delete deeply nested Document
+    def test_delete_multiple_references(self):
+        referee = self.DemoDocument(name='e')
+        document_1 = self.DemoNestedDocument(name='test_1', children=[referee])
+        document_2 = self.DemoNestedDocument(name='test_2', children=[referee])
+        self.assertTrue(referee in document_1.children)
+        self.assertTrue(referee in document_2.children)
+        referee.delete()
+        self.assertFalse(referee in document_1.children)
+        self.assertFalse(referee in document_2.children)
+
+    def test_delete_indexed_document_reference(self):
+        referee = self.DemoNestedDocument(name='test_1', children=[])
+        document = self.DemoNestedDocument(name='test_2', children=[referee])
+        self.assertTrue(referee in document.children)
+        referee.delete()
+        self.DemoNestedDocument.reload()
+        self.assertIsNone(self.DemoNestedDocument.find('test_1'))
+        self.assertFalse(referee in document.children)
+
+    def test_delete_deep_reference(self):
+        root_referee = self.DemoDocument(name='f')
+        mid_referee = self.DemoNestedDocument(name='test_1', children=[root_referee])
+        document = self.DemoNestedDocument(name='test_2', children=[mid_referee])
+        root_referee.delete()
+        self.DemoNestedDocument.reload()
+        for referee in document.children:
+            self.assertFalse(root_referee in referee.children)
 
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()
