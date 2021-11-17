@@ -111,6 +111,9 @@ class ReferenceSet:
     def __len__(self):
         return len(self.__references)
 
+    def __str__(self):
+        return f'{self.__class__.__name__}[{",".join([str(item) for item in self.__references])}]'
+
 
 class ReferenceDocumentSetField(Field):
 

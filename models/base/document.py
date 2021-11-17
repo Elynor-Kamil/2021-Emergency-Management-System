@@ -8,14 +8,14 @@ from models.base.meta_document import MetaDocument
 
 def persist(func):
     def wrapper_persist(*args, **kwargs):
-        instance: BaseDocument = args[0]
+        instance: Document = args[0]
         func(*args, **kwargs)
         instance.save()
 
     return wrapper_persist
 
 
-class BaseDocument(ABC, metaclass=MetaDocument):
+class Document(ABC, metaclass=MetaDocument):
     _initialised = False
 
     class PrimaryKeyNotDefinedError(Exception):
@@ -32,9 +32,9 @@ class BaseDocument(ABC, metaclass=MetaDocument):
         self._initialised = True
         self._referrers = []
 
-    @abstractmethod
     def save(self):
-        pass
+        for referrer in self._referrers:
+            referrer.save()
 
     @property
     def key(self):
@@ -64,38 +64,39 @@ class BaseDocument(ABC, metaclass=MetaDocument):
         for referrer in self._referrers:
             referrer.unlink_referee(self)
 
-    def __del__(self):
-        self.delete()
+    def __str__(self):
+        return f'{self.__class__.__name__}({self._data})'
 
 
-class Document(BaseDocument):
+class IndexedDocument(Document):
 
     def __init__(self, **kwargs):
         if not self._primary_key:
-            raise BaseDocument.PrimaryKeyNotDefinedError(self)
+            raise Document.PrimaryKeyNotDefinedError(self)
         super().__init__(**kwargs)
 
     @classmethod
     @property
-    def persistence_path(cls) -> str:
+    def __persistence_path(cls) -> str:
         return f'data/{cls.__name__}'
 
     try:
-        __objects = pickle.load(open(f'{persistence_path}.p', 'rb'))
+        __objects = pickle.load(open(f'{__persistence_path}.p', 'rb'))
     except FileNotFoundError:
         __objects = {}
 
     @classmethod
     def reload(cls):
         try:
-            cls.__objects = pickle.load(open(f'{cls.persistence_path}', 'rb'))
+            cls.__objects = pickle.load(open(f'{cls.__persistence_path}', 'rb'))
         except FileNotFoundError:
             cls.__objects = {}
 
     def save(self):
         self.__class__.__objects[self.key] = self
-        os.makedirs(os.path.dirname(self.persistence_path), exist_ok=True)
-        pickle.dump(self.__class__.__objects, open(self.persistence_path, 'wb'))
+        os.makedirs(os.path.dirname(self.__persistence_path), exist_ok=True)
+        pickle.dump(self.__class__.__objects, open(self.__persistence_path, 'wb'))
+        super().save()
 
     @classmethod
     def find(cls, key):
@@ -107,26 +108,16 @@ class Document(BaseDocument):
 
     def delete(self):
         del self.__class__.__objects[self.key]
-        pickle.dump(self.__class__.__objects, open(self.persistence_path, 'wb'))
+        pickle.dump(self.__class__.__objects, open(self.__persistence_path, 'wb'))
         super().delete()
 
     @classmethod
     def delete_all(cls):
         try:
-            os.remove(cls.persistence_path)
+            os.remove(cls.__persistence_path)
         except FileNotFoundError:
             pass
         cls.__objects = {}
 
     def __str__(self):
-        return f'{self.__class__.__name__}({self.key})'
-
-
-class EmbeddedDocument(BaseDocument, metaclass=MetaDocument):
-    parent = set()
-
-    def save(self):
-        for parent in self.parent:
-            parent.save()
-
-    # TODO: is delete possible for embedded documents?
+        return f'{self.__class__.__name__}({self._primary_key}={self.key})'
