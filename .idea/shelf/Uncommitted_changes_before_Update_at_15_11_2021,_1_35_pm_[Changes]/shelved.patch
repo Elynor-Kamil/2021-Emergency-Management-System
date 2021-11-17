@@ -1,0 +1,32 @@
+Index: models/refugee.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from datetime import date, datetime\n\nclass Refugee:\n    \"\"\"\n    A class to represent a refugee family.\n    \"\"\"\n    def __init__(self,\n                 name: str,\n                 identificationOfCamp: str,\n                 medicalCondition: str,\n                 numOfFamilyMember: int,\n                 dateOfClosing=None):\n\n        \"\"\"\n        Initialise a new refugee.\n        :param name of refugee family\n        :param number of family member\n        :param identification of campus the refugee family locating\n        :param medical condition of the refugee\n        :param start date of refugee family creation\n        :param closing date of refugee family\n        \"\"\"\n        self.name = name\n        self.numOfFamilyMember = numOfFamilyMember + 1\n        self.identificationOfCamp = identificationOfCamp\n        self.medicalCondition = medicalCondition\n        self.dateOfCreation = datetime.today().date()\n        self.dateOfClosing = dateOfClosing #raise InvalidDateError if closing date has past\n\n    def formatName(self, name):\n        \"\"\"\n        format name to a new name\n        \"\"\"\n        self.name = name\n        #error handling if invalid name is inputed\n\n    def formatNumOfFamilyMember(self, numOfFamilyMember):\n        \"\"\"\n        format number of family member\n        \"\"\"\n        if numOfFamilyMember > 1:\n            self.numOfFamilyMember = numOfFamilyMember + 1\n\n    def formatIdentificationOfCamp(self, identificationOfCamp):\n        \"\"\"\n        format identification camp of refugee\n        \"\"\"\n        self.identificationOfCamp = identificationOfCamp\n\n    def formatMedicalCondition(self, medicalCondition): #medical condition types provided or a description?\n        \"\"\"\n        format refugee family medical condition\n        \"\"\"\n        self.medicalCondition = medicalCondition\n\n    def formatDateOfClosing(self, closingDate: date): #for removing and archive\n        \"\"\"\n        format closing date of refugee family\n        \"\"\"\n        if datetime.today().date() < closingDate:\n            self.dateOfClosing = closingDate\n        else:\n            pass #raise InvalidDateError\n\n\n    def __str__(self):\n        return f\"Refugee family {self.name} located in {self.identificationOfCamp}.\\n\"\\\n               f\"number of family member: {self.numOfFamilyMember}\\n\" \\\n               f\"medical condition: {self.medicalCondition}\\n\" \\\n               f\"creation date: {self.dateOfCreation}\\n\" \\\n               f\"closing date: {self.dateOfClosing}\\n\"\n\n\n\n\nr = Refugee(\"Chan\", \"London\", \"severe\", 3, date(2022,3,4))\nr.formatDateOfClosing(date(2020, 4, 5))\nprint(r.__str__())\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/models/refugee.py b/models/refugee.py
+--- a/models/refugee.py	(revision 53f2f93dc4be930dd7072d8cc0a6d8df6283da32)
++++ b/models/refugee.py	(date 1636983116227)
+@@ -40,18 +40,21 @@
+         """
+         if numOfFamilyMember > 1:
+             self.numOfFamilyMember = numOfFamilyMember + 1
++        # must be number
+ 
+     def formatIdentificationOfCamp(self, identificationOfCamp):
+         """
+         format identification camp of refugee
+         """
+         self.identificationOfCamp = identificationOfCamp
++        # if camp not exists
+ 
+     def formatMedicalCondition(self, medicalCondition): #medical condition types provided or a description?
+         """
+         format refugee family medical condition
+         """
+         self.medicalCondition = medicalCondition
++        #medical condition 1.text or 2. choices
+ 
+     def formatDateOfClosing(self, closingDate: date): #for removing and archive
+         """
