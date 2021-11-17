@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from models.base.document import IndexedDocument, Document
-from models.base.field import Field, ReferenceDocumentSetField
+from models.base.field import Field, ReferenceDocumentsField
 
 
 class MetaDocumentTest(TestCase):
@@ -66,7 +66,7 @@ class DocumentReferenceTest(TestCase):
 
     class DemoNestedDocument(IndexedDocument):
         name = Field(primary_key=True)
-        children = ReferenceDocumentSetField()
+        children = ReferenceDocumentsField()
 
     def setUp(self) -> None:
         children = [
@@ -91,6 +91,26 @@ class DocumentReferenceTest(TestCase):
         referee = next(iter(self.document.children))
         referee.delete()
         self.assertEqual(len(self.document.children), 2)
+
+    def test_find_referee(self):
+        children = [
+            self.DemoNestedDocument(name='child_1', children=[]),
+            self.DemoNestedDocument(name='child_2', children=[]),
+            self.DemoNestedDocument(name='child_3', children=[])
+        ]
+        document = self.DemoNestedDocument(name='test', children=children)
+        self.assertEqual(document.children.get('child_1'), children[0])
+
+    def test_delete_referee_by_key(self):
+        children = [
+            self.DemoNestedDocument(name='child_1', children=[]),
+            self.DemoNestedDocument(name='child_2', children=[]),
+            self.DemoNestedDocument(name='child_3', children=[])
+        ]
+        document = self.DemoNestedDocument(name='test', children=children)
+        self.assertEqual(document.children.find('child_1'), children[0])
+        del document.children['child_1']
+        self.assertIsNone(document.children.find('child_1'))
 
     def test_delete_multiple_references(self):
         referee = self.DemoDocument(name='e')
