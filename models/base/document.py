@@ -57,8 +57,7 @@ class Document(ABC, metaclass=MetaDocument):
                 documents = getattr(self, field_name)
                 if referee in documents:
                     documents.remove(referee)
-        for referrer in self._referrers:
-            referrer.unlink_referee(referee)
+        self.save()
 
     def delete(self):
         for referrer in self._referrers:
