@@ -55,7 +55,7 @@ class ReferenceSet:
         self.__owner = owner
         self.__add_references(*references)
 
-    def with_owner(self, owner):
+    def _with_owner(self, owner):
         self.__owner = owner
         for reference in self.__references:
             reference._referrers.append(owner)
@@ -115,11 +115,11 @@ class ReferenceSet:
         return f'{self.__class__.__name__}[{",".join([str(item) for item in self.__references])}]'
 
 
-class ReferenceDocumentSetField(Field):
+class ReferenceDocumentsField(Field):
 
     def __set__(self, instance, value):
         if isinstance(value, ReferenceSet):
-            super().__set__(instance, value.with_owner(instance))
+            super().__set__(instance, value._with_owner(instance))
         else:
             try:
                 for doc in value:
@@ -131,6 +131,6 @@ class ReferenceDocumentSetField(Field):
     def __get__(self, instance, owner):
         obj = super().__get__(instance, owner)
         if isinstance(obj, ReferenceSet):
-            return obj.with_owner(instance)
+            return obj._with_owner(instance)
         else:
             return obj

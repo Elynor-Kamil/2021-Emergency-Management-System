@@ -2,7 +2,7 @@ import os
 import pickle
 from abc import ABC, abstractmethod
 
-from models.base.field import Field, ReferenceDocumentSetField
+from models.base.field import Field, ReferenceDocumentsField
 from models.base.meta_document import MetaDocument
 
 
@@ -53,7 +53,7 @@ class Document(ABC, metaclass=MetaDocument):
 
     def unlink_referee(self, referee):
         for field_name, field in self._fields.items():
-            if isinstance(field, ReferenceDocumentSetField):
+            if isinstance(field, ReferenceDocumentsField):
                 documents = getattr(self, field_name)
                 if referee in documents:
                     documents.remove(referee)
