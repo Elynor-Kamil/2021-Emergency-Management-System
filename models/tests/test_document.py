@@ -2,11 +2,12 @@ from unittest import TestCase
 
 from models.base.document import IndexedDocument, Document
 from models.base.field import Field, ReferenceDocumentsField
+from models.base.meta_document import MetaDocument
 
 
 class MetaDocumentTest(TestCase):
     def test_multiple_primary_key(self):
-        with self.assertRaises(Field.MultiplePrimaryKeyError):
+        with self.assertRaises(MetaDocument.MultiplePrimaryKeyError):
             class DemoIndexedDocument(IndexedDocument):
                 id = Field(primary_key=True)
                 name = Field(primary_key=True)
@@ -23,7 +24,7 @@ class BasicDocumentTest(TestCase):
         self.assertEqual(doc.password, 'test')
 
     def test_compulsory_primary_key(self):
-        with self.assertRaises(Field.PrimaryKeyNotSetError):
+        with self.assertRaises(Document.PrimaryKeyNotSetError):
             self.DemoIndexedDocument(password='test')
 
 

@@ -4,6 +4,9 @@ from models.base.field import Field
 
 
 class MetaDocument(abc.ABCMeta):
+    class MultiplePrimaryKeyError(Exception):
+        def __init__(self):
+            super().__init__(f"Only one primary key is allowed")
 
     def __new__(mcs, name, bases, attrs):
 

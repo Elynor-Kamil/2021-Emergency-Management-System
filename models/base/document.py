@@ -22,12 +22,16 @@ class Document(ABC, metaclass=MetaDocument):
         def __init__(self, document):
             super().__init__(f"Primary key not defined for {document.__class__.__name__}")
 
+    class PrimaryKeyNotSetError(Exception):
+        def __init__(self, field_name):
+            super().__init__(f"Primary key {field_name} not set")
+
     @persist
     def __init__(self, **kwargs):
         self._data = {}
         for field_name, field in self._fields.items():
             if field.primary_key and field_name not in kwargs:
-                raise Field.PrimaryKeyNotSetError(field_name)
+                raise self.PrimaryKeyNotSetError(field_name)
             self.__setattr__(field_name, kwargs.get(field_name))
         self._initialised = True
         self._referrers = []
