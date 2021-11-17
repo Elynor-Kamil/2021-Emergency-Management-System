@@ -88,14 +88,16 @@ class IndexedDocument(Document):
     @classmethod
     def reload(cls):
         try:
-            cls.__objects = pickle.load(open(f'{cls.__persistence_path}', 'rb'))
+            with open(cls.__persistence_path, 'rb') as f:
+                cls.__objects = pickle.load(f)
         except FileNotFoundError:
             cls.__objects = {}
 
     def save(self):
         self.__class__.__objects[self.key] = self
         os.makedirs(os.path.dirname(self.__persistence_path), exist_ok=True)
-        pickle.dump(self.__class__.__objects, open(self.__persistence_path, 'wb'))
+        with open(self.__persistence_path, 'wb') as f:
+            pickle.dump(self.__class__.__objects, f)
         super().save()
 
     @classmethod
@@ -108,7 +110,8 @@ class IndexedDocument(Document):
 
     def delete(self):
         del self.__class__.__objects[self.key]
-        pickle.dump(self.__class__.__objects, open(self.__persistence_path, 'wb'))
+        with open(self.__persistence_path, 'wb') as f:
+            pickle.dump(self.__class__.__objects, f)
         super().delete()
 
     @classmethod
