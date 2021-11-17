@@ -66,7 +66,7 @@ class EmbeddedDocumentTest(TestCase):
 
     class DemoNestedDocument(Document):
         name = Field(primary_key=True)
-        children = ReferenceDocumentSetField()  # TODO: reference field list class
+        children = ReferenceDocumentSetField()
 
     def setUp(self) -> None:
         children = [
@@ -86,6 +86,15 @@ class EmbeddedDocumentTest(TestCase):
     def test_remove(self):
         self.document.children.remove(self.DemoEmbeddedDocument(name='a'))
         self.assertFalse(self.DemoEmbeddedDocument(name='a') in self.document.children)
+
+    def test_delete_referee(self):
+        referee = next(iter(self.document.children))
+        referee.delete()
+        self.assertEqual(len(self.document.children), 2)
+
+    # TODO: test delete multiple references
+    # TODO: test delete Document with referrer
+    # TODO: test delete deeply nested Document
 
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()
