@@ -1,13 +1,22 @@
-from models.base.document import IndexedDocument
+
 import datetime
 from models import camp
+from models.base.document import IndexedDocument
+from models.base.field import Field
+
+class volunteerAccount(IndexedDocument):
+    volunteerUsername = Field(primary_key=True)
+    volunteerPassword = Field()
 
 
 
-volunteerAccountFile = IndexedDocument(_primary_key = 1)
 
-print(volunteerAccountFile)
 
+
+
+
+
+'''
 
 class Volunteer:
     """
@@ -100,3 +109,4 @@ class Volunteer:
 
 
 
+'''
