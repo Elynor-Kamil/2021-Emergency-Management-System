@@ -1,38 +1,52 @@
 from datetime import date, datetime
+from enum import Enum
 
 class Refugee:
     """
     A class to represent a refugee family.
     """
+    class MedicalCondition(Enum):
+        MINOR = "minor"
+        MAJOR = "major"
+        MODERATE = "moderate"
+        EXTREME = "extreme"
+
+    class MissingMedicalConditionError(Exception):
+        """
+        It is mandatory to supply one medical condition only.
+        When no medical condition is provided, this exception will be raised.
+        """
+        def __init__(self):
+            super().__init__(f"It is mandatory to provide only one medical condition")
+
+
     def __init__(self,
                  firstname: str,
                  lastname:str,
                  camp: str,
-                 medicalCondition: str,
+                 medicalConditionType: MedicalCondition,
                  numOfFamilyMember: int,
-                 dateOfClosing=None):
+                 startingDate=datetime.today().date()):
 
         """
-        Initialise a new refugee.
-        :param name of refugee family
-        :param number of family member
-        :param camp of the refugee family locating at
-        :param medical condition of the refugee
-        :param start date of refugee family
-        :param closing date of refugee family
+        :param firstname: firstname of refugee family
+        :param lastname: lastname of refugee family
+        :param camp: camp of the refugee family locating at
+        :param medicalConditionType: medical condition type of the refugee
+        :param numOfFamilyMember: param number of family member
+        :param startingDate: start date of refugee family creation
         """
 
-        self.name = self.__checkAndFormatName(firstname, lastname)
+        self.name = self.__checkName(firstname, lastname)
         self.numOfFamilyMember = self.__checkNumOfFamilyMember(numOfFamilyMember)
         self.camp = camp
-        self.medicalCondition = medicalCondition
-        self.dateOfCreation = datetime.today().date()
-        self.dateOfClosing = self.__checkDateOfClosing(dateOfClosing)
+        self.medicalConditionType = medicalConditionType
+        self.startingDate = self.__checkStartingDate(startingDate)
 
 
-    def __checkAndFormatName(self, firstname, lastname):
+    def __checkName(self, firstname, lastname):
         """
-        format name to a new name
+        check if name is valid
         """
         if not isinstance(firstname, str) or not isinstance(lastname, str):
             raise self.InvalidNameException()
@@ -41,49 +55,34 @@ class Refugee:
         else:
             fullname = firstname + " " + lastname
             return fullname
-        #error handling if invalid name is inputed
+
 
     def __checkNumOfFamilyMember(self, numOfFamilyMember):
         """
-        format number of family member
+        check if number of family member is valid
         """
-        if not isinstance(numOfFamilyMember, int) or numOfFamilyMember < 0:
+        if not isinstance(numOfFamilyMember, int) or numOfFamilyMember < 1:
             raise self.InvalidNumOfFamilyMemberException()
-        return numOfFamilyMember + 1
+        return numOfFamilyMember
 
-    def formatCamp(self, newCamp):
-        """
-        format identification camp of refugee
-        """
-        if newCamp not in camp.Camp.camps:
-            raise self.InvalidCampException(newCamp)
-        self.camp = newCamp
 
-    def formatMedicalCondition(self, medicalCondition): #medical condition types provided or a description?
+    def __checkStartingDate(self, startingDate: date):  # for removing and archive
         """
-        format refugee family medical condition
-        """
-        self.medicalCondition = medicalCondition
-
-    def __checkDateOfClosing(self, dateOfClosing: date): #for removing and archive
-        """
-        format closing date of refugee family
+        check if starting date is valid
         """
         today = datetime.today().date()
-        if today >= dateOfClosing:
-            raise self.InvalidClosingDateException()
-        elif dateOfClosing == None:
-            return dateOfClosing
-        else:
-            return dateOfClosing
+        if not startingDate:
+            return today
+        elif startingDate > today:
+            raise self.InvalidStartingDateException()
+        return startingDate
 
 
     def __str__(self):
         return f"Refugee family {self.name} located in {self.camp}.\n"\
-               f"number of family member: {self.numOfFamilyMember}\n" \
-               f"medical condition: {self.medicalCondition}\n" \
-               f"creation date: {self.dateOfCreation}\n" \
-               f"closing date: {self.dateOfClosing}\n"
+               f"Number of Family Member: {self.numOfFamilyMember}\n" \
+               f"Medical Condition: {self.medicalConditionType}\n" \
+               f"Creation Date: {self.startingDate}\n" \
 
 
     class InvalidNumOfFamilyMemberException(Exception):
@@ -91,28 +90,20 @@ class Refugee:
         Raise exception when number of family member entered.
         """
         def __init__(self):
-            super().__init__(f"Invalid number of family member. Family member must be an positive integer.")
-
-
-    class InvalidCampException(Exception):
-        """
-        Raise exception when camp entered does not exist.
-        """
-
-        def __init__(self, camp):
-            super().__init__(f"Camp {camp} does not exist.")
-
-
-    class InvalidClosingDateException(Exception):
-        """
-        Raise exception when the close date is invalid.
-        """
-        def __init__(self):
-            super().__init__(f"Invalid closing date. Closing date must be after current date.")
+            super().__init__(f"Invalid input: the number of family members must be a positive integer.")
 
     class InvalidNameException(Exception):
         """
         Raise exception when the firstname or/and lastname is invalid.
         """
         def __init__(self):
-            super().__init__(f"Invalid name. The firstname and lastname must be in alphabet.")
+            super().__init__(f"Invalid name. The firstname and lastname must be alphabets.")
+
+
+    class InvalidStartingDateException(Exception):
+        """
+        Raise exception when the start date is invalid.
+        """
+
+        def __init__(self):
+            super().__init__(f"Invalid starting date. Starting date must be before/on current date.")
