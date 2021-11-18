@@ -1,6 +1,5 @@
-'''
+
 import models.base.document
-'''
 
 
 import datetime
