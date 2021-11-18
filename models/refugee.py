@@ -11,15 +11,6 @@ class Refugee:
         MODERATE = "moderate"
         EXTREME = "extreme"
 
-    class MissingMedicalConditionError(Exception):
-        """
-        It is mandatory to supply one medical condition only.
-        When no medical condition is provided, this exception will be raised.
-        """
-        def __init__(self):
-            super().__init__(f"It is mandatory to provide only one medical condition")
-
-
     def __init__(self,
                  firstname: str,
                  lastname:str,
