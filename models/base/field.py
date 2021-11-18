@@ -88,7 +88,9 @@ class ReferenceSet:
         if not self.data_type:  # set type if not set yet
             self.data_type = type(documents[0])
             self.__primary_key = self.data_type._primary_key
-        self.__ref_documents += documents
+        for document in documents:
+            if document not in self.__ref_documents:
+                self.__ref_documents.append(document)
         if self.__primary_key:
             self.__index.update({document._data[self.__primary_key]: document for document in documents})
         for reference in documents:
