@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from models.base.document import IndexedDocument, Document
-from models.base.field import Field, ReferenceDocumentsField
+from models.base.field import Field, ReferenceDocumentsField, ReferenceSet
 from models.base.meta_document import MetaDocument
 
 
@@ -84,6 +84,10 @@ class DocumentReferenceTest(TestCase):
         self.document.children.add(self.DemoDocument(name='d'))
         self.assertEqual(4, len(self.document.children))
 
+    def test_add_incorrect_type(self):
+        with self.assertRaises(ReferenceSet.MultipleTypeError):
+            self.document.children.add(self.DemoNestedDocument(name='d'))
+
     def test_remove(self):
         self.document.children.remove(self.DemoDocument(name='a'))
         self.assertFalse(self.DemoDocument(name='a') in self.document.children)
@@ -140,6 +144,16 @@ class DocumentReferenceTest(TestCase):
         self.DemoNestedDocument.reload()
         for referee in document.children:
             self.assertFalse(root_referee in referee.children)
+
+    def test_typed_reference_field(self):
+        class DemoTypedNestedDocument(Document):
+            name = Field(primary_key=True)
+            children = ReferenceDocumentsField(data_type=self.DemoDocument)
+
+        # This should not raise an exception
+        DemoTypedNestedDocument(name='test', children=[self.DemoDocument(name='a')])
+        with self.assertRaises(ReferenceSet.MultipleTypeError):
+            DemoTypedNestedDocument(name='test', children=[self.DemoNestedDocument(name='a')])
 
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()

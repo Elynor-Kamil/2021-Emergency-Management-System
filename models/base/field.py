@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Sequence, Iterator, TYPE_CHECKING, Union, Iterable, Any
+from typing import Sequence, Iterator, TYPE_CHECKING, Union, Iterable, Any, Type
 
 if TYPE_CHECKING:
     from document import Document
@@ -58,10 +58,11 @@ class ReferenceSet:
         def __init__(self):
             super().__init__('Operation not supported for references to documents without primary keys')
 
-    def __init__(self, references: Sequence[Document], owner: Document = None):
+    def __init__(self, references: Sequence[Document], data_type: Type[Document] = None, owner: Document = None):
         self.__ref_documents: list[Document] = []  # Actual references
-        self.__type = None  # Type of the references, updated in the first add.
-        self.__primary_key = None  # Primary key name of the referenced documents, updated in the first add.
+        self.data_type = data_type  # Type of the references, updated in the first add if not provided.
+        # Primary key name of the referenced documents, updated in the first add if data_type not provided.
+        self.__primary_key = self.data_type._primary_key if self.data_type else None
         self.__index: dict[Any, Document] = {}  # Index of the references, if they have a primary key.
         self.__owner = owner  # The document that owns this reference set. Must be set before editing references.
         self.__add_references(*references)
@@ -82,11 +83,11 @@ class ReferenceSet:
         """
         if len(documents) == 0:
             return
-        if not all(type(document) == (self.__type or type(documents[0])) for document in documents):
+        if not all(type(document) == (self.data_type or type(documents[0])) for document in documents):
             raise self.MultipleTypeError()
-        if not self.__ref_documents:  # First add to the set
-            self.__type = type(documents[0])
-            self.__primary_key = self.__type._primary_key
+        if not self.data_type:  # set type if not set yet
+            self.data_type = type(documents[0])
+            self.__primary_key = self.data_type._primary_key
         self.__ref_documents += documents
         if self.__primary_key:
             self.__index.update({document._data[self.__primary_key]: document for document in documents})
@@ -155,10 +156,22 @@ class ReferenceDocumentsField(Field):
     This field maintains a two-way binding between the owner and the referenced documents.
     """
 
+    def __init__(self, data_type: Type[Document] = None, **kwargs):
+        """
+        :param data_type: the type of the referenced documents
+        """
+        super().__init__(**kwargs)
+        self.__data_type = data_type
+
     def __set__(self, instance, value: Union[ReferenceSet, Sequence[Document]]):
         if isinstance(value, ReferenceSet):
+            if value.data_type is None:
+                value.data_type = self.__data_type
+            elif value.data_type != self.__data_type:
+                raise ReferenceSet.MultipleTypeError
             super().__set__(instance, value._with_owner(instance))
         else:
+            value = value or []  # avoid TypeError when initialising document with optional reference field
             try:
                 for doc in value:
                     assert hasattr(doc, "_referenced_by")
@@ -167,7 +180,7 @@ class ReferenceDocumentsField(Field):
             if instance._initialised:
                 for document in self.__get__(instance, instance.__class__):
                     document._remove_referrer(instance)  # Remove the old references
-            super().__set__(instance, ReferenceSet(value, instance))
+            super().__set__(instance, ReferenceSet(value, self.__data_type, instance))
 
     def __get__(self, instance, owner):
         obj = super().__get__(instance, owner)
