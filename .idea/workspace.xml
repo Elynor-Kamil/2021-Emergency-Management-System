@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="" />
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="update refugee class">
+      <change afterPath="$PROJECT_DIR$/models/calculate_volunteers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +42,28 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.refugee">
+  <component name="RunManager" selected="Python.calculate_volunteers">
+    <configuration name="calculate_volunteers" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2021-Emergency-Management-System" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/calculate_volunteers.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="refugee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -58,20 +83,6 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_refugee.RefugeeTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2021-Emergency-Management-System" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_refugee.RefugeeTest&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests for test_refugee.RefugeeTest.test_invalid_firstname1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -118,11 +129,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.calculate_volunteers" />
+        <item itemvalue="Python.refugee" />
         <item itemvalue="Python tests.Python tests for test_refugee.RefugeeTest.test_invalid_numOfFamilyMember1" />
         <item itemvalue="Python tests.Python tests for test_refugee.RefugeeTest.test_invalid_lastname" />
         <item itemvalue="Python tests.Python tests for test_refugee.RefugeeTest.test_invalid_firstname1" />
-        <item itemvalue="Python tests.Python tests for test_refugee.RefugeeTest" />
-        <item itemvalue="Python.refugee" />
       </list>
     </recent_temporary>
   </component>
