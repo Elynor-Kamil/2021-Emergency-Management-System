@@ -28,14 +28,14 @@ class Refugee:
         :param startingDate: start date of refugee family creation
         """
 
-        self.name = self.__checkName(firstname, lastname)
-        self.numOfFamilyMember = self.__checkNumOfFamilyMember(numOfFamilyMember)
+        self.name = self.__sanitiseSanitiseName(firstname, lastname)
+        self.numOfFamilyMember = self.__sanitiseNumOfFamilyMember(numOfFamilyMember)
         self.camp = camp
         self.medicalConditionType = medicalConditionType
-        self.startingDate = self.__checkStartingDate(startingDate)
+        self.startingDate = self.__sanitiseStartingDate(startingDate)
 
 
-    def __checkName(self, firstname, lastname):
+    def __sanitiseName(self, firstname, lastname):
         """
         check if name is valid
         """
@@ -48,7 +48,7 @@ class Refugee:
             return fullname
 
 
-    def __checkNumOfFamilyMember(self, numOfFamilyMember):
+    def __sanitiseNumOfFamilyMember(self, numOfFamilyMember):
         """
         check if number of family member is valid
         """
@@ -57,7 +57,7 @@ class Refugee:
         return numOfFamilyMember
 
 
-    def __checkStartingDate(self, startingDate: date):  # for removing and archive
+    def __sanitiseStartingDate(self, startingDate: date):  # for removing and archive
         """
         check if starting date is valid
         """
