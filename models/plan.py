@@ -1,14 +1,23 @@
-from collections import Iterable
 from datetime import date, datetime
 from enum import Enum
+from typing import Iterable
 
+from models.base.document import IndexedDocument
+from models.base.field import Field, ReferenceDocumentsField
 from models.camp import Camp
 
 
-class Plan:
+class Plan(IndexedDocument):
     """
     An emergency plan consisting of camps.
     """
+
+    name = Field(primary_key=True)
+    emergency = Field()
+    description = Field()
+    geographical_area = Field()
+    start_date = Field()
+    camps = ReferenceDocumentsField(data_type=Camp)
 
     class EmergencyType(Enum):
         """
@@ -47,15 +56,15 @@ class Plan:
         :param start_date: start date of the plan
         :param camps: camps to be included in the plan
         """
-        self.name = name
-        self.emergency_type = emergency_type
-        self.description = description
-        self.geographical_area = geographical_area
         self.__check_start_date(start_date)
-        self.start_date = start_date
         if not camps:
             raise self.MissingCampsError()
-        self.camps: set[Camp] = set(camps)
+        super().__init__(name=name,
+                         emergency=emergency_type,
+                         description=description,
+                         geographical_area=geographical_area,
+                         start_date=start_date,
+                         camps=camps)
 
     def __str__(self):
         return f"Plan '{self.name}'"
@@ -64,13 +73,20 @@ class Plan:
         """
         Open one or more camps.
         """
-        self.camps.update(camps)
+        self.camps.add(*camps)
+        self.save()
 
     def close_camps(self, *camps: Camp) -> None:
         """
         Close one or more camps.
         """
-        self.camps.difference_update(camps)
+        for camp in camps:
+            self.camps.remove(camp)
+        if len(self.camps) == 0:
+            self.reload()
+            raise self.MissingCampsError()
+        else:
+            self.save()
 
     class PastStartDateException(Exception):
         """
