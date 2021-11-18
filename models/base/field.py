@@ -164,6 +164,9 @@ class ReferenceDocumentsField(Field):
                     assert hasattr(doc, "_referenced_by")
             except (TypeError, AssertionError):
                 raise self.InvalidValueError(value)
+            if instance._initialised:
+                for document in self.__get__(instance, instance.__class__):
+                    document._remove_referrer(instance)  # Remove the old references
             super().__set__(instance, ReferenceSet(value, instance))
 
     def __get__(self, instance, owner):
