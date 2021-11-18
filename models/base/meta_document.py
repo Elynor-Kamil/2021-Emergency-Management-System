@@ -1,14 +1,16 @@
-import abc
-
 from models.base.field import Field
 
 
-class MetaDocument(abc.ABCMeta):
+class MetaDocument(type):
+    """
+    A metaclass for documents to register all fields and identify the primary key.
+    """
+
     class MultiplePrimaryKeyError(Exception):
         def __init__(self):
             super().__init__(f"Only one primary key is allowed")
 
-    def __new__(mcs, name, bases, attrs):
+    def __new__(cls, name, bases, attrs):
 
         # Discover document fields
         doc_fields = {}
@@ -19,11 +21,11 @@ class MetaDocument(abc.ABCMeta):
             attr_value.name = attr_name
             if attr_value.primary_key:
                 if primary_key is not None:
-                    raise Field.MultiplePrimaryKeyError
+                    raise cls.MultiplePrimaryKeyError
                 else:
                     primary_key = attr_name
             doc_fields[attr_name] = attr_value
         attrs["_primary_key"] = primary_key
         attrs["_fields"] = doc_fields
 
-        return super().__new__(mcs, name, bases, attrs)
+        return super().__new__(cls, name, bases, attrs)
