@@ -34,15 +34,14 @@ class MetaDocument(type):
 
 
 class MetaIndexedDocument(MetaDocument):
+    """
+    A metaclass for IndexedDocument to load the index at class definition.
+    """
 
     def __new__(cls, name, bases, attrs):
-        if "persistence_path" not in attrs:
-            attrs["persistence_path"] = f'data/{name}'
+        if "_persistence_path" not in attrs:
+            attrs["_persistence_path"] = f'data/{name}'
 
-        try:
-            __objects = pickle.load(open(f'{attrs["persistence_path"]}.p', 'rb'))
-        except FileNotFoundError:  # No persistence file yet
-            __objects = {}
-
-        attrs[f"_{name}__objects"] = __objects
-        return super().__new__(cls, name, bases, attrs)
+        new_class = super().__new__(cls, name, bases, attrs)
+        new_class.reload()
+        return new_class
