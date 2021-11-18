@@ -1,0 +1,2 @@
+def numOfVolunteersRequired(campInfo):
+    pass
