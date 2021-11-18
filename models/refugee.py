@@ -81,6 +81,7 @@ class Refugee:
     def __str__(self):
         return f"Refugee family {self.name} located in {self.camp}.\n"\
                f"Number of Family Member: {self.numOfFamilyMember}\n" \
+               f"Camp: {self.camp}\n" \
                f"Medical Condition: {self.medicalConditionType}\n" \
                f"Creation Date: {self.startingDate}\n" \
 
