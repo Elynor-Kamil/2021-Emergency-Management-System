@@ -212,7 +212,7 @@ class IndexedDocument(Document):
         Remove all documents of this type and persist the change.
         """
         for document in cls.all():
-            document.delete()
+            super(document.__class__, document).delete()
         try:
             os.remove(cls.persistence_path)
         except FileNotFoundError:
