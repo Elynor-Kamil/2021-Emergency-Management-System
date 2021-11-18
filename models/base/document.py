@@ -5,7 +5,7 @@ import pickle
 from typing import Union
 
 from models.base.field import ReferenceDocumentsField
-from models.base.meta_document import MetaDocument
+from models.base.meta_document import MetaDocument, MetaIndexedDocument
 
 
 def persist(func):
@@ -131,7 +131,7 @@ class Document(metaclass=MetaDocument):
         return f'{self.__class__.__name__}({self._data})'
 
 
-class IndexedDocument(Document):
+class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     """
     Base class for all root level documents, directly persisted to disk.
     A primary key must be defined to index all active documents.
@@ -142,20 +142,6 @@ class IndexedDocument(Document):
         if not self._primary_key:
             raise Document.PrimaryKeyNotDefinedError(self)
         super().__init__(**kwargs)
-
-    @classmethod
-    @property
-    def persistence_path(cls) -> str:
-        """
-        The path to the persistence file. Defaults to data/{the class name}.
-        Override this method to change the path.
-        """
-        return f'data/{cls.__name__}'
-
-    try:
-        __objects = pickle.load(open(f'{persistence_path}.p', 'rb'))
-    except FileNotFoundError:  # No persistence file yet
-        __objects = {}
 
     @classmethod
     def reload(cls) -> None:
