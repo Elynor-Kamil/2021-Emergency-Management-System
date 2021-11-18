@@ -1,3 +1,5 @@
+import pickle
+
 from models.base.field import Field
 
 
@@ -28,4 +30,19 @@ class MetaDocument(type):
         attrs["_primary_key"] = primary_key
         attrs["_fields"] = doc_fields
 
+        return super().__new__(cls, name, bases, attrs)
+
+
+class MetaIndexedDocument(MetaDocument):
+
+    def __new__(cls, name, bases, attrs):
+        if "persistence_path" not in attrs:
+            attrs["persistence_path"] = f'data/{name}'
+
+        try:
+            __objects = pickle.load(open(f'{attrs["persistence_path"]}.p', 'rb'))
+        except FileNotFoundError:  # No persistence file yet
+            __objects = {}
+
+        attrs[f"_{name}__objects"] = __objects
         return super().__new__(cls, name, bases, attrs)
