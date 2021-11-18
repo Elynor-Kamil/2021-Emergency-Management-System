@@ -31,6 +31,14 @@ class Plan:
         def __init__(self):
             super().__init__("It is mandatory to provide at least one camp")
 
+    class PastStartDateException(Exception):
+        """
+        Exception raised when start date entered is in the past.
+        """
+
+        def __init__(self):
+            super().__init__('Start date is in the past. Please enter a valid start date.')
+
     def __init__(self,
                  name: str,
                  emergency_type: EmergencyType,
@@ -71,14 +79,6 @@ class Plan:
         Close one or more camps.
         """
         self.camps.difference_update(camps)
-
-    class PastStartDateException(Exception):
-        """
-        Exception raised when start date entered is in the past.
-        """
-
-        def __init__(self):
-            super().__init__('Start date is in the past. Please enter a valid start date.')
 
     def __check_start_date(self, start_date: date) -> None:
         """
