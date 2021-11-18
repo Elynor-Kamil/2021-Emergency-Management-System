@@ -1,9 +1,12 @@
-
-import models.base.document
-
-
+from models.base.document import IndexedDocument
 import datetime
 from models import camp
+
+
+
+volunteerAccountFile = IndexedDocument(_primary_key = 1)
+
+print(volunteerAccountFile)
 
 
 class Volunteer:
