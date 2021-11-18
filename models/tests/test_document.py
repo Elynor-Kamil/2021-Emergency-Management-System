@@ -109,9 +109,9 @@ class DocumentReferenceTest(TestCase):
             self.DemoNestedDocument(name='child_3', children=[])
         ]
         document = self.DemoNestedDocument(name='test', children=children)
-        self.assertEqual(document.children.find('child_1'), children[0])
+        self.assertEqual(document.children.get('child_1'), children[0])
         del document.children['child_1']
-        self.assertIsNone(document.children.find('child_1'))
+        self.assertIsNone(document.children.get('child_1'))
 
     def test_delete_multiple_references(self):
         referee = self.DemoDocument(name='e')

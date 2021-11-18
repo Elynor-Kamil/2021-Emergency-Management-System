@@ -1,7 +1,16 @@
-from typing import Sequence
+from __future__ import annotations
+
+from typing import Sequence, Iterator, TYPE_CHECKING, Union, Iterable, Any
+
+if TYPE_CHECKING:
+    from document import Document
 
 
 class Field:
+    """
+    A placeholder for all data attributes in a class.
+    The class is created for helper functions like checking for multiple primary keys.
+    """
     name = None  # Set by Document.__new__()
     primary_key = False
 
@@ -14,6 +23,10 @@ class Field:
             super().__init__(f"Invalid value {value}")
 
     def __init__(self, primary_key=False):
+        """
+        Declare a data attribute.
+        :param primary_key: whether this attribute is a primary key. Only one primary key per class is allowed.
+        """
         self.primary_key = primary_key
 
     def __get__(self, instance, owner):
@@ -31,6 +44,12 @@ class Field:
 
 
 class ReferenceSet:
+    """
+    A container for references to other documents.
+    The class maintains a two-way binding between the referenced documents and the referencing documents.
+    Additionally, the references are automatically indexed if they have a primary key.
+    """
+
     class MultipleTypeError(Exception):
         def __init__(self):
             super().__init__('Multiple types passed to set. Only homogeneous sets are supported. ')
@@ -39,53 +58,76 @@ class ReferenceSet:
         def __init__(self):
             super().__init__('Operation not supported for references to documents without primary keys')
 
-    def __init__(self, references: Sequence, owner=None):
-        self.__type = None
-        self.__references = []
-        self.__index = {}
-        self.__primary_key = None
-        self.__owner = owner
+    def __init__(self, references: Sequence[Document], owner: Document = None):
+        self.__ref_documents: list[Document] = []  # Actual references
+        self.__type = None  # Type of the references, updated in the first add.
+        self.__primary_key = None  # Primary key name of the referenced documents, updated in the first add.
+        self.__index: dict[Any, Document] = {}  # Index of the references, if they have a primary key.
+        self.__owner = owner  # The document that owns this reference set. Must be set before editing references.
         self.__add_references(*references)
 
-    def _with_owner(self, owner):
+    def _with_owner(self, owner: Document) -> ReferenceSet:
+        """
+        Update the owner of this reference set, so that references can be updated.
+        """
         self.__owner = owner
-        for reference in self.__references:
-            reference._referrers.append(owner)
+        for document in self.__ref_documents:
+            document._add_referrer(owner)
         return self
 
-    def __add_references(self, *references):
-        if len(references) > 0:
-            if not all(type(reference) == (self.__type or type(references[0])) for reference in references):
-                raise self.MultipleTypeError()
-            if not self.__references:  # First references
-                self.__type = type(references[0])
-                self.__primary_key = self.__type._primary_key
-            if self.__primary_key:
-                self.__index.update({reference._data[self.__primary_key]: reference for reference in references})
-            self.__references += references
-            for reference in references:
-                reference.add_referrer(self.__owner)
+    def __add_references(self, *documents: Document) -> None:
+        """
+        Add references to the reference set.
+        :param documents: Documents instances of the same type
+        """
+        if len(documents) == 0:
+            return
+        if not all(type(document) == (self.__type or type(documents[0])) for document in documents):
+            raise self.MultipleTypeError()
+        if not self.__ref_documents:  # First add to the set
+            self.__type = type(documents[0])
+            self.__primary_key = self.__type._primary_key
+        self.__ref_documents += documents
+        if self.__primary_key:
+            self.__index.update({document._data[self.__primary_key]: document for document in documents})
+        for reference in documents:
+            reference._add_referrer(self.__owner)
 
-    def __iter__(self):
-        return iter(self.__references)
+    def __iter__(self) -> Iterator[Document]:
+        return iter(self.__ref_documents)
 
-    def add(self, *references):
+    def add(self, *references) -> None:
+        """
+        Add documents to the reference set.
+        :param references: documents of the same type
+        """
         self.__add_references(*references)
 
-    def remove(self, item):
+    def remove(self, item) -> None:
+        """
+        Remove a referenced document from the reference set.
+        A ValueError is raised if the item is not in the reference set.
+        :param item: a document existing in the reference set
+        """
         if self.__primary_key:
             self.__index.pop(item.key)
-        i = self.__references.index(item)
-        self.__references[i]._referrers.remove(self.__owner)
-        self.__references.remove(item)
+        i = self.__ref_documents.index(item)
+        self.__ref_documents[i]._remove_referrer(self.__owner)
+        self.__ref_documents.remove(item)
 
-    def get(self, key):
+    def get(self, key) -> Union[Document, None]:
+        """
+        Get a document from the reference set by its primary key.
+        UnindexedReferenceError is raised if the document type does not have a primary key.
+        :param key: the primary key of the document
+        :return: the document with the given primary key, or None if it does not exist
+        """
         if not self.__primary_key:
             raise self.UnindexedReferenceError()
         return self.__index.get(key)
 
     def __contains__(self, item):
-        return item in self.__references
+        return item in self.__ref_documents
 
     def __getitem__(self, item):
         if not self.__primary_key:
@@ -96,33 +138,34 @@ class ReferenceSet:
         if not self.__primary_key:
             raise self.UnindexedReferenceError()
         item = self.__index[key]
-        self.__references.remove(item)
+        self.__ref_documents.remove(item)
         del self.__index[key]
-        item._referrers.discard(self.__owner)
+        item._remove_referrer(self.__owner)
 
     def __len__(self):
-        return len(self.__references)
+        return len(self.__ref_documents)
 
     def __str__(self):
-        return f'{self.__class__.__name__}[{",".join([str(item) for item in self.__references])}]'
+        return f'{self.__class__.__name__}[{",".join([str(item) for item in self.__ref_documents])}]'
 
 
 class ReferenceDocumentsField(Field):
+    """
+    A field that references a set of documents.
+    This field maintains a two-way binding between the owner and the referenced documents.
+    """
 
-    def __set__(self, instance, value):
+    def __set__(self, instance, value: Union[ReferenceSet, Sequence[Document]]):
         if isinstance(value, ReferenceSet):
             super().__set__(instance, value._with_owner(instance))
         else:
             try:
                 for doc in value:
-                    assert hasattr(doc, "_referrers")
+                    assert hasattr(doc, "_referenced_by")
             except (TypeError, AssertionError):
                 raise self.InvalidValueError(value)
             super().__set__(instance, ReferenceSet(value, instance))
 
     def __get__(self, instance, owner):
         obj = super().__get__(instance, owner)
-        if isinstance(obj, ReferenceSet):
-            return obj._with_owner(instance)
-        else:
-            return obj
+        return obj._with_owner(instance)
