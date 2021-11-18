@@ -28,7 +28,7 @@ class Refugee:
         :param startingDate: start date of refugee family creation
         """
 
-        self.name = self.__sanitiseSanitiseName(firstname, lastname)
+        self.name = self.__sanitiseName(firstname, lastname)
         self.numOfFamilyMember = self.__sanitiseNumOfFamilyMember(numOfFamilyMember)
         self.camp = camp
         self.medicalConditionType = medicalConditionType
