@@ -1,4 +1,4 @@
-import pickle
+import sys
 
 from models.base.field import Field
 
@@ -43,5 +43,6 @@ class MetaIndexedDocument(MetaDocument):
             attrs["_persistence_path"] = f'data/{name}'
 
         new_class = super().__new__(cls, name, bases, attrs)
+        sys.modules[new_class.__module__].__dict__[name] = new_class
         new_class.reload()
         return new_class
