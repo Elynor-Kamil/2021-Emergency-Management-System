@@ -29,7 +29,7 @@ class volunteer(IndexedDocument):
         :param password: password of the volunteer account
         :param firstname: the firstname of the volunteer
         :param lastname: the lastname of the volunteer
-        :param phone: the phone number of the volunteer
+        :param phone: the phone number of the volunteer (only numbers with international code are accepted)
         :param camp: the camp that the volunteer belongs to
         :param availability:  whether the volunteer is available to join a new emergency plan
         :param creationdate: the date that this volunteer is created
@@ -84,7 +84,7 @@ class volunteer(IndexedDocument):
                f"Volunteer {self.firstname} {self.lastname} belongs to camp {self.camp}.\n" \
                f"Phone Number: {self.phone}\n" \
                f"Availability: {self.availability}\n" \
-               f"Joined date: {self.creationdate}\n"
+               f"Date joined: {self.creationdate}\n"
 
 
     class InvalidUsernameException(Exception):
@@ -145,4 +145,11 @@ class volunteer(IndexedDocument):
 volunteerA = volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin', phone='+012345', camp='UCL')
 print(volunteerA)
 
+volunteerA.firstname = 'Yun-Tzu'
+volunteerA.save()
+print(volunteerA)
+
 # print(volunteer.all())
+# print(volunteer.find('yunsy'))
+# volunteer.delete()
+print(volunteer.find('yunsy'))
