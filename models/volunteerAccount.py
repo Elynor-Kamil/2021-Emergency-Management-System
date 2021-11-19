@@ -1,10 +1,10 @@
-
 import datetime
 from models import camp
 from models.base.document import IndexedDocument
 from models.base.field import Field
 
-class volunteer(IndexedDocument):
+
+class Volunteer(IndexedDocument):
     username = Field(primary_key=True)
     password = Field()
     firstname = Field()
@@ -21,7 +21,7 @@ class volunteer(IndexedDocument):
                  lastname: str,
                  phone: str,
                  camp: list,
-                 availability = True):
+                 availability=True):
 
         """
         Initialize a new volunteer account.
@@ -48,7 +48,6 @@ class volunteer(IndexedDocument):
                          camp=camp,
                          availability=availability,
                          creationdate=datetime.datetime.now().date())
-
 
     def __checkVolunteerUsername(self, username):
         if len(username) <= 1:
@@ -78,14 +77,12 @@ class volunteer(IndexedDocument):
     def changeAvailability(self):
         self.availability = not (self.availability)
 
-
     def __str__(self):
         return f"Volunteer username: {self.username}\n" \
                f"Volunteer {self.firstname} {self.lastname} belongs to camp {self.camp}.\n" \
                f"Phone Number: {self.phone}\n" \
                f"Availability: {self.availability}\n" \
                f"Date joined: {self.creationdate}\n"
-
 
     class InvalidUsernameException(Exception):
         """
@@ -95,7 +92,6 @@ class volunteer(IndexedDocument):
         def __init__(self, username):
             super().__init__(f"Invalid username: {username}. Username should be more than 1 character.")
 
-
     class InvalidPasswordException(Exception):
         """
          Raise exception when the password entered is too short.
@@ -103,7 +99,6 @@ class volunteer(IndexedDocument):
 
         def __init__(self, password):
             super().__init__(f"Invalid password: {password}. Password should be more than 1 character.")
-
 
     class InvalidFirstnameException(Exception):
         """
@@ -113,7 +108,6 @@ class volunteer(IndexedDocument):
         def __init__(self, firstname):
             super().__init__(f"Invalid name: {firstname}. First name should be more than 1 character.")
 
-
     class InvalidLastnameException(Exception):
         """
          Raise exception when the lastname entered is too short.
@@ -122,7 +116,6 @@ class volunteer(IndexedDocument):
         def __init__(self, lastname):
             super().__init__(f"Invalid name: {lastname}. Last name should be more than 1 character.")
 
-
     class InvalidPhoneException(Exception):
         """
          Raise exception when the phone number is invalid (length, no country code).
@@ -130,7 +123,6 @@ class volunteer(IndexedDocument):
 
         def __init__(self, msg):
             super().__init__(msg)
-
 
     class InvalidCampException(Exception):
         """
@@ -141,15 +133,17 @@ class volunteer(IndexedDocument):
             super().__init__(f"Camp {camp} does not exist.")
 
 
-
-volunteerA = volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin', phone='+012345', camp='UCL')
-print(volunteerA)
-
-volunteerA.firstname = 'Yun-Tzu'
-volunteerA.save()
-print(volunteerA)
+# volunteerA = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin', phone='+012345', camp='UCL')
+# print(volunteerA)
+#
+# volunteerA.firstname = 'Yun-Tzu'
+# volunteerA.save()
+# print(volunteerA)
 
 # print(volunteer.all())
 # print(volunteer.find('yunsy'))
-# volunteer.delete()
-print(volunteer.find('yunsy'))
+# Volunteer.delete()
+
+volunteerB = Volunteer.find('yunsy')
+volunteerB.delete()
+print(Volunteer.find('yunsy'))
