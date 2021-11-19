@@ -1,7 +1,4 @@
 import datetime
-from models import camp
-from models.base.document import IndexedDocument
-from models.base.field import Field
 from models.camp import Camp
 
 

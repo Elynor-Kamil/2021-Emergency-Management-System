@@ -1,6 +1,5 @@
 import unittest
 
-from models import volunteer
 from models.camp import Camp
 from models.volunteer import Volunteer
 
