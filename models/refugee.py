@@ -6,34 +6,49 @@ class Refugee:
     A class to represent a refugee family.
     """
     class MedicalCondition(Enum):
-        MINOR = "minor"
-        MAJOR = "major"
-        MODERATE = "moderate"
-        EXTREME = "extreme"
+        CANCER = "Cancer"
+        CHRONICKIDNEY = "Chronic kidney disease"
+        CHRONICLIVER = "Chronic liver disease"
+        CHRONICLUNG = "Chronic lung diseases"
+        DEMENTIA_OR_NEUROLOGICAL = "Dementia or other neurological conditions"
+        DIABETES = "Diabetes"
+        DOWNSYNDROME = "Down Syndrome"
+        HEART = "Heart conditions"
+        HIV = "HIV infection"
+        IMMUNOCOMPROMISED = "Immunocompromised state (weakened immune system)"
+        MENTALHEALTH = "Mental health conditions"
+        OVERWEIGHT_OR_OBESITY = "Overweight and obesity"
+        PREGNANCY = "Pregnancy"
+        SICKLECELL_OR_THALASSEMIA = "Sickle cell or thalassemia"
+        SMOKING = "Smoking, current or former"
+        TRANSPLANT = "Solid organ or blood stem cell transplant"
+        STROKE_OR_CEREBROVASCULAR = "Stroke or cerebrovascular disease, which affects blood flow to the brain"
+        SUBSTANCE_USE = "Substance use disorders"
+        TUBERCULOSIS = "Tuberculosis"
+        OTHERS = "Others"
 
     def __init__(self,
                  firstname: str,
                  lastname:str,
                  camp: str,
-                 medicalConditionType: MedicalCondition,
                  numOfFamilyMember: int,
-                 startingDate=datetime.today().date()):
+                 startingDate:date,
+                 medicalConditionType=None):
 
         """
         :param firstname: firstname of refugee family
         :param lastname: lastname of refugee family
         :param camp: camp of the refugee family locating at
-        :param medicalConditionType: medical condition type of the refugee
         :param numOfFamilyMember: param number of family member
         :param startingDate: start date of refugee family creation
+        :param medicalConditionType: medical condition type of the refugee
         """
 
         self.name = self.__sanitiseName(firstname, lastname)
         self.numOfFamilyMember = self.__sanitiseNumOfFamilyMember(numOfFamilyMember)
         self.camp = camp
-        self.medicalConditionType = medicalConditionType
         self.startingDate = self.__sanitiseStartingDate(startingDate)
-
+        self.medicalConditionType : list[MedicalCondition] = medicalConditionType
 
     def __sanitiseName(self, firstname, lastname):
         """
@@ -56,6 +71,16 @@ class Refugee:
             raise self.InvalidNumOfFamilyMemberException()
         return numOfFamilyMember
 
+    def __sanitiseMedicalConditionType(self, medicalConditionType):
+        """
+        check if no other options is being selected if None option is chosen.
+        """
+        list = []
+        for medicalCondition.value in medicalConditionType:
+            list.append(medicalCondition)
+        if len(medicalConditionType) > 1:
+            raise self.invalidMedicalConditionTypeException()
+        return medicalConditionType
 
     def __sanitiseStartingDate(self, startingDate: date):  # for removing and archive
         """
@@ -73,8 +98,8 @@ class Refugee:
         return f"Refugee family {self.name} located in {self.camp}.\n"\
                f"Number of Family Member: {self.numOfFamilyMember}\n" \
                f"Camp: {self.camp}\n" \
-               f"Medical Condition: {self.medicalConditionType}\n" \
                f"Creation Date: {self.startingDate}\n" \
+               f"Medical Condition: {self.medicalConditionType}\n"\
 
 
     class InvalidNumOfFamilyMemberException(Exception):
