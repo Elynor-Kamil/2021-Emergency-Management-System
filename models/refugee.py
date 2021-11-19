@@ -5,7 +5,7 @@ class Refugee:
     """
     A class to represent a refugee family.
     """
-    class Medical_Condition(Enum):
+    class MedicalCondition(Enum):
         CANCER = "Cancer"
         CHRONICKIDNEY = "Chronic kidney disease"
         CHRONICLIVER = "Chronic liver disease"
@@ -44,11 +44,11 @@ class Refugee:
         :param medicalConditionType: medical condition type of the refugee
         """
 
-        self.name = self.__sanitiseName(firstname, lastname)
-        self.numOfFamilyMember = self.__sanitiseNumOfFamilyMember(numOfFamilyMember)
+        self.name = self.__sanitise_name(firstname, lastname)
+        self.numOfFamilyMember = self.__sanitise_num_of_family_member(numOfFamilyMember)
         self.camp = camp
-        self.startingDate = self.__sanitiseStartingDate(startingDate)
-        self.medicalConditionType : self.MedicalCondition = medicalConditionType
+        self.startingDate = self.__sanitise_starting_date(startingDate)
+        self.medicalConditionType : set[self.MedicalCondition] = set(medicalConditionType)
 
     def __sanitise_name(self, firstname, lastname):
         """
@@ -102,14 +102,14 @@ class Refugee:
                f"Medical Condition: {self.medicalConditionType}\n"\
 
 
-    class Invalid_NumOfFamilyMember_Exception(Exception):
+    class InvalidNumOfFamilyMemberException(Exception):
         """
         Raise exception when number of family member entered.
         """
         def __init__(self):
             super().__init__(f"Invalid input: the number of family members must be a positive integer.")
 
-    class Invalid_Name_Exception(Exception):
+    class InvalidNameException(Exception):
         """
         Raise exception when the firstname or/and lastname is invalid.
         """
@@ -117,7 +117,7 @@ class Refugee:
             super().__init__(f"Invalid name. The firstname and lastname must be alphabets.")
 
 
-    class Invalid_Starting_Date_Exception(Exception):
+    class InvalidStartingDateException(Exception):
         """
         Raise exception when the start date is invalid.
         """
