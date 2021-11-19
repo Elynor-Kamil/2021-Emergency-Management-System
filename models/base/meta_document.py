@@ -1,3 +1,5 @@
+import sys
+
 from models.base.field import Field
 
 
@@ -29,3 +31,18 @@ class MetaDocument(type):
         attrs["_fields"] = doc_fields
 
         return super().__new__(cls, name, bases, attrs)
+
+
+class MetaIndexedDocument(MetaDocument):
+    """
+    A metaclass for IndexedDocument to load the index at class definition.
+    """
+
+    def __new__(cls, name, bases, attrs):
+        if "_persistence_path" not in attrs:
+            attrs["_persistence_path"] = f'data/{name}'
+
+        new_class = super().__new__(cls, name, bases, attrs)
+        sys.modules[new_class.__module__].__dict__[name] = new_class
+        new_class.reload()
+        return new_class

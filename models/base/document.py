@@ -5,7 +5,7 @@ import pickle
 from typing import Union
 
 from models.base.field import ReferenceDocumentsField
-from models.base.meta_document import MetaDocument
+from models.base.meta_document import MetaDocument, MetaIndexedDocument
 
 
 def persist(func):
@@ -131,11 +131,13 @@ class Document(metaclass=MetaDocument):
         return f'{self.__class__.__name__}({self._data})'
 
 
-class IndexedDocument(Document):
+class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     """
     Base class for all root level documents, directly persisted to disk.
     A primary key must be defined to index all active documents.
     Documents are persisted as the index to all documents in this class.
+    The default persistence path is data/{classname}
+    to change the path, override the _persistence_path property.
     """
 
     def __init__(self, **kwargs):
@@ -144,26 +146,12 @@ class IndexedDocument(Document):
         super().__init__(**kwargs)
 
     @classmethod
-    @property
-    def persistence_path(cls) -> str:
-        """
-        The path to the persistence file. Defaults to data/{the class name}.
-        Override this method to change the path.
-        """
-        return f'data/{cls.__name__}'
-
-    try:
-        __objects = pickle.load(open(f'{persistence_path}.p', 'rb'))
-    except FileNotFoundError:  # No persistence file yet
-        __objects = {}
-
-    @classmethod
     def reload(cls) -> None:
         """
         Reload the index from disk.
         """
         try:
-            with open(cls.persistence_path, 'rb') as f:
+            with open(cls._persistence_path, 'rb') as f:
                 cls.__objects = pickle.load(f)
         except FileNotFoundError:
             cls.__objects = {}
@@ -174,8 +162,8 @@ class IndexedDocument(Document):
         Also save all root-level documents referencing this document.
         """
         self.__class__.__objects[self.key] = self
-        os.makedirs(os.path.dirname(self.persistence_path), exist_ok=True)
-        with open(self.persistence_path, 'wb') as f:
+        os.makedirs(os.path.dirname(self._persistence_path), exist_ok=True)
+        with open(self._persistence_path, 'wb') as f:
             pickle.dump(self.__class__.__objects, f)
         super().save()
 
@@ -202,7 +190,7 @@ class IndexedDocument(Document):
         :return:
         """
         del self.__class__.__objects[self.key]
-        with open(self.persistence_path, 'wb') as f:
+        with open(self._persistence_path, 'wb') as f:
             pickle.dump(self.__class__.__objects, f)
         super().delete()
 
@@ -214,7 +202,7 @@ class IndexedDocument(Document):
         for document in cls.all():
             super().delete(document)
         try:
-            os.remove(cls.persistence_path)
+            os.remove(cls._persistence_path)
         except FileNotFoundError:
             pass
         cls.__objects = {}
