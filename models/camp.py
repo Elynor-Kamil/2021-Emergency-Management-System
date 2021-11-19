@@ -1,9 +1,6 @@
-from models.base.document import Document
-from models.base.field import Field
-
-
-class Camp(Document):
-    name = Field(primary_key=True)
+class Camp:
+    def __init__(self, name: str):
+        self.name = name
 
     def __str__(self):
         return self.name

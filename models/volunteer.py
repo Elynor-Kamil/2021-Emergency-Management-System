@@ -2,17 +2,10 @@ import datetime
 from models import camp
 from models.base.document import IndexedDocument
 from models.base.field import Field
+from models.camp import Camp
 
 
-class Volunteer(IndexedDocument):
-    username = Field(primary_key=True)
-    password = Field()
-    firstname = Field()
-    lastname = Field()
-    phone = Field()
-    camp = Field()
-    availability = Field()
-    creationdate = Field()
+class Volunteer:
 
     def __init__(self,
                  username: str,
@@ -20,7 +13,7 @@ class Volunteer(IndexedDocument):
                  firstname: str,
                  lastname: str,
                  phone: str,
-                 camp: list,
+                 camp: Camp,
                  availability=True):
 
         """
@@ -40,14 +33,14 @@ class Volunteer(IndexedDocument):
         self.__checkVolunteerName(firstname, lastname)
         self.__checkVolunteerPhone(phone)
 
-        super().__init__(username=username,
-                         password=password,
-                         firstname=firstname,
-                         lastname=lastname,
-                         phone=phone,
-                         camp=camp,
-                         availability=availability,
-                         creationdate=datetime.datetime.now().date())
+        self.username = username
+        self.password = password
+        self.firstname = firstname
+        self.lastname = lastname
+        self.phone = phone
+        self.camp = camp
+        self.availability = availability
+        self.creationdate = datetime.datetime.now().date()
 
     def __checkVolunteerUsername(self, username):
         if len(username) <= 1:
@@ -68,11 +61,6 @@ class Volunteer(IndexedDocument):
             raise self.InvalidPhoneException("Phone should include country code and be in format \"+XXXXXXXXXXX\".")
         elif len(phone) < 5:
             raise self.InvalidPhoneException("The phone number is too short.")
-
-    def changeCamp(self, newcamp):
-        if newcamp not in camp.Camp.camps:
-            raise self.InvalidCampException(newcamp)
-        self.camp = newcamp
 
     def changeAvailability(self):
         self.availability = not (self.availability)
