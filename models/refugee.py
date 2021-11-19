@@ -5,7 +5,7 @@ class Refugee:
     """
     A class to represent a refugee family.
     """
-    class MedicalCondition(Enum):
+    class Medical_Condition(Enum):
         CANCER = "Cancer"
         CHRONICKIDNEY = "Chronic kidney disease"
         CHRONICLIVER = "Chronic liver disease"
@@ -48,9 +48,9 @@ class Refugee:
         self.numOfFamilyMember = self.__sanitiseNumOfFamilyMember(numOfFamilyMember)
         self.camp = camp
         self.startingDate = self.__sanitiseStartingDate(startingDate)
-        self.medicalConditionType : list[MedicalCondition] = medicalConditionType
+        self.medicalConditionType : self.MedicalCondition = medicalConditionType
 
-    def __sanitiseName(self, firstname, lastname):
+    def __sanitise_name(self, firstname, lastname):
         """
         check if name is valid
         """
@@ -63,7 +63,7 @@ class Refugee:
             return fullname
 
 
-    def __sanitiseNumOfFamilyMember(self, numOfFamilyMember):
+    def __sanitise_num_of_family_member(self, numOfFamilyMember):
         """
         check if number of family member is valid
         """
@@ -71,7 +71,7 @@ class Refugee:
             raise self.InvalidNumOfFamilyMemberException()
         return numOfFamilyMember
 
-    def __sanitiseMedicalConditionType(self, medicalConditionType):
+    def __sanitise_medical_condition_type(self, medicalConditionType):
         """
         check if no other options is being selected if None option is chosen.
         """
@@ -82,7 +82,7 @@ class Refugee:
             raise self.invalidMedicalConditionTypeException()
         return medicalConditionType
 
-    def __sanitiseStartingDate(self, startingDate: date):  # for removing and archive
+    def __sanitise_starting_date(self, startingDate: date):  # for removing and archive
         """
         check if starting date is valid
         """
@@ -102,14 +102,14 @@ class Refugee:
                f"Medical Condition: {self.medicalConditionType}\n"\
 
 
-    class InvalidNumOfFamilyMemberException(Exception):
+    class Invalid_NumOfFamilyMember_Exception(Exception):
         """
         Raise exception when number of family member entered.
         """
         def __init__(self):
             super().__init__(f"Invalid input: the number of family members must be a positive integer.")
 
-    class InvalidNameException(Exception):
+    class Invalid_Name_Exception(Exception):
         """
         Raise exception when the firstname or/and lastname is invalid.
         """
@@ -117,7 +117,7 @@ class Refugee:
             super().__init__(f"Invalid name. The firstname and lastname must be alphabets.")
 
 
-    class InvalidStartingDateException(Exception):
+    class Invalid_Starting_Date_Exception(Exception):
         """
         Raise exception when the start date is invalid.
         """
