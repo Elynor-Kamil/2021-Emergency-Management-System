@@ -48,7 +48,7 @@ class Refugee:
         self.numOfFamilyMember = self.__sanitise_num_of_family_member(numOfFamilyMember)
         self.camp = camp
         self.startingDate = self.__sanitise_starting_date(startingDate)
-        self.medicalConditionType : set[self.MedicalCondition] = set(medicalConditionType)
+        self.medicalConditionType : set[self.MedicalCondition] = self.__sanitise_medical_condition_type(medicalConditionType)
 
     def __sanitise_name(self, firstname, lastname):
         """
@@ -73,16 +73,12 @@ class Refugee:
 
     def __sanitise_medical_condition_type(self, medicalConditionType):
         """
-        check if no other options is being selected if None option is chosen.
+        check if set(medicalConditionType) is created if medicalConditionType is not None.
         """
-        list = []
-        for medicalCondition.value in medicalConditionType:
-            list.append(medicalCondition)
-        if len(medicalConditionType) > 1:
-            raise self.invalidMedicalConditionTypeException()
-        return medicalConditionType
+        if medicalConditionType:
+            return set(medicalConditionType)
 
-    def __sanitise_starting_date(self, startingDate: date):  # for removing and archive
+    def __sanitise_starting_date(self, startingDate: date):
         """
         check if starting date is valid
         """
