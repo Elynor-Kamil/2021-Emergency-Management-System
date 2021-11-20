@@ -52,7 +52,6 @@ class Plan:
                  emergency_type: EmergencyType,
                  description: str,
                  geographical_area: str,
-                 start_date: date,
                  camps: Iterable[Camp]):
         """
         Initialize a new plan.
@@ -60,18 +59,23 @@ class Plan:
         :param emergency_type: type of emergency, one of the predefined types
         :param description: description of the plan
         :param geographical_area: geographical area affected by the emergency
-        :param start_date: start date of the plan
         :param camps: camps to be included in the plan
         """
         self.name = name
         self.emergency_type = emergency_type
         self.description = description
         self.geographical_area = geographical_area
-        self.__check_start_date(start_date)
-        self.start_date = start_date
+        self.__start_date = datetime.today().date()
         if not camps:
             raise self.MissingCampsError()
         self.camps: set[Camp] = set(camps)
+
+    @property
+    def start_date(self) -> date:
+        """
+        Get the read-only start date of the plan.
+        """
+        return self.__start_date
 
     def __str__(self):
         return f"Plan '{self.name}'"
@@ -94,11 +98,3 @@ class Plan:
             if camp not in self.camps:
                 raise self.CampNotFoundError(camp)
             self.camps.remove(camp)
-
-    def __check_start_date(self, start_date: date) -> None:
-        """
-        Validate start date. PastStartDateException is raised if start date is in the past.
-        """
-        today = datetime.today().date()
-        if start_date < today:
-            raise self.PastStartDateException()

@@ -18,7 +18,6 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1),
                     camps=[Camp('TestCamp')])
         self.assertEqual("Plan 'My Plan'", str(plan))
 
@@ -31,7 +30,6 @@ class PlanTest(unittest.TestCase):
                  emergency_type=Plan.EmergencyType.EARTHQUAKE,
                  description='Test emergency plan',
                  geographical_area='',
-                 start_date=date(2999, 1, 1),
                  camps=[])
 
     def test_open_camps(self):
@@ -46,7 +44,6 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1),
                     camps=[camp_1])
         plan.open_camps(camp_2, camp_3)
         self.assertEqual({camp_1, camp_2, camp_3}, plan.camps)
@@ -65,7 +62,6 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1),
                     camps=[camp_1, camp_2, camp_3])
         plan.close_camps(camp_3)
         self.assertEqual({camp_1, camp_2}, plan.camps)
@@ -80,7 +76,6 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1),
                     camps=[camp_1])
         with self.assertRaises(Plan.CampNotFoundError):
             plan.close_camps(camp_2)
@@ -96,19 +91,17 @@ class PlanTest(unittest.TestCase):
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    start_date=date(2999, 1, 1),
                     camps=[camp_1, camp_2, camp_3])
         with self.assertRaises(Plan.MissingCampsError):
             plan.close_camps(camp_1, camp_2, camp_3)
 
-    def test_invalid_start(self):
+    def test_start_date_today(self):
         """
-        Test that invalid start dates are rejected
+        Test that start date is today
         """
-        with self.assertRaises(Plan.PastStartDateException):
-            Plan('My Plan',
-                 emergency_type=Plan.EmergencyType.EARTHQUAKE,
-                 description='Test emergency plan',
-                 geographical_area='',
-                 start_date=date(2000, 1, 1),
-                 camps=[Camp('TestCamp')])
+        plan = Plan('My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp('TestCamp')])
+        self.assertEqual(date.today(), plan.start_date)
