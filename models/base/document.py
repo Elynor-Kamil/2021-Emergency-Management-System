@@ -187,7 +187,6 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     def delete(self) -> None:
         """
         Remove the document from the index, all references to it, and persist the change.
-        :return:
         """
         del self.__class__.__objects[self.key]
         with open(self._persistence_path, 'wb') as f:
