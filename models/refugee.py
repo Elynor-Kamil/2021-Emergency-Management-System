@@ -31,9 +31,9 @@ class Refugee:
                  firstname: str,
                  lastname:str,
                  camp: str,
-                 numOfFamilyMember: int,
-                 startingDate:date,
-                 medicalConditionType=None):
+                 num_of_family_member: int,
+                 starting_date:date,
+                 medical_condition_type=None):
 
         """
         :param firstname: firstname of refugee family
@@ -46,10 +46,10 @@ class Refugee:
         self.__sanitise_name(firstname, lastname)
         self.firstname = firstname
         self.lastname = lastname
-        self.numOfFamilyMember = self.__sanitise_num_of_family_member(numOfFamilyMember)
+        self.num_of_family_member = self.__sanitise_num_of_family_member(num_of_family_member)
         self.camp = camp
-        self.startingDate = self.__sanitise_starting_date(startingDate)
-        self.medicalConditionType : set[self.MedicalCondition] = self.__sanitise_medical_condition_type(medicalConditionType)
+        self.starting_date = self.__sanitise_starting_date(starting_date)
+        self.medical_condition_type : set[self.MedicalCondition] = self.__sanitise_medical_condition_type(medical_condition_type)
 
     def __sanitise_name(self, firstname, lastname):
         """
@@ -61,42 +61,41 @@ class Refugee:
             raise self.InvalidNameException()
 
 
-    def __sanitise_num_of_family_member(self, numOfFamilyMember):
+    def __sanitise_num_of_family_member(self, num_of_family_member):
         """
         check if number of family member is valid
         """
-        if not isinstance(numOfFamilyMember, int) or numOfFamilyMember < 1:
+        if not isinstance(num_of_family_member, int) or num_of_family_member < 1:
             raise self.InvalidNumOfFamilyMemberException()
-        return numOfFamilyMember
+        return num_of_family_member
 
-    def __sanitise_medical_condition_type(self, medicalConditionType):
+    def __sanitise_medical_condition_type(self, medical_condition_type):
         """
-        check if set(medicalConditionType) is created if medicalConditionType is not None.
+        check if set(medical_condition_type) is created if medical_condition_type is not None.
         """
-        emptySet = set()
-        if medicalConditionType:
-            return set(medicalConditionType)
+        if medical_condition_type:
+            return set(medical_condition_type)
         else:
-            return emptySet
+            return set()
 
-    def __sanitise_starting_date(self, startingDate: date):
+    def __sanitise_starting_date(self, starting_date: date):
         """
         check if starting date is valid
         """
         today = datetime.today().date()
-        if not startingDate:
+        if not starting_date:
             return today
-        elif startingDate > today:
+        elif starting_date > today:
             raise self.InvalidStartingDateException()
-        return startingDate
+        return starting_date
 
 
     def __str__(self):
-        return f"Refugee family {self.name} located in {self.camp}.\n"\
-               f"Number of Family Member: {self.numOfFamilyMember}\n" \
+        return f"Refugee family {self.firstname} {self.lastname} located in {self.camp}.\n"\
+               f"Number of Family Member: {self.num_of_family_member}\n" \
                f"Camp: {self.camp}\n" \
-               f"Creation Date: {self.startingDate}\n" \
-               f"Medical Condition: {self.medicalConditionType}\n"\
+               f"Creation Date: {self.starting_date}\n" \
+               f"Medical Condition: {self.medical_condition_type}\n"\
 
 
     class InvalidNumOfFamilyMemberException(Exception):
