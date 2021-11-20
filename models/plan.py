@@ -39,6 +39,14 @@ class Plan:
         def __init__(self):
             super().__init__('Start date is in the past. Please enter a valid start date.')
 
+    class CampNotFoundError(Exception):
+        """
+        Exception raised when a camp is not found in the emergency plan.
+        """
+
+        def __init__(self, camp):
+            super().__init__(f'Camp {camp} is not in the emergency plan.')
+
     def __init__(self,
                  name: str,
                  emergency_type: EmergencyType,
@@ -70,15 +78,22 @@ class Plan:
 
     def open_camps(self, *camps: Camp) -> None:
         """
-        Open one or more camps.
+        Open one or more camps. Camps that are already in the plan are ignored.
         """
         self.camps.update(camps)
 
     def close_camps(self, *camps: Camp) -> None:
         """
         Close one or more camps.
+        MissingCampsError is raised if the call will close all camps in the plan.
+        CampNotFoundError is raised if one or more camps are not found in the plan.
         """
-        self.camps.difference_update(camps)
+        if len(self.camps - set(camps)) == 0:
+            raise self.MissingCampsError
+        for camp in camps:
+            if camp not in self.camps:
+                raise self.CampNotFoundError(camp)
+            self.camps.remove(camp)
 
     def __check_start_date(self, start_date: date) -> None:
         """

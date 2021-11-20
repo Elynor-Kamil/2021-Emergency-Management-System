@@ -69,8 +69,37 @@ class PlanTest(unittest.TestCase):
                     camps=[camp_1, camp_2, camp_3])
         plan.close_camps(camp_3)
         self.assertEqual({camp_1, camp_2}, plan.camps)
-        plan.close_camps(camp_2, camp_4)
-        self.assertEqual({camp_1}, plan.camps)
+
+    def test_close_nonexistent_camp(self):
+        """
+        Test that closing a camp that is not open is rejected
+        """
+        camp_1 = Camp('Camp 1')
+        camp_2 = Camp('Camp 2')
+        plan = Plan('My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    start_date=date(2999, 1, 1),
+                    camps=[camp_1])
+        with self.assertRaises(Plan.CampNotFoundError):
+            plan.close_camps(camp_2)
+
+    def test_close_all_camps(self):
+        """
+        Test that closing all camps is rejected
+        """
+        camp_1 = Camp('Camp 1')
+        camp_2 = Camp('Camp 2')
+        camp_3 = Camp('Camp 3')
+        plan = Plan('My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    start_date=date(2999, 1, 1),
+                    camps=[camp_1, camp_2, camp_3])
+        with self.assertRaises(Plan.MissingCampsError):
+            plan.close_camps(camp_1, camp_2, camp_3)
 
     def test_invalid_start(self):
         """
