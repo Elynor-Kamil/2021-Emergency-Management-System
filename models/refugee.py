@@ -43,8 +43,9 @@ class Refugee:
         :param startingDate: start date of refugee family creation
         :param medicalConditionType: medical condition type of the refugee
         """
-
-        self.name = self.__sanitise_name(firstname, lastname)
+        self.__sanitise_name(firstname, lastname)
+        self.firstname = firstname
+        self.lastname = lastname
         self.numOfFamilyMember = self.__sanitise_num_of_family_member(numOfFamilyMember)
         self.camp = camp
         self.startingDate = self.__sanitise_starting_date(startingDate)
@@ -58,9 +59,6 @@ class Refugee:
             raise self.InvalidNameException()
         elif not firstname.isalpha() or not lastname.isalpha():
             raise self.InvalidNameException()
-        else:
-            fullname = firstname + " " + lastname
-            return fullname
 
 
     def __sanitise_num_of_family_member(self, numOfFamilyMember):
@@ -75,8 +73,11 @@ class Refugee:
         """
         check if set(medicalConditionType) is created if medicalConditionType is not None.
         """
+        emptySet = set()
         if medicalConditionType:
             return set(medicalConditionType)
+        else:
+            return emptySet
 
     def __sanitise_starting_date(self, startingDate: date):
         """
