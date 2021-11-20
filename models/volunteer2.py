@@ -1,8 +1,19 @@
 import datetime
+from models import camp
+from models.base.document import IndexedDocument
+from models.base.field import Field
 from models.camp import Camp
 
 
-class Volunteer:
+class Volunteer(IndexedDocument):
+    username = Field(primary_key=True)
+    password = Field()
+    firstname = Field()
+    lastname = Field()
+    phone = Field()
+    camp = Field()
+    availability = Field()
+    creationdate = Field()
 
     def __init__(self,
                  username: str,
@@ -30,14 +41,14 @@ class Volunteer:
         self.__checkVolunteerName(firstname, lastname)
         self.__checkVolunteerPhone(phone)
 
-        self.username = username
-        self.password = password
-        self.firstname = firstname
-        self.lastname = lastname
-        self.phone = phone
-        self.camp = camp
-        self.availability = availability
-        self.creationdate = datetime.datetime.now().date()
+        super().__init__(username=username,
+                         password=password,
+                         firstname=firstname,
+                         lastname=lastname,
+                         phone=phone,
+                         camp=camp,
+                         availability=availability,
+                         creationdate=datetime.datetime.now().date())
 
     def __checkVolunteerUsername(self, username):
         if len(username) <= 1:
@@ -116,3 +127,19 @@ class Volunteer:
 
         def __init__(self, camp):
             super().__init__(f"Camp {camp} does not exist.")
+
+
+volunteerA = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin', phone='+012345', camp='UCL')
+# print(volunteerA)
+#
+# volunteerA.firstname = 'Yun-Tzu'
+# volunteerA.save()
+# print(volunteerA)
+
+# print(volunteer.all())
+# print(volunteer.find('yunsy'))
+# Volunteer.delete()
+
+# volunteerB = Volunteer.find('yunsy')
+# volunteerB.delete()
+# print(Volunteer.find('yunsy'))
