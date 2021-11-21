@@ -19,7 +19,7 @@ class EmsShell(Cmd):
         Loop until the user enters a valid username and password.
         """
         from interfaces.admin_cli import AdminShell
-        from interfaces.volunteer_cli import VolunteerShell
+        #from interfaces.volunteer_cli import VolunteerShell
 
         while self.user is None:
             username = input('Username: ')
@@ -48,7 +48,7 @@ class EmsShell(Cmd):
         Ask the user to login before entering the shell.
         :return:
         """
-        print('Welcome to EMS, please login.')
+        print('\033[1m'+'Welcome to EMS, please login.'+'\033[0m')
         self.login()
 
 
