@@ -30,7 +30,7 @@ class Refugee:
     def __init__(self,
                  firstname: str,
                  lastname:str,
-                 camp: str,
+                 camp: Camp,
                  num_of_family_member: int,
                  starting_date:date,
                  medical_condition_type=None):
@@ -69,6 +69,7 @@ class Refugee:
             raise self.InvalidNumOfFamilyMemberException()
         return num_of_family_member
 
+
     def __sanitise_medical_condition_type(self, medical_condition_type):
         """
         check if set(medical_condition_type) is created if medical_condition_type is not None.
@@ -77,6 +78,7 @@ class Refugee:
             return set(medical_condition_type)
         else:
             return set()
+
 
     def __sanitise_starting_date(self, starting_date: date):
         """
@@ -120,3 +122,12 @@ class Refugee:
 
         def __init__(self):
             super().__init__(f"Invalid starting date. Starting date must be before/on current date.")
+
+
+    class InvalidCampException(Exception):
+        """
+         Raise exception when the camp entered does not exist.
+        """
+
+        def __init__(self, camp):
+            super().__init__(f"Camp {camp} does not exist.")
