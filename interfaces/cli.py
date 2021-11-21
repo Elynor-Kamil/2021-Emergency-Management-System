@@ -18,13 +18,20 @@ class EmsShell(Cmd):
         Prompts the user for a username and password to login to EMS.
         Loop until the user enters a valid username and password.
         """
+        from interfaces.admin_cli import AdminShell
+        from interfaces.volunteer_cli import VolunteerShell
+
         while self.user is None:
             username = input('Username: ')
             password = input('Password: ')
             try:
                 self.user = users_catalog[username].login(password)
                 self.prompt = f'{self.user.username}> '
-                print(f'Welcome {self.user.username}')
+                print(f'Welcome {self.user.username}. Your role is {self.user.__class__.__name__}.')
+                if self.user.__class__.__name__ == "Admin":
+                    AdminShell().cmdloop()
+                else:
+                    VolunteerShell().cmdloop()
             except (KeyError, User.InvalidPassword):
                 print('Invalid username or password. Please try again.')
 
@@ -44,6 +51,8 @@ class EmsShell(Cmd):
         print('Welcome to EMS, please login.')
         self.login()
 
+
+    #---- delete below
     def precmd(self, line: str) -> str:
         """
         Handles two-word commands made with action words
