@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from enum import Enum
+from models.camp import Camp
 
 class Refugee:
     """
