@@ -84,7 +84,7 @@ class Plan(IndexedDocument):
         """
         Get the read-only start date of the plan.
         """
-        return self._Plan__start_date  # Name mangling to access private field
+        return self.__start_date  # Name mangling to access private field
 
     def __str__(self):
         return f"Plan '{self.name}'"

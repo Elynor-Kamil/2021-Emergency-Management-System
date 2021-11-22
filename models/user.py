@@ -4,19 +4,27 @@ import functools
 import os
 import hashlib
 
+from models.base.document import IndexedDocument
+from models.base.field import Field
 
-class User:
+
+class User(IndexedDocument):
     """
     Base class for user with authentication mechanism
     """
+    username = Field(primary_key=True)
+    __salt = Field()
+    __password_hash = Field()
 
     def __init__(self, username: str, password: str):
-        self.username = username
-        self.salt = os.urandom(32)
-        self.__password_hash = self.__hash_password(password)
+        salt = os.urandom(32)
+        super().__init__(username=username,
+                         _User__salt=salt,
+                         _User__password_hash=self.__hash_password(password, salt))
 
-    def __hash_password(self, password: str) -> bytes:
-        return hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), self.salt, 100000)
+    @staticmethod
+    def __hash_password(password: str, salt: bytes) -> bytes:
+        return hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
     class InvalidPassword(Exception):
         pass
@@ -28,13 +36,13 @@ class User:
         :param password:
         :return:
         """
-        if self.__hash_password(password) == self.__password_hash:
+        if self.__hash_password(password, self.__salt) == self.__password_hash:
             return self
         else:
             raise User.InvalidPassword()
 
     def update_password(self, password: str) -> None:
-        self.__password_hash = self.__hash_password(password)
+        self.__password_hash = self.__hash_password(password, self.__salt)
 
 
 def require_role(*roles: type):
