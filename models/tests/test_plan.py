@@ -14,11 +14,11 @@ class PlanTest(unittest.TestCase):
         """
         Test Plan creation
         """
-        plan = Plan('My Plan',
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    camps=[Camp('TestCamp')])
+                    camps=[Camp(name='TestCamp')])
         self.assertEqual("Plan 'My Plan'", str(plan))
 
     def test_missing_camps(self):
@@ -26,7 +26,7 @@ class PlanTest(unittest.TestCase):
         Test that missing camps are rejected
         """
         with self.assertRaises(Plan.MissingCampsError):
-            Plan('My Plan',
+            Plan(name='My Plan',
                  emergency_type=Plan.EmergencyType.EARTHQUAKE,
                  description='Test emergency plan',
                  geographical_area='',
@@ -72,9 +72,9 @@ class PlanTest(unittest.TestCase):
         """
         Test that closing a camp that is not open is rejected
         """
-        camp_1 = Camp('Camp 1')
-        camp_2 = Camp('Camp 2')
-        plan = Plan('My Plan',
+        camp_1 = Camp(name='Camp 1')
+        camp_2 = Camp(name='Camp 2')
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
@@ -86,10 +86,10 @@ class PlanTest(unittest.TestCase):
         """
         Test that closing all camps is rejected
         """
-        camp_1 = Camp('Camp 1')
-        camp_2 = Camp('Camp 2')
-        camp_3 = Camp('Camp 3')
-        plan = Plan('My Plan',
+        camp_1 = Camp(name='Camp 1')
+        camp_2 = Camp(name='Camp 2')
+        camp_3 = Camp(name='Camp 3')
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
@@ -101,11 +101,11 @@ class PlanTest(unittest.TestCase):
         """
         Test that start date is today
         """
-        plan = Plan('My Plan',
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    camps=[Camp('TestCamp')])
+                    camps=[Camp(name='TestCamp')])
         self.assertEqual(date.today(), plan.start_date)
 
     def tearDown(self) -> None:

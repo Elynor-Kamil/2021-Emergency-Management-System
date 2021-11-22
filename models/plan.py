@@ -76,7 +76,7 @@ class Plan(IndexedDocument):
                          emergency=emergency_type,
                          description=description,
                          geographical_area=geographical_area,
-                         __start_date=datetime.today().date(),
+                         _Plan__start_date=datetime.today().date(),
                          camps=camps)
 
     @property
@@ -84,7 +84,7 @@ class Plan(IndexedDocument):
         """
         Get the read-only start date of the plan.
         """
-        return self.__start_date
+        return self._Plan__start_date  # Name mangling to access private field
 
     def __str__(self):
         return f"Plan '{self.name}'"

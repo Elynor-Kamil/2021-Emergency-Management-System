@@ -17,6 +17,7 @@ class BasicDocumentTest(TestCase):
     class DemoIndexedDocument(IndexedDocument):
         name = Field(primary_key=True)
         password = Field()
+        __private_data = Field()
 
     def test_create_document(self):
         doc = self.DemoIndexedDocument(name='test', password='test')
