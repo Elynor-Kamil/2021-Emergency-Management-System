@@ -11,3 +11,8 @@ class Camp(Document):
 
     def __str__(self):
         return self.name
+
+    @property
+    def plan(self):
+        from models.plan import Plan
+        return self.find_referred_by(referrer_type=Plan)

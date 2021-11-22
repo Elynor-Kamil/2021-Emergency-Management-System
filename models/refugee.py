@@ -4,7 +4,6 @@ from enum import Enum
 
 from models.base.document import Document
 from models.base.field import Field
-from models.camp import Camp
 
 
 class Refugee(Document):
@@ -60,7 +59,7 @@ class Refugee(Document):
         super().__init__(user_id=int(time.time()),  # registration timestamp as unique identifier
                          firstname=firstname,
                          lastname=lastname,
-                         num_of_family_member=num_of_family_member,
+                         num_of_family_member=self.__sanitise_num_of_family_member(num_of_family_member),
                          starting_date=self.__sanitise_starting_date(starting_date),
                          medical_condition_type=self.__sanitise_medical_condition_type(medical_condition_type))
 
@@ -103,6 +102,7 @@ class Refugee(Document):
 
     @property
     def camp(self):
+        from models.camp import Camp
         return self.find_referred_by(referrer_type=Camp)
 
     def __str__(self):
