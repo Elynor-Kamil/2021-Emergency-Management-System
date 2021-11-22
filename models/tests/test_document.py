@@ -155,5 +155,14 @@ class DocumentReferenceTest(TestCase):
         with self.assertRaises(ReferenceSet.MultipleTypeError):
             DemoTypedNestedDocument(name='test', children=[self.DemoNestedDocument(name='a')])
 
+    def test_find_referred_by(self):
+        referee = self.DemoDocument(name='e')
+        referrer = self.DemoNestedDocument(name='test_1', children=[referee])
+        self.assertEqual(referee.find_referred_by(referrer_type=self.DemoNestedDocument, field_name='children'),
+                         referrer)
+        referrer.children.remove(referee)
+        with self.assertRaises(Document.ReferrerNotFound):
+            referee.find_referred_by(referrer_type=self.DemoNestedDocument, field_name='children')
+
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()

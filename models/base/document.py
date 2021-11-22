@@ -71,6 +71,11 @@ class Document(metaclass=MetaDocument):
         def __init__(self, field_name):
             super().__init__(f"Primary key {field_name} not set")
 
+    class ReferrerNotFound(Exception):
+        def __init__(self, referrer_type=None, attribute_name=None):
+            super().__init__(f"Instanced is not referenced by "
+                             f"{attribute_name or 'any field'} in {referrer_type or 'Any type'}")
+
     @persist
     def __init__(self, **kwargs):
         """
@@ -107,6 +112,22 @@ class Document(metaclass=MetaDocument):
         The primary key value of the document.
         """
         return getattr(self, self._primary_key)
+
+    def find_referred_by(self, referrer_type: type = None, field_name: str = None) -> Document:
+        """
+        Find the first document that references this document matching the criteria.
+        ReferrerNotFound exception is raised if no referrer matching the criteria is found.
+        :param referrer_type: optional type of the referrer as a criteria
+        :param field_name: optional field name of the referrer where the instance is referred as a criteria
+        :return: the first referrer matching the criteria
+        """
+        for referrer in self._referenced_by:
+            if referrer_type is not None and not isinstance(referrer, referrer_type):
+                continue
+            if field_name is not None and not self in getattr(referrer, field_name):
+                continue
+            return referrer
+        raise self.ReferrerNotFound(referrer_type, field_name)
 
     def __eq__(self, other):
         return self._data == other._data
@@ -187,7 +208,6 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     def delete(self) -> None:
         """
         Remove the document from the index, all references to it, and persist the change.
-        :return:
         """
         del self.__class__.__objects[self.key]
         with open(self._persistence_path, 'wb') as f:
