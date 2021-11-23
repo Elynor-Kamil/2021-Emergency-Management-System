@@ -1,14 +1,23 @@
-from collections import Iterable
 from datetime import date, datetime
 from enum import Enum
+from typing import Iterable
 
+from models.base.document import IndexedDocument
+from models.base.field import Field, ReferenceDocumentsField
 from models.camp import Camp
 
 
-class Plan:
+class Plan(IndexedDocument):
     """
     An emergency plan consisting of camps.
     """
+
+    name = Field(primary_key=True)
+    emergency = Field()
+    description = Field()
+    geographical_area = Field()
+    __start_date = Field()
+    camps = ReferenceDocumentsField(data_type=Camp)
 
     class EmergencyType(Enum):
         """
@@ -61,21 +70,21 @@ class Plan:
         :param geographical_area: geographical area affected by the emergency
         :param camps: camps to be included in the plan
         """
-        self.name = name
-        self.emergency_type = emergency_type
-        self.description = description
-        self.geographical_area = geographical_area
-        self.__start_date = datetime.today().date()
         if not camps:
             raise self.MissingCampsError()
-        self.camps: set[Camp] = set(camps)
+        super().__init__(name=name,
+                         emergency=emergency_type,
+                         description=description,
+                         geographical_area=geographical_area,
+                         _Plan__start_date=datetime.today().date(),
+                         camps=camps)
 
     @property
     def start_date(self) -> date:
         """
         Get the read-only start date of the plan.
         """
-        return self.__start_date
+        return self.__start_date  # Name mangling to access private field
 
     def __str__(self):
         return f"Plan '{self.name}'"
@@ -84,7 +93,8 @@ class Plan:
         """
         Open one or more camps. Camps that are already in the plan are ignored.
         """
-        self.camps.update(camps)
+        self.camps.add(*camps)
+        self.save()
 
     def close_camps(self, *camps: Camp) -> None:
         """
@@ -92,9 +102,12 @@ class Plan:
         MissingCampsError is raised if the call will close all camps in the plan.
         CampNotFoundError is raised if one or more camps are not found in the plan.
         """
-        if len(self.camps - set(camps)) == 0:
-            raise self.MissingCampsError
         for camp in camps:
             if camp not in self.camps:
                 raise self.CampNotFoundError(camp)
             self.camps.remove(camp)
+        if len(self.camps) == 0:
+            self.reload()
+            raise self.MissingCampsError()
+        else:
+            self.save()

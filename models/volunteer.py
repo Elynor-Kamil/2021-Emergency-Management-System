@@ -31,7 +31,6 @@ class Volunteer(IndexedDocument):
         :param lastname: the lastname of the volunteer
         :param phone: the phone number of the volunteer (only numbers with international code are accepted)
         :param availability:  whether the volunteer is available to join a new emergency plan
-        :param creationDate: the date that this volunteer is created
         """
 
         self.__checkVolunteerUsername(username)
