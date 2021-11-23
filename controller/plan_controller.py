@@ -17,14 +17,14 @@ def create_plan():
 def list_plan():
     """
     Shalaka, Elynor
-    This function would be comfined with others, and not be shown on the menu.
+    This function would be combined with others, and not be shown on the menu.
     """
     pass
 
-
 def view_plan(plan_name: str)->str:
     """
-
+    :param plan_name:
+    :return:
     """
     # """
     # Shalaka, Elynor, Michelle
