@@ -1,21 +1,34 @@
 from models.volunteer import Volunteer
+from models.camp import Camp
+
 
 ###---- Manage Volunteer Menu ----
-def create_volunteer() -> Volunteer:
+def create_volunteer(username: str,
+                     password: str,
+                     firstname: str,
+                     lastname: str,
+                     phone: str,
+                     camp: Camp) -> Volunteer:
     """
     Yunsy, Yingbo
     """
     pass
 
 
-def view_volunteer_profile():
+def find_volunteer(username: str) -> Volunteer:
+    pass
+
+
+def view_volunteer_profile(volunteer: Volunteer) -> str:
     """
+    Admin
     Yunsy, Yingbo
     """
     pass
 
 
-def edit_volunteer_profile():
+def edit_volunteer_profile(volunteer: Volunteer, firstname: str, lastname: str,
+                           phone: str) -> Volunteer:
     """
     Yunsy, Yingbo
     A function used by admin and volunteer
@@ -24,43 +37,33 @@ def edit_volunteer_profile():
     pass
 
 
-def deactivate_volunteer():
+def change_volunteer_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> Volunteer:
+    """
+    The admin role
+    :param is_admin: if this method is called by an admin
+    :param volunteer:
+    :param camp: the new camp
+    :return:
+    """
+    pass
+
+
+def deactivate_volunteer(volunteer: Volunteer) -> Volunteer:
     """
     Yunsy, Yingbo
     """
     pass
 
 
-def reactivate_volunteer():
+def reactivate_volunteer(volunteer: Volunteer) -> Volunteer:
     """
     Yunsy, Yingbo
     """
     pass
 
 
-def delete_volunteer():
+def delete_volunteer(volunteer: Volunteer) -> None:
     """
     Yunsy, Yingbo
     """
-    pass
-
-
-
-
-# font_end.py
-
-def view_plan():
-    plan_name = input('Please input plan name:')
-    try:
-        plan = find_plan(plan_name)
-        print(plan_details(plan))
-    except PlanNotFound:
-        print(f'No plan named {plan_name}')
-
-# controller.py
-
-def find_plan(plan_name: str) -> Plan:
-    pass
-
-def plan_details(plan: Plan) -> str:
     pass
