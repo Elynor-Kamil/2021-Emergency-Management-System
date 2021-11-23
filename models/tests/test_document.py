@@ -146,6 +146,10 @@ class DocumentReferenceTest(TestCase):
             self.assertFalse(root_referee in referee.children)
 
     def test_typed_reference_field(self):
+        """
+        Test that type checking is enforced when defining ReferenceDocumentsField with a specific data_type.
+        """
+
         class DemoTypedNestedDocument(Document):
             name = Field(primary_key=True)
             children = ReferenceDocumentsField(data_type=self.DemoDocument)

@@ -156,6 +156,8 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     """
     Base class for all root level documents, directly persisted to disk.
     A primary key must be defined to index all active documents.
+    To define the primary key, define an attribute with:
+    my_field = Field(primary=True)
     Documents are persisted as the index to all documents in this class.
     The default persistence path is data/{classname}
     to change the path, override the _persistence_path property.
