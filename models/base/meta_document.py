@@ -10,7 +10,7 @@ class MetaDocument(type):
 
     class MultiplePrimaryKeyError(Exception):
         def __init__(self):
-            super().__init__(f"Only one primary key is allowed")
+            super().__init__("Only one primary key is allowed")
 
     def __new__(cls, name, bases, attrs):
 
