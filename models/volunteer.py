@@ -1,4 +1,6 @@
-import datetime, re
+import datetime
+import re
+
 from models.base.document import IndexedDocument
 from models.base.field import Field
 
@@ -6,12 +8,12 @@ from models.base.field import Field
 class Volunteer(IndexedDocument):
     username = Field(primary_key=True)
     password = Field()
-    accountActivated = Field()
+    account_activated = Field()
     firstname = Field()
     lastname = Field()
     phone = Field()
     availability = Field()
-    creationDate = Field()
+    __creation_date = Field()
 
     def __init__(self,
                  username: str,
@@ -19,51 +21,52 @@ class Volunteer(IndexedDocument):
                  firstname: str,
                  lastname: str,
                  phone: str,
-                 accountActivated=True,
+                 account_activated=True,
                  availability=True):
 
         """
         Initialize a new volunteer account.
         :param username: username of the volunteer account
         :param password: password of the volunteer account
-        :param accountActivated: activation status of the volunteer account
+        :param account_activated: activation status of the volunteer account
         :param firstname: the firstname of the volunteer
         :param lastname: the lastname of the volunteer
         :param phone: the phone number of the volunteer (only numbers with international code are accepted)
         :param availability:  whether the volunteer is available to join a new emergency plan
         """
 
-        self.__checkVolunteerUsername(username)
-        self.__checkVolunteerPassword(password)
-        self.__checkVolunteerName(firstname, lastname)
-        self.__checkVolunteerPhone(phone)
+        self.__check_volunteer_username(username)
+        self.__check_volunteer_password(password)
+        self.__check_volunteer_name(firstname, lastname)
+        self.__check_volunteer_phone(phone)
 
         super().__init__(username=username,
                          password=password,
-                         accountActivated=accountActivated,
+                         account_activated=account_activated,
                          firstname=firstname,
                          lastname=lastname,
                          phone=phone,
                          availability=availability,
-                         creationDate=datetime.datetime.now().date())
+                         _Volunteer__creation_date=datetime.datetime.now().date())
 
-    def __checkVolunteerUsername(self, username):
+    def __check_volunteer_username(self, username):
         if len(username) < 4:
             raise self.InvalidUsernameException(username)
 
-    def __checkVolunteerPassword(self, password):
+    def __check_volunteer_password(self, password):
         if len(password) < 4:
             raise self.InvalidPasswordException(password)
 
-    def __checkVolunteerName(self, firstname, lastname):
+    def __check_volunteer_name(self, firstname, lastname):
         if len(firstname) <= 1:
             raise self.InvalidFirstnameException(firstname)
         elif len(lastname) <= 1:
             raise self.InvalidLastnameException(lastname)
 
-    def __checkVolunteerPhone(self, phone):
-        phoneText = "\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{5,14}$"
-        if not re.search(phoneText, phone):
+    def __check_volunteer_phone(self, phone):
+        phone_text = r"\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]" \
+                     r"|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{5,14}$"
+        if not re.search(phone_text, phone):
             raise self.InvalidPhoneException(phone)
 
     @property
@@ -73,11 +76,11 @@ class Volunteer(IndexedDocument):
 
     def __str__(self):
         return f"Volunteer username: {self.username}\n" \
-               f"Account activated: {self.accountActivated}\n" \
+               f"Account activated: {self.account_activated}\n" \
                f"Volunteer {self.firstname} {self.lastname} belongs to camp {self.camp}.\n" \
                f"Phone Number: {self.phone}\n" \
                f"Availability: {self.availability}\n" \
-               f"Date joined: {self.creationDate}\n"
+               f"Date joined: {self.__creation_date}\n"
 
     class InvalidUsernameException(Exception):
         """
