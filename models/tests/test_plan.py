@@ -14,11 +14,11 @@ class PlanTest(unittest.TestCase):
         """
         Test Plan creation
         """
-        plan = Plan('My Plan',
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    camps=[Camp('TestCamp')])
+                    camps=[Camp(name='TestCamp')])
         self.assertEqual("Plan 'My Plan'", str(plan))
 
     def test_missing_camps(self):
@@ -26,7 +26,7 @@ class PlanTest(unittest.TestCase):
         Test that missing camps are rejected
         """
         with self.assertRaises(Plan.MissingCampsError):
-            Plan('My Plan',
+            Plan(name='My Plan',
                  emergency_type=Plan.EmergencyType.EARTHQUAKE,
                  description='Test emergency plan',
                  geographical_area='',
@@ -36,43 +36,42 @@ class PlanTest(unittest.TestCase):
         """
         Test Plan opening camps
         """
-        camp_1 = Camp('Camp 1')
-        camp_2 = Camp('Camp 2')
-        camp_3 = Camp('Camp 3')
-        camp_4 = Camp('Camp 4')
-        plan = Plan('My Plan',
+        camp_1 = Camp(name='Camp 1')
+        camp_2 = Camp(name='Camp 2')
+        camp_3 = Camp(name='Camp 3')
+        camp_4 = Camp(name='Camp 4')
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[camp_1])
         plan.open_camps(camp_2, camp_3)
-        self.assertEqual({camp_1, camp_2, camp_3}, plan.camps)
+        self.assertListEqual([camp_1, camp_2, camp_3], list(plan.camps))
         plan.open_camps(camp_3, camp_4)
-        self.assertEqual({camp_1, camp_2, camp_3, camp_4}, plan.camps)
+        self.assertListEqual([camp_1, camp_2, camp_3, camp_4], list(plan.camps))
 
     def test_close_camps(self):
         """
         Test Plan closing camps
         """
-        camp_1 = Camp('Camp 1')
-        camp_2 = Camp('Camp 2')
-        camp_3 = Camp('Camp 3')
-        camp_4 = Camp('Camp 4')
+        camp_1 = Camp(name='Camp 1')
+        camp_2 = Camp(name='Camp 2')
+        camp_3 = Camp(name='Camp 3')
         plan = Plan('My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[camp_1, camp_2, camp_3])
         plan.close_camps(camp_3)
-        self.assertEqual({camp_1, camp_2}, plan.camps)
+        self.assertListEqual([camp_1, camp_2], list(plan.camps))
 
     def test_close_nonexistent_camp(self):
         """
         Test that closing a camp that is not open is rejected
         """
-        camp_1 = Camp('Camp 1')
-        camp_2 = Camp('Camp 2')
-        plan = Plan('My Plan',
+        camp_1 = Camp(name='Camp 1')
+        camp_2 = Camp(name='Camp 2')
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
@@ -84,10 +83,10 @@ class PlanTest(unittest.TestCase):
         """
         Test that closing all camps is rejected
         """
-        camp_1 = Camp('Camp 1')
-        camp_2 = Camp('Camp 2')
-        camp_3 = Camp('Camp 3')
-        plan = Plan('My Plan',
+        camp_1 = Camp(name='Camp 1')
+        camp_2 = Camp(name='Camp 2')
+        camp_3 = Camp(name='Camp 3')
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
@@ -99,9 +98,9 @@ class PlanTest(unittest.TestCase):
         """
         Test that start date is today
         """
-        plan = Plan('My Plan',
+        plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
-                    camps=[Camp('TestCamp')])
+                    camps=[Camp(name='TestCamp')])
         self.assertEqual(date.today(), plan.start_date)

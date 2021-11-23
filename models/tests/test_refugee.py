@@ -1,8 +1,8 @@
 import unittest
 from datetime import date
-from models.camp import Camp
 
 from models.refugee import Refugee
+
 
 class RefugeeTest(unittest.TestCase):
     """
@@ -15,9 +15,8 @@ class RefugeeTest(unittest.TestCase):
         """
         refugee1 = Refugee(firstname="Tom",
                            lastname="Bond",
-                           camp=Camp("UCL"),
                            num_of_family_member=1,
-                           starting_date= date(2020,1,2),
+                           starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         self.assertEqual(type(refugee1), Refugee)
 
@@ -28,10 +27,9 @@ class RefugeeTest(unittest.TestCase):
         with self.assertRaises(Refugee.InvalidNumOfFamilyMemberException):
             Refugee(firstname="Tom",
                     lastname="Bond",
-                    camp=Camp("UCL"),
                     num_of_family_member="a",
-                    starting_date= date(2020,1,2),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
+                    starting_date=date(2020, 1, 2),
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
 
     def test_invalid_numOfFamilyMember1(self):
         """
@@ -40,64 +38,54 @@ class RefugeeTest(unittest.TestCase):
         with self.assertRaises(Refugee.InvalidNumOfFamilyMemberException):
             Refugee(firstname="Tom",
                     lastname="Bond",
-                    camp=Camp("UCL"),
                     num_of_family_member=-10,
-                    starting_date= date(2020,1,2),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
+                    starting_date=date(2020, 1, 2),
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
 
     def test_invalid_firstname(self):
         with self.assertRaises(Refugee.InvalidNameException):
             Refugee(firstname="a13",
                     lastname="Bond",
-                    camp=Camp("UCL"),
                     num_of_family_member=1,
-                    starting_date= date(2020,1,2),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
+                    starting_date=date(2020, 1, 2),
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
 
     def test_invalid_firstname1(self):
         with self.assertRaises(Refugee.InvalidNameException):
             Refugee(firstname=12,
                     lastname="Bond",
-                    camp=Camp("UCL"),
                     num_of_family_member=1,
-                    starting_date= date(2020,1,2),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
+                    starting_date=date(2020, 1, 2),
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
 
     def test_invalid_lastname(self):
         with self.assertRaises(Refugee.InvalidNameException):
             Refugee(firstname="Tom",
                     lastname="a123",
-                    camp=Camp("UCL"),
                     num_of_family_member=1,
-                    starting_date= date(2020,1,2),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
+                    starting_date=date(2020, 1, 2),
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
 
     def test_invalid_lastname1(self):
         with self.assertRaises(Refugee.InvalidNameException):
             Refugee(firstname="Tom",
                     lastname=1234567,
-                    camp="None",
                     num_of_family_member=1,
-                    starting_date= date(2020,1,2),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
+                    starting_date=date(2020, 1, 2),
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
 
     def test_invalid_startingDate(self):
         with self.assertRaises(Refugee.InvalidStartingDateException):
             Refugee(firstname="Tom",
                     lastname="Bond",
-                    camp=Camp("UCL"),
                     num_of_family_member=1,
                     starting_date=date(2023, 1, 2),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
 
     def test_invalid_startingDate1(self):
         with self.assertRaises(Refugee.InvalidStartingDateException):
             Refugee(firstname="Tom",
                     lastname="Bond",
-                    camp=Camp("UCL"),
                     num_of_family_member=1,
                     starting_date=date(2022, 1, 1),
-                    medical_condition_type=Refugee.MedicalCondition.HIV)
-
-if __name__ == "main":
-    unittest.main()
+                    medical_condition_type=[Refugee.MedicalCondition.HIV])
