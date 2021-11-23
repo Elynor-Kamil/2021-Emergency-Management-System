@@ -1,6 +1,7 @@
+from models.volunteer import Volunteer
 
 ###---- Manage Volunteer Menu ----
-def create_volunteer():
+def create_volunteer() -> Volunteer:
     """
     Yunsy, Yingbo
     """
