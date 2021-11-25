@@ -164,7 +164,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     """
 
     def __init__(self, **kwargs):
-        self.reload()
+        self.__class__.check_and_load_data()
         if not self._primary_key:
             raise Document.PrimaryKeyNotDefinedError(self)
         super().__init__(**kwargs)
