@@ -16,11 +16,11 @@ class User(IndexedDocument):
     __salt = Field()
     __password_hash = Field()
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, username: str, password: str, **kwargs):
         salt = os.urandom(32)
         super().__init__(username=username,
                          _User__salt=salt,
-                         _User__password_hash=self.__hash_password(password, salt))
+                         _User__password_hash=self.__hash_password(password, salt), **kwargs)
 
     @staticmethod
     def __hash_password(password: str, salt: bytes) -> bytes:

@@ -164,6 +164,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     """
 
     def __init__(self, **kwargs):
+        self.reload()
         if not self._primary_key:
             raise Document.PrimaryKeyNotDefinedError(self)
         super().__init__(**kwargs)
@@ -179,16 +180,42 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         except FileNotFoundError:
             cls.__objects = {}
 
+    @classmethod
+    def check_and_load_data(cls):
+        """
+        Check if the index is loaded, if not, load it.
+        """
+        if not getattr(cls, '__objects', None):
+            cls.reload()
+
     def save(self) -> None:
         """
         Save all documents of the same type (i.e. the index) to disk.
         Also save all root-level documents referencing this document.
         """
+        self.__class__.check_and_load_data()
         self.__class__.__objects[self.key] = self
         os.makedirs(os.path.dirname(self._persistence_path), exist_ok=True)
         with open(self._persistence_path, 'wb') as f:
             pickle.dump(self.__class__.__objects, f)
+
+        # Also save to parent indices
+        for persistence_base in self._persistence_bases:
+            persistence_base.__save_child(self)
         super().save()
+
+    @classmethod
+    def __save_child(cls, child: Document) -> None:
+        """
+        Save a child document to the parent index.
+        to be called from subclass.
+        :param child: child instance to be saved
+        """
+        cls.check_and_load_data()
+        cls.__objects[child.key] = child
+        os.makedirs(os.path.dirname(cls._persistence_path), exist_ok=True)
+        with open(cls._persistence_path, 'wb') as f:
+            pickle.dump(cls.__objects, f)
 
     @classmethod
     def find(cls, key) -> Union[None, IndexedDocument]:
@@ -197,6 +224,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         :param key: the primary key value
         :return: the document, or None if not found
         """
+        cls.check_and_load_data()
         return cls.__objects.get(key)
 
     @classmethod
@@ -205,12 +233,14 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         Get all documents of this type.
         :return: a list of all documents
         """
+        cls.check_and_load_data()
         return list(cls.__objects.values())
 
     def delete(self) -> None:
         """
         Remove the document from the index, all references to it, and persist the change.
         """
+        self.__class__.check_and_load_data()
         del self.__class__.__objects[self.key]
         with open(self._persistence_path, 'wb') as f:
             pickle.dump(self.__class__.__objects, f)
@@ -221,6 +251,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         """
         Remove all documents of this type and persist the change.
         """
+        cls.check_and_load_data()
         for document in cls.all():
             super().delete(document)
         try:
