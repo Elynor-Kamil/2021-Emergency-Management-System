@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="update plan_statistics.py">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/calculate_volunteers.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/calculate_volunteers.py" afterDir="false" />
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="update plan_statistics with small tests">
       <change beforePath="$PROJECT_DIR$/models/camp.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/camp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/plan.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
@@ -247,7 +245,21 @@
       <option name="project" value="LOCAL" />
       <updated>1637921818437</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="update plan_statistics.py">
+      <created>1637964266642</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1637964266642</updated>
+    </task>
+    <task id="LOCAL-00013" summary="update plan_statistics with small tests">
+      <created>1637964386553</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1637964386553</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -270,6 +282,7 @@
     <MESSAGE value="update refugee class and unittest" />
     <MESSAGE value="update name with error handling in refugee class" />
     <MESSAGE value="update plan_statistics.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="update plan_statistics.py" />
+    <MESSAGE value="update plan_statistics with small tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="update plan_statistics with small tests" />
   </component>
 </project>
