@@ -1,2 +1,0 @@
-def numOfVolunteersRequired(campInfo):
-    pass
