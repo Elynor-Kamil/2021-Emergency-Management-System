@@ -146,6 +146,10 @@ class DocumentReferenceTest(TestCase):
             self.assertFalse(root_referee in referee.children)
 
     def test_typed_reference_field(self):
+        """
+        Test that type checking is enforced when defining ReferenceDocumentsField with a specific data_type.
+        """
+
         class DemoTypedNestedDocument(Document):
             name = Field(primary_key=True)
             children = ReferenceDocumentsField(data_type=self.DemoDocument)
@@ -154,6 +158,15 @@ class DocumentReferenceTest(TestCase):
         DemoTypedNestedDocument(name='test', children=[self.DemoDocument(name='a')])
         with self.assertRaises(ReferenceSet.MultipleTypeError):
             DemoTypedNestedDocument(name='test', children=[self.DemoNestedDocument(name='a')])
+
+    def test_find_referred_by(self):
+        referee = self.DemoDocument(name='e')
+        referrer = self.DemoNestedDocument(name='test_1', children=[referee])
+        self.assertEqual(referee.find_referred_by(referrer_type=self.DemoNestedDocument, field_name='children'),
+                         referrer)
+        referrer.children.remove(referee)
+        with self.assertRaises(Document.ReferrerNotFound):
+            referee.find_referred_by(referrer_type=self.DemoNestedDocument, field_name='children')
 
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()

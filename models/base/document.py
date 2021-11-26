@@ -5,7 +5,7 @@ import pickle
 from typing import Union
 
 from models.base.field import ReferenceDocumentsField
-from models.base.meta_document import MetaDocument
+from models.base.meta_document import MetaDocument, MetaIndexedDocument
 
 
 def persist(func):
@@ -71,6 +71,11 @@ class Document(metaclass=MetaDocument):
         def __init__(self, field_name):
             super().__init__(f"Primary key {field_name} not set")
 
+    class ReferrerNotFound(Exception):
+        def __init__(self, referrer_type=None, attribute_name=None):
+            super().__init__(f"Instanced is not referenced by "
+                             f"{attribute_name or 'any field'} in {referrer_type or 'Any type'}")
+
     @persist
     def __init__(self, **kwargs):
         """
@@ -108,6 +113,22 @@ class Document(metaclass=MetaDocument):
         """
         return getattr(self, self._primary_key)
 
+    def find_referred_by(self, referrer_type: type = None, field_name: str = None) -> Document:
+        """
+        Find the first document that references this document matching the criteria.
+        ReferrerNotFound exception is raised if no referrer matching the criteria is found.
+        :param referrer_type: optional type of the referrer as a criteria
+        :param field_name: optional field name of the referrer where the instance is referred as a criteria
+        :return: the first referrer matching the criteria
+        """
+        for referrer in self._referenced_by:
+            if referrer_type is not None and not isinstance(referrer, referrer_type):
+                continue
+            if field_name is not None and not self in getattr(referrer, field_name):
+                continue
+            return referrer
+        raise self.ReferrerNotFound(referrer_type, field_name)
+
     def __eq__(self, other):
         return self._data == other._data
 
@@ -131,11 +152,15 @@ class Document(metaclass=MetaDocument):
         return f'{self.__class__.__name__}({self._data})'
 
 
-class IndexedDocument(Document):
+class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     """
     Base class for all root level documents, directly persisted to disk.
     A primary key must be defined to index all active documents.
+    To define the primary key, define an attribute with:
+    my_field = Field(primary=True)
     Documents are persisted as the index to all documents in this class.
+    The default persistence path is data/{classname}
+    to change the path, override the _persistence_path property.
     """
 
     def __init__(self, **kwargs):
@@ -144,26 +169,12 @@ class IndexedDocument(Document):
         super().__init__(**kwargs)
 
     @classmethod
-    @property
-    def persistence_path(cls) -> str:
-        """
-        The path to the persistence file. Defaults to data/{the class name}.
-        Override this method to change the path.
-        """
-        return f'data/{cls.__name__}'
-
-    try:
-        __objects = pickle.load(open(f'{persistence_path}.p', 'rb'))
-    except FileNotFoundError:  # No persistence file yet
-        __objects = {}
-
-    @classmethod
     def reload(cls) -> None:
         """
         Reload the index from disk.
         """
         try:
-            with open(cls.persistence_path, 'rb') as f:
+            with open(cls._persistence_path, 'rb') as f:
                 cls.__objects = pickle.load(f)
         except FileNotFoundError:
             cls.__objects = {}
@@ -174,8 +185,8 @@ class IndexedDocument(Document):
         Also save all root-level documents referencing this document.
         """
         self.__class__.__objects[self.key] = self
-        os.makedirs(os.path.dirname(self.persistence_path), exist_ok=True)
-        with open(self.persistence_path, 'wb') as f:
+        os.makedirs(os.path.dirname(self._persistence_path), exist_ok=True)
+        with open(self._persistence_path, 'wb') as f:
             pickle.dump(self.__class__.__objects, f)
         super().save()
 
@@ -199,10 +210,9 @@ class IndexedDocument(Document):
     def delete(self) -> None:
         """
         Remove the document from the index, all references to it, and persist the change.
-        :return:
         """
         del self.__class__.__objects[self.key]
-        with open(self.persistence_path, 'wb') as f:
+        with open(self._persistence_path, 'wb') as f:
             pickle.dump(self.__class__.__objects, f)
         super().delete()
 
@@ -214,7 +224,7 @@ class IndexedDocument(Document):
         for document in cls.all():
             super().delete(document)
         try:
-            os.remove(cls.persistence_path)
+            os.remove(cls._persistence_path)
         except FileNotFoundError:
             pass
         cls.__objects = {}
