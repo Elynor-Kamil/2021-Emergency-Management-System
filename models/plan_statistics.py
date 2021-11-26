@@ -72,7 +72,7 @@ plan = Plan(name='My Plan',
             emergency_type=Plan.EmergencyType.EARTHQUAKE,
             description='Test emergency plan',
             geographical_area='',
-            camps=[camp1, camp2])
+            camps=[camp1, camp2, camp3])
 
 
 def find_volunteers(Camp):
