@@ -75,6 +75,9 @@ class EditVolunteerMenu(ManageVolunteerMenu):
         edit_availability(username, availability)
         print(f"Updated successfully! The availability is now {find_volunteer(username).availability}.")
 
+    def do_return(self):
+        ManageVolunteerMenu().cmdloop()
+
 
 def find_volunteer(username: str) -> Volunteer:
     volunteer_called = Volunteer.find(username)
