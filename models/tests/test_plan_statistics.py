@@ -35,9 +35,9 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
                                 phone='+447511111111')
         plan = Plan.find('test_plan')
         test_camp = test_plan.camps.get('camp1')
-        test_camp.volunteer.add(volunteer_a, volunteer_b, volunteer_c)
+        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
 
-        volunteer_count = find_volunteer("camp1")
+        volunteer_count = find_volunteers("camp1")
 
         self.assertEqual(volunteer_count, 3)
 
@@ -60,9 +60,9 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         plan = Plan.find('test_plan')
         test_camp = test_plan.camps.get('camp1')
         test_camp.volunteer.add(volunteer_a, volunteer_b, volunteer_c)
-        setattr(volunteer_a, account_activated, False)
-        setattr(volunteer_b, account_activated, False)
-        setattr(volunteer_c, account_activated, False)
+        setattr(volunteer_a, Volunteer.account_activated, False)
+        setattr(volunteer_b, Volunteer.account_activated, False)
+        setattr(volunteer_c, Volunteer.account_activated, False)
 
         volunteer_count = find_volunteer("camp1")
         self.assertEqual(volunteer_count, 0)
