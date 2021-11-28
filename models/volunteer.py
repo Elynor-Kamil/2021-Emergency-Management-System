@@ -83,7 +83,7 @@ class Volunteer(User):
 
     def __str__(self):
         try:
-            camp_str = f'belongs to camp {self.camp}'
+            camp_str = f'belongs to camp {self.camp} under {self.camp.plan}'
         except Document.ReferrerNotFound:
             camp_str = 'does not belong to any camp'
         return f"Volunteer username: {self.username}\n" \

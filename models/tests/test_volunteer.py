@@ -4,15 +4,19 @@ from models.volunteer import Volunteer
 
 class TestVolunteer(unittest.TestCase):
 
+    def setUp(self):
+        Volunteer.delete_all()
+
     def test_create_volunteer(self):
         volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                               phone='+447519953189')
         self.assertIsInstance(volunteer, Volunteer)
 
     def test_delete_volunteer(self):
-        volunteer = Volunteer.find('yunsy')
+        volunteer = Volunteer(username='peter', password='1234', firstname='Peter', lastname='Green',
+                              phone='+447519953189')
         volunteer.delete()
-        self.assertIsNone(Volunteer.find('yunsy'))
+        self.assertIsNone(Volunteer.find('peter'))
 
     def test_deactivate_volunteer(self):
         volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
@@ -58,6 +62,5 @@ class TestVolunteer(unittest.TestCase):
             Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                       phone='+12345')
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def tearDown(self) -> None:
+        Volunteer.delete_all()

@@ -196,7 +196,7 @@ class Document(metaclass=MetaDocument):
         referrer_roots = set()
         for referrer in self._referenced_by:
             root = referrer._get_root_document()
-            referrer_roots.add((root.__module__, root.__class__.__name__))
+            referrer_roots.add((root.__module__, getattr(root.__class__, '__qualname__', root.__class__.__name__)))
         state['_referrer_roots'] = referrer_roots
         state['_referenced_by'] = []
         return state
@@ -226,7 +226,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
 
         def persistent_id(self, obj):
             if not isinstance(obj, self.base_class) and isinstance(obj, IndexedDocument):
-                return obj.__module__, obj.__class__.__name__, obj.key
+                return obj.__module__, getattr(obj.__class__, '__qualname__', obj.__class__.__name__), obj.key
             else:
                 return None
 
@@ -255,14 +255,16 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
             Restore the referenced document.
             """
             __import__(self.module)
-            index = getattr(sys.modules[self.module], self.classname)
+            index = pickle._getattribute(sys.modules[self.module], self.classname)[0]
             return index.find(self.key)
 
+    @persist
     def __init__(self, **kwargs):
         self.__class__.check_and_load_data()
         if not self._primary_key:
             raise Document.PrimaryKeyNotDefinedError(self)
         super().__init__(**kwargs)
+        self.__class__.__objects[self.key] = self
 
     @classmethod
     def reload(cls) -> None:
@@ -309,7 +311,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         if getattr(obj, '_referrer_roots', None):
             for mod, classname in obj._referrer_roots:
                 __import__(mod)
-                index = getattr(sys.modules[mod], classname)
+                index = pickle._getattribute(sys.modules[mod], classname)[0]
                 index.check_and_load_data()
             delattr(obj, '_referrer_roots')
 
@@ -318,7 +320,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         """
         Check if the index is loaded, if not, load it.
         """
-        if not cls.__objects:
+        if cls.__objects is None:
             cls.reload()
 
     def _persist(self) -> None:
@@ -327,7 +329,6 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         If the class is a subclass of IndexedDocument, also persist to parent indices.
         """
         self.__class__.check_and_load_data()
-        self.__class__.__objects[self.key] = self
         os.makedirs(os.path.dirname(self._persistence_path), exist_ok=True)
         with open(self._persistence_path, 'wb') as f:
             self.Pickler(f, self.__class__).dump(self.__class__.__objects)
@@ -377,8 +378,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         """
         self.__class__.check_and_load_data()
         del self.__class__.__objects[self.key]
-        with open(self._persistence_path, 'wb') as f:
-            pickle.dump(self.__class__.__objects, f)
+        self._persist()
         super().delete()
 
     @classmethod
