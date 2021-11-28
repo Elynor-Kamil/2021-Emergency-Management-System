@@ -2,6 +2,9 @@ from models.volunteer import Volunteer
 from models.camp import Camp
 from controller.controller_error import ControllerError
 
+    def do_return(self):
+        ManageVolunteerMenu().cmdloop()
+
 
 def find_volunteer(username: str) -> Volunteer:
     volunteer_called = Volunteer.find(username)
