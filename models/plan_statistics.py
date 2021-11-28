@@ -11,7 +11,7 @@ def find_volunteers(Camp):
     """
     volunteer_count = 0
     for volunteer in Camp.volunteers:
-        if volunteer.availability == True:
+        if volunteer.availability == True and volunteer.account_activated == True:
             volunteer_count += 1
     return volunteer_count
 
@@ -49,3 +49,6 @@ def calculate_volunteer_needed(Camp, plan_statistics):
         extra_volunteers_needed = ideal_volunteers_num - num_of_volunteers
     plan_statistics[Camp.name].append(remaining_volunteers)
     plan_statistics[Camp.name].append(extra_volunteers_needed)
+
+
+
