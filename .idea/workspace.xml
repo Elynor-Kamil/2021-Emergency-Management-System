@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="unit tests for plan_statistics">
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="update refugee class">
+      <change afterPath="$PROJECT_DIR$/models/test/test_refugee.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/refugee.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/refugee.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +27,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/cli" />
+        <entry key="$PROJECT_DIR$" value="feature/plan_statistics" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,6 +39,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
@@ -218,14 +219,7 @@
       <option name="project" value="LOCAL" />
       <updated>1637072091887</updated>
     </task>
-    <task id="LOCAL-00011" summary="unit tests for plan_statistics">
-      <created>1638120234391</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1638120234393</updated>
-    </task>
-    <option name="localTasksCounter" value="12" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -247,7 +241,6 @@
     <MESSAGE value="update refugee class" />
     <MESSAGE value="update refugee class and unittest" />
     <MESSAGE value="update name with error handling in refugee class" />
-    <MESSAGE value="unit tests for plan_statistics" />
-    <option name="LAST_COMMIT_MESSAGE" value="unit tests for plan_statistics" />
+    <option name="LAST_COMMIT_MESSAGE" value="update name with error handling in refugee class" />
   </component>
 </project>

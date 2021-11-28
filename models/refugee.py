@@ -143,3 +143,4 @@ class Refugee(Document):
 
         def __init__(self, camp):
             super().__init__(f"Camp {camp} does not exist.")
+
