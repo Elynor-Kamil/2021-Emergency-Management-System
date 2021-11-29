@@ -33,9 +33,6 @@ class Plan(IndexedDocument):
         FLOOD = 'flood'
         OTHER = 'other'
 
-        def __str__(self):
-            return str(self.value)
-
     class MissingCampsError(Exception):
         """
         It is mandatory to supply at least one camp when you are creating an emergency plan.
