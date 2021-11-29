@@ -12,12 +12,6 @@ class VolunteerShell(EmsShell):
     VolunteerShell is the command line interface for volunteer role.
     """
 
-    def __init__(self):
-        """
-        Initialise the volunteer user menu.
-        """
-        super(VolunteerShell, self).__init__()
-
     def volunteer_menu(self) -> None:
         print("""
          1) Edit my details 
