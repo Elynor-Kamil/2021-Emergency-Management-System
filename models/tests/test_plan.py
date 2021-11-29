@@ -3,6 +3,7 @@ from datetime import date
 
 from models.camp import Camp
 from models.plan import Plan
+from controller.plan_controller import close_plan
 
 
 class PlanTest(unittest.TestCase):
@@ -104,3 +105,50 @@ class PlanTest(unittest.TestCase):
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
         self.assertEqual(date.today(), plan.start_date)
+
+    # might need to put the following tests solely in test_plan_controller
+    def test_plan_status(self):
+        """
+        Test status flag of plan. Should be false is plan is open.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        self.assertEqual(False, plan.close_plan_status)
+
+    def test_close_plan(self):
+        """
+        Test status flag of plan. Should be true when plan is closed.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        close_plan(plan)
+        self.assertEqual(True, plan.close_plan_status)
+
+    def test_no_close_date(self):
+        """
+        Test that close date is not set during plan creation.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        self.assertEqual(None, plan.close_date)
+
+    def test_close_date_set(self):
+        """
+        Test plan closure date is set to today's date when plan is closed.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        close_plan(plan)
+        self.assertEqual(date.today(), plan.close_date)

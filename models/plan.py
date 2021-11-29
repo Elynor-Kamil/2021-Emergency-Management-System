@@ -17,6 +17,8 @@ class Plan(IndexedDocument):
     description = Field()
     geographical_area = Field()
     __start_date = Field()
+    __is_closed = Field()
+    __close_date = Field()
     camps = ReferenceDocumentsField(data_type=Camp)
 
     class EmergencyType(Enum):
@@ -31,6 +33,9 @@ class Plan(IndexedDocument):
         FLOOD = 'flood'
         OTHER = 'other'
 
+        def __str__(self):
+            return str(self.value)
+
     class MissingCampsError(Exception):
         """
         It is mandatory to supply at least one camp when you are creating an emergency plan.
@@ -39,14 +44,6 @@ class Plan(IndexedDocument):
 
         def __init__(self):
             super().__init__("It is mandatory to provide at least one camp")
-
-    class PastStartDateException(Exception):
-        """
-        Exception raised when start date entered is in the past.
-        """
-
-        def __init__(self):
-            super().__init__('Start date is in the past. Please enter a valid start date.')
 
     class CampNotFoundError(Exception):
         """
@@ -70,6 +67,7 @@ class Plan(IndexedDocument):
         :param geographical_area: geographical area affected by the emergency
         :param camps: camps to be included in the plan
         """
+
         if not camps:
             raise self.MissingCampsError()
         super().__init__(name=name,
@@ -77,6 +75,8 @@ class Plan(IndexedDocument):
                          description=description,
                          geographical_area=geographical_area,
                          _Plan__start_date=datetime.today().date(),
+                         _Plan__close_date=None,
+                         _Plan__is_closed=False,
                          camps=camps)
 
     @property
@@ -111,3 +111,25 @@ class Plan(IndexedDocument):
             raise self.MissingCampsError()
         else:
             self.save()
+
+    def close(self, __is_closed=None):
+        """
+        Set __is_closed flag to be True, if plan is closed.
+        """
+        self.__is_closed = True
+        self.save()
+
+    @property
+    def close_date(self) -> date:
+        """
+        Get the read only close date of the plan.
+        """
+        if self.__is_closed:
+            return self.__close_date
+
+    @property
+    def close_plan_status(self):
+        """
+        Get the read only status of the plan.
+        """
+        return self.__is_closed
