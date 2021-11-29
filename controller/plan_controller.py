@@ -1,5 +1,4 @@
 from datetime import datetime
-# from enum import Enum
 from typing import Iterable
 
 from models.plan import Plan
@@ -15,23 +14,25 @@ def manage_plan_menu():
     pass
 
 
-def list_emergency_types():
-    for emergency in Plan.EmergencyType:
-        print(emergency)
+def list_emergency_types() -> dict:
+    emergency_types = {'earthquake': Plan.EmergencyType.EARTHQUAKE,
+                       'fire': Plan.EmergencyType.FIRE,
+                       'tsunami': Plan.EmergencyType.TSUNAMI,
+                       'storm': Plan.EmergencyType.STORM,
+                       'pandemic': Plan.EmergencyType.PANDEMIC,
+                       'flood': Plan.EmergencyType.FLOOD,
+                       'other': Plan.EmergencyType.OTHER}
+
+    return emergency_types
 
 
-list_emergency_types()
-
-
-# Flag to Vanessa - need to add plan attribute to create_camps
-
-def create_camps(camp_name: str, plan_name: str) -> None:
+def create_camps(camp_name: str, plan_document: Plan) -> None:
     """
     Add new camp to plan.
     """
-    plan = find_plan(plan_name)
     camp = Camp(name=camp_name)
-    plan.open_camps(camp)
+    camp.save()
+    plan_document.open_camps(camp)
 
 
 def create_plan(name: str, emergency_type: Plan.EmergencyType, description: str,
@@ -57,7 +58,25 @@ def view_plan_statistics(plan: Plan) -> str:
     """
     Display plan statistics.
     """
-    pass
+    for plan in Plan.all():
+        plan_statistics = plan_statistics_function(plan)
+        plan_name = plan.name
+
+        plan_info = f"Plan name: {plan_name}\n"
+        statistics = ""
+
+        # {"camp1":[1, 2, 3, 4], "camp2":[6, 7, 8, 9]}
+        for camp in plan_statistics.items():
+            camp_name, statistics_info = camp[0], camp[1]
+            num_of_volunteers, num_of_refugees, remaining_volunteers, extra_volunteers_needed = statistics_info[0], statistics_info[1], statistics_info[2], statistics_info[3]
+
+            statistics += f"Camp name: {camp_name}\n" \
+                          f"Number of volunteers: {num_of_volunteers}\n" \
+                          f"Number of refugees: {num_of_refugees}\n" \
+                          f"Number of remaining volunteers not needed: {remaining_volunteers}\n" \
+                          f"Number of extra volunteers needed: {extra_volunteers_needed}\n\n"
+
+        return plan_info + statistics
 
 
 def find_plan(plan_name: str) -> IndexedDocument:
@@ -74,4 +93,5 @@ def close_plan(plan_document: Plan):
     Inputted plan will be changed to read-only by changing the __is_closed flag in Plan class.
     """
     Plan._Plan__close_date = datetime.today().date()
+    plan_document.save()
     return Plan.close(plan_document)
