@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="update plan_statistics">
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="unit tests for plan_statistics">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" afterDir="false" />
@@ -27,7 +27,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/plan_statistics" />
+        <entry key="$PROJECT_DIR$" value="feature/cli" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,13 +39,33 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_plan_statistics.PlanStatisticsRefugeeTest">
+  <component name="RunManager" selected="Python.plan_statistics">
+    <configuration name="calculate_volunteers" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2021-Emergency-Management-System" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/calculate_volunteers.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="plan_statistics" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -67,69 +87,69 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_plan_statistics.PlanStatisticsRefugeeTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="refugee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/tests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_statistics.PlanStatisticsRefugeeTest&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/refugee.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_plan_statistics.PlanStatisticsRefugeeTest.test_refugee_count_multiple_families_one_camp" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="test_plan_statistics" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/tests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_statistics.PlanStatisticsRefugeeTest.test_refugee_count_multiple_families_one_camp&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/tests/test_plan_statistics.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_refugee.RefugeeTest.test_invalid_numOfFamilyMember1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/tests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/test" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_statistics.PlanStatisticsVolunteerTest&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_plan_statistics.PlanStatisticsVolunteerTest.test_active_volunteer_count" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2021-Emergency-Management-System" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_statistics.PlanStatisticsVolunteerTest.test_active_volunteer_count&quot;" />
+      <option name="_new_target" value="&quot;test_refugee.RefugeeTest.test_invalid_numOfFamilyMember1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsRefugeeTest" />
-        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
-        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest.test_active_volunteer_count" />
         <item itemvalue="Python.plan_statistics" />
-        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsRefugeeTest.test_refugee_count_multiple_families_one_camp" />
+        <item itemvalue="Python.test_plan_statistics" />
+        <item itemvalue="Python.calculate_volunteers" />
+        <item itemvalue="Python.refugee" />
+        <item itemvalue="Python tests.Python tests for test_refugee.RefugeeTest.test_invalid_numOfFamilyMember1" />
       </list>
     </recent_temporary>
   </component>
@@ -212,12 +232,12 @@
       <option name="project" value="LOCAL" />
       <updated>1637072091887</updated>
     </task>
-    <task id="LOCAL-00011" summary="update plan_statistics">
-      <created>1638123510270</created>
+    <task id="LOCAL-00011" summary="unit tests for plan_statistics">
+      <created>1638120234391</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1638123510270</updated>
+      <updated>1638120234393</updated>
     </task>
     <option name="localTasksCounter" value="12" />
     <servers />
@@ -241,7 +261,7 @@
     <MESSAGE value="update refugee class" />
     <MESSAGE value="update refugee class and unittest" />
     <MESSAGE value="update name with error handling in refugee class" />
-    <MESSAGE value="update plan_statistics" />
-    <option name="LAST_COMMIT_MESSAGE" value="update plan_statistics" />
+    <MESSAGE value="unit tests for plan_statistics" />
+    <option name="LAST_COMMIT_MESSAGE" value="unit tests for plan_statistics" />
   </component>
 </project>

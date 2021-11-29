@@ -11,6 +11,13 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
     Class for testing cases involving volunteer counts in plan statistics.
     """
 
+    def tearDown(self):
+        """
+        Function to delete stored data after a test has finished running
+        to avoid corrupting other tests
+        """
+        Plan.delete_all()
+
     def test_active_volunteer_count(self):
         """
         Test case where only active volunteers are in the file.
@@ -35,6 +42,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_count = find_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
+        self.tearDown()
 
     def test_deactivated_volunteer_not_counted(self):
         """
@@ -61,6 +69,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
+        self.tearDown()
 
     def test_partially_active_volunteer_count(self):
         """
@@ -86,6 +95,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 2)
+        self.tearDown()
 
     def test_deactivated_volunteer_not_counted(self):
         """
@@ -112,6 +122,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
+        self.tearDown()
 
 
     def test_available_volunteer_count(self):
@@ -138,6 +149,8 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_count = find_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
+        self.tearDown()
+
 
     def test_unavailable_volunteer_not_counted(self):
         """
@@ -164,6 +177,8 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
+        self.tearDown()
+
 
     def test_partially_available_volunteer_count(self):
         """
@@ -189,6 +204,8 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 2)
+        self.tearDown()
+
 
     def test_unavailable_volunteer_not_counted(self):
         """
@@ -215,6 +232,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
+        self.tearDown()
 
 
     def test_no_volunteers_in_file(self):
@@ -232,6 +250,8 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_count = find_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 0)
+        self.tearDown()
+
 
     def test_volunteer_count_multiple_camps(self):
         """
@@ -259,13 +279,21 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         self.assertEqual(volunteer_count_camp1, 1)
         self.assertEqual(volunteer_count_camp2, 2)
+        self.tearDown()
 
 
 class PlanStatisticsRefugeeTest(unittest.TestCase):
     """
     Class for testing cases involving refugee counts in plan statistics.
     """
-# Notes for find_refugee testing:
+
+    def tearDown(self):
+        """
+        Function to delete stored data after a test has finished running
+        to avoid corrupting other tests
+        """
+        Plan.delete_all()
+
     def test_refugee_count_single_family(self):
         """
         Test to check that refugee count is correct for a single refugee family.
@@ -287,7 +315,7 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         refugee_count = find_refugees(test_camp)
 
         self.assertEqual(refugee_count, 6)
-#         NEED TO CHECK THIS 7 IS CORRECT
+        self.tearDown()
 
     def test_refugee_count_multiple_families_one_camp(self):
         """
@@ -315,6 +343,8 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         refugee_count = find_refugees(test_camp)
 
         self.assertEqual(refugee_count, 7)
+        self.tearDown()
+
 
     def test_refugee_count_multiple_camps(self):
         """
@@ -346,7 +376,103 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
 
         self.assertEqual(refugee_count_camp1, 0)
         self.assertEqual(refugee_count_camp2, 7)
+        self.tearDown()
 
 
-# Notes for plan_statistics_function testing:
-# 1. Test volunteer_count and refugee_count correct for each camp
+class PlanStatisticsTest(unittest.TestCase):
+    """Class for testing cases involving refugee and volunteer counts in plan statistics."""
+
+    def tearDown(self):
+        """
+        Function to delete stored data after a test has finished running
+        to avoid corrupting other tests
+        """
+        Plan.delete_all()
+
+    def plan_statistics_for_one_camp_test(self):
+        """
+        Test to check number of volunteers and refugees returned by plan_statistics_function
+        for a single camp is correct.
+        Also tests the feature to check how many additional volunteers are recommended (number of refugees * 20),
+        hence should return 27 in the third list position in the plan_statistics value list.
+        """
+        Plan(name='test_plan1',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp1')])
+        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                phone='+447519953189')
+        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+                                phone='+447519955439')
+        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+                                phone='+447511111111')
+        test_plan = Plan.find('test_plan1')
+        test_camp = test_plan.camps.get('camp1')
+        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
+        refugee1 = Refugee(firstname="Tom",
+                           lastname="Bond",
+                           num_of_family_member=600,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+        test_camp.refugees.add(refugee1)
+        test_plan_statistics = plan_statistics_function('test_plan1')
+        print(test_plan_statistics)
+        test_dictionary = {
+            'camp1': [3, 600, 0, 27]
+        }
+        self.assertDictEqual(self.test_dictionary, self.test_plan_statistics)
+        self.tearDown()
+
+    def plan_statistics_two_plans_exist_test(self):
+        """
+        Test to check number of volunteers and refugees returned by plan_statistics_function
+        for a single camp is correct, when there is another plan that also exists with volunteers and refugees.
+        Also tests where number of volunteers needed is less than the number currently at the camp,
+        hence should return 0 extra volunteers required at the end of the plan_statistics dictionary.
+        """
+        Plan(name='test_plan1',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp1')])
+        Plan(name='test_plan2',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp2')])
+        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                phone='+447519953189')
+        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+                                phone='+447519955439')
+        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+                                phone='+447511111111')
+        test_plan1 = Plan.find('test_plan1')
+        test_camp1 = test_plan1.camps.get('camp1')
+        test_camp1.volunteers.add(volunteer_a, volunteer_b)
+        test_plan2 = Plan.find('test_plan2')
+        test_camp2 = test_plan2.camps.get('camp2')
+        test_camp2.volunteers.add(volunteer_c)
+        refugee1 = Refugee(firstname="Tom",
+                           lastname="Bond",
+                           num_of_family_member=6,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+        refugee2 = Refugee(firstname="Terry",
+                           lastname="Bimble",
+                           num_of_family_member=2,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+        test_camp.refugees.add(refugee1)
+        test_plan_statistics = plan_statistics_function('test_plan1')
+        test_camp.refugees.add(refugee2)
+        test_plan_statistics = plan_statistics_function('test_plan2')
+        print(test_plan_statistics)
+        test_dictionary = {
+            'camp1': [2, 7, 1, 0]
+        }
+        self.assertDictEqual(self.test_dictionary, self.test_plan_statistics)
+        self.tearDown()
+
+
+
