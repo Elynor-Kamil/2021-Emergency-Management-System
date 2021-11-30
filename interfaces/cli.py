@@ -1,6 +1,7 @@
 from cmd import Cmd
 import sys
 from data.users import users_catalog
+
 from models.admin import Admin
 from models.user import User, require_role
 from models.volunteer import Volunteer
@@ -11,7 +12,7 @@ class EmsShell(Cmd):
     EmsShell is the main class for the command line interface.
     """
 
-    def __init__(self, user=None):
+    def __init__(self, user=None) -> object:
         super().__init__()
         self.user = user
         if user != None:
@@ -37,9 +38,8 @@ class EmsShell(Cmd):
                 elif isinstance(self.user, Volunteer):
                     VolunteerShell(self.user).cmdloop()
             except (KeyError, User.InvalidPassword):
-                print('\033[31m  \033[0m \n')
+                print("\033[95m {}\033[00m".format("** Invalid username or password. Please try again."))
 
-    "\033[95m {}\033[00m".format("** Invalid username or password. Please try again.")
     def do_logout(self, args):
         """
         Logout the current user, prompting for a new username and password.
@@ -56,40 +56,26 @@ class EmsShell(Cmd):
         print("\033[96m {}\033[0m".format("Welcome to EMS, please enter your details."))
         self.login()
 
-        # ---- delete below
-    def precmd(self, line: str) -> str:
-        """
-        Handles two-word commands made with action words
-        """
-        for action_word in self.action_words:
-            if line.startswith(action_word + ' '):
-                return action_word + '_' + line[len(action_word) + 1:]
-            elif line.startswith('help ' + action_word + ' '):
-                return 'help ' + action_word + '_' + line[len(action_word) + 6:]
-        return line
+    def return_main_menu(self):
+        from interfaces.admin_cli import AdminShell
+        while True:
+            option = input("Enter R to return back to main menu.\n > ")
+            if option.upper() == 'R':
+                AdminShell(self.user).cmdloop()
+            else:
+                print("Invalid input. Enter R to return back to main menu.\n > ")
+                continue
 
     def do_profile(self, arg):
         """
         Print user info
         """
-        print(f'Username: {self.user.username}\n'
+        from interfaces.admin_cli import AdminShell
+        print("\033[100m\033[4m\033[1m{}\033[0m\n".format("Your details:") +
+              f'Username: {self.user.username}\n'
               f'Role: {self.user.__class__.__name__}\n')
+        self.return_main_menu()
 
     def do_exit(self, arg):
         print(f'\n Thank you for using EMS. Bye bye!')
         sys.exit()
-
-    @require_role(Admin)
-    def do_create_volunteer(self, arg):
-        """
-        Create a new volunteer user
-        """
-        username = input('Username: ')
-        password = input('Password: ')
-        user = Volunteer(username, password)
-        if user in users_catalog.values():
-            print('Username already exists')
-        else:
-            users_catalog[username] = user  # TODO: persist new user
-            print(f'User {username} created')
-
