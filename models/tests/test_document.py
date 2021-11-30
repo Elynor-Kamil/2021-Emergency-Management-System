@@ -18,6 +18,9 @@ class BasicDocumentTest(TestCase):
         name = Field(primary_key=True)
         password = Field()
 
+    def setUp(self) -> None:
+        self.DemoIndexedDocument.delete_all()
+
     def test_create_document(self):
         doc = self.DemoIndexedDocument(name='test', password='test')
         self.assertEqual(doc.name, 'test')
@@ -26,6 +29,11 @@ class BasicDocumentTest(TestCase):
     def test_compulsory_primary_key(self):
         with self.assertRaises(Document.PrimaryKeyNotSetError):
             self.DemoIndexedDocument(password='test')
+
+    def test_duplicate_primary_key(self):
+        self.DemoIndexedDocument(name='test_duplicate', password='test1')
+        with self.assertRaises(Document.DuplicateKeyError):
+            self.DemoIndexedDocument(name='test_duplicate', password='test2')
 
 
 class DocumentPersistenceTest(TestCase):
@@ -167,6 +175,15 @@ class DocumentReferenceTest(TestCase):
         referrer.children.remove(referee)
         with self.assertRaises(Document.ReferrerNotFound):
             referee.find_referred_by(referrer_type=self.DemoNestedDocument, field_name='children')
+
+    def test_add_duplicate_referee(self):
+        class KeyedReferee(Document):
+            name = Field(primary_key=True)
+
+        referee_1 = KeyedReferee(name='duplicate')
+        referee_2 = KeyedReferee(name='duplicate')
+        with self.assertRaises(Document.DuplicateKeyError):
+            self.DemoNestedDocument(name='test', children=[referee_1, referee_2])
 
     def tearDown(self) -> None:
         self.DemoNestedDocument.delete_all()

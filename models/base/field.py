@@ -93,6 +93,9 @@ class ReferenceSet:
             if document not in self.__ref_documents:
                 self.__ref_documents.append(document)
         if self.__primary_key:
+            key_value = getattr(document, self.__primary_key)
+            if key_value in self.__index:
+                raise Document.DuplicateKeyError(self.__primary_key, key_value)
             self.__index.update({document._data[self.__primary_key]: document for document in documents})
         for reference in documents:
             reference._add_referrer(self.__owner)
