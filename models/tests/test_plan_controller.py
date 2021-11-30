@@ -61,9 +61,7 @@ class PlanControllerTest(unittest.TestCase):
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
-        print(plan.close_date)
         close_plan(plan)
-        print(plan.close_date)
         self.assertEqual(date.today(), plan.close_date)
 
     def test_find_plan_controller(self):
@@ -83,28 +81,22 @@ class PlanControllerTest(unittest.TestCase):
         """
         Test to see if plan is created correctly with controller.
         """
-        plan = create_plan(name='My Plan',
+        plan = create_plan(plan_name='My Plan',
                            emergency_type=Plan.EmergencyType.EARTHQUAKE,
                            description='Test emergency plan',
                            geographical_area='',
                            camps=[Camp(name='TestCamp')])
         self.assertEqual('My Plan', plan.name)
+        plan_camp = plan.camps.get('TestCamp')
+        self.assertListEqual([plan_camp.name], ['TestCamp'])
         self.setUp()
 
     def test_create_camps_controller(self):
         """
         Test that camps are added to plan correctly.
         """
-        create_camp_plan = Plan(name='My Plan Camp Test',
-                                emergency_type=Plan.EmergencyType.EARTHQUAKE,
-                                description='Test emergency plan',
-                                geographical_area='',
-                                camps=[Camp(name='Camp 0')])
-        create_camps('Camp 1', create_camp_plan)
-        camp_1 = create_camp_plan.camps.get('Camp 0')
-        camp_2 = create_camp_plan.camps.get('Camp 1')
-        camps_list = [camp_1.name, camp_2.name]
-        self.assertListEqual(['Camp 0', 'Camp 1'], camps_list)
+        create_camps('Camp 1')
+        self.assertIsInstance(create_camps('Camp 1'), Camp)
         self.setUp()
 
     def test_list_plans_controller(self):
