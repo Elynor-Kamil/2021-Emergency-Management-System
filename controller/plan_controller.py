@@ -5,6 +5,12 @@ from models.plan import Plan
 from models.camp import Camp
 
 
+class UserInputError(Exception):
+
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 ###---- Manage Plan Menu ----
 def manage_plan_menu():
     """
@@ -27,6 +33,12 @@ def create_plan(plan_name: str, emergency_type: Plan.EmergencyType, description:
     """
     Shalaka, Elynor
     """
+    try:
+        return Plan()
+    except Plan.CampNotFoundError:
+        raise UserInputError('')
+    except Plan.PastStartDateException:
+        raise UserInputError('')
     pass
 
 

@@ -5,7 +5,7 @@ from data.users import users_catalog
 from models.admin import Admin
 from models.user import User, require_role
 from models.volunteer import Volunteer
-
+from controller.plan_controller import create_plan
 
 class AdminShell(EmsShell):
     """
@@ -29,7 +29,6 @@ class AdminShell(EmsShell):
         """
         Transfer option numbers to function name for Admin Menu
         """
-
         if option.isdigit() and int(option) in list(self.admin_options.values()):
             return list(self.admin_options.keys())[list(self.admin_options.values()).index(int(option))]
         elif option.upper() == 'X' or option.upper() == 'R':
@@ -82,6 +81,9 @@ class AdminShell(EmsShell):
 
 
 class PlanMenu(AdminShell):
+    """
+    PlanMenu is the command line interface for emergency plan management.
+    """
     admin_options = {"logout": 0, "create_plan": 1, "view_plan": 2,
                      "close_plan": 3,
                      "return": "r"}
@@ -105,8 +107,16 @@ class PlanMenu(AdminShell):
         """
         Create a plan
         """
-        print("connect to create plan...")  # add function
-        pass
+        import controller.plan_controller as plan
+        print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new emergency plan"))
+        e_name = input("Enter emergency plan name:")
+        e_type = input("Choose a emergency type:")
+        e_description = input("Enter description:")
+        e_geoarea = input("Enter emergency plan graphical_area:")
+        e_camp_number = input("Enter the number of camps:")
+        e_camps = input("Enter camp names:")
+
+        plan.create_plan(e_name, e_type, e_description, e_geoarea, e_camps)
 
     def do_view_plan(self, arg):
         """
