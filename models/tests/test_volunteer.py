@@ -1,5 +1,6 @@
 import unittest
 from models.volunteer import Volunteer
+from models.plan_statistics import find_volunteers
 
 
 class TestVolunteer(unittest.TestCase):
@@ -58,6 +59,30 @@ class TestVolunteer(unittest.TestCase):
             Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                       phone='+12345')
 
+    def tearDown(self):
+        """
+        Function to delete stored data after a test has finished running
+        to avoid corrupting other tests
+        """
+        Plan.delete_all()
+
+    def test_adding_volunteer_to_camp(self):
+        """
+        Test to check functionality for adding a volunteer to a camp.
+        """
+        Plan(name='test_plan1',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp1')])
+        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                phone='+447519953189')
+        test_plan = Plan.find('test_plan1')
+        test_camp = test_plan.camps.get('camp1')
+        test_camp.volunteers.add(volunteer_a)
+
+        self.assertEqual(volunteer_a.camps, 'camp1')
+        self.tearDown()
 
 if __name__ == '__main__':
     unittest.main()
