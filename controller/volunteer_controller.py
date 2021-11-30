@@ -6,14 +6,7 @@ from controller.controller_error import ControllerError
         ManageVolunteerMenu().cmdloop()
 
 
-def find_volunteer(username: str) -> Volunteer:
-    volunteer_called = Volunteer.find(username)
-    if isinstance(volunteer_called, Volunteer):
-        return volunteer_called
-    else:
-        raise ControllerError(f"Invalid username: {username}. Please try again.")
-
-
+###---- Manage Volunteer Menu ----
 def create_volunteer(username: str,
                      password: str,
                      firstname: str,
@@ -39,6 +32,14 @@ def create_volunteer(username: str,
                 f"Invalid phone number: {phone}. Phone number should start with a plus sign and international code")
     else:
         raise ControllerError(f"Camp {camp} does not exist.")
+
+
+def find_volunteer(username: str) -> Volunteer:
+    volunteer_called = Volunteer.find(username)
+    if isinstance(volunteer_called, Volunteer):
+        return volunteer_called
+    else:
+        raise ControllerError(f"Invalid username: {username}. Please try again.")
 
 
 def view_volunteer_profile(volunteer: Volunteer) -> str:
