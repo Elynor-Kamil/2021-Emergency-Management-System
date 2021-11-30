@@ -1,41 +1,25 @@
 from datetime import datetime
-from typing import Iterable
+from enum import Enum
+from typing import Iterable, Type
 
 from models.plan import Plan
 from models.camp import Camp
 from models.base.document import IndexedDocument
 
 
-# ---- Manage Plan Menu ----
-def manage_plan_menu():
+def list_emergency_types() -> Type[Enum]:
     """
-    Vanessa
+    List all options for emergency type.
     """
-    pass
+    return Plan.EmergencyType
 
 
-def list_emergency_types() -> dict:
-    """
-    Dictionary of emergency types.
-    """
-    emergency_types = {'earthquake': Plan.EmergencyType.EARTHQUAKE,
-                       'fire': Plan.EmergencyType.FIRE,
-                       'tsunami': Plan.EmergencyType.TSUNAMI,
-                       'storm': Plan.EmergencyType.STORM,
-                       'pandemic': Plan.EmergencyType.PANDEMIC,
-                       'flood': Plan.EmergencyType.FLOOD,
-                       'other': Plan.EmergencyType.OTHER}
-
-    return emergency_types
-
-
-def create_camps(camp_name: str, plan_document: Plan) -> None:
+def create_camps(camp_name: str) -> Camp:
     """
     Add new camp to plan given the Plan.
     """
     camp = Camp(name=camp_name)
-    camp.save()
-    plan_document.open_camps(camp)
+    return camp
 
 
 def create_plan(name: str, emergency_type: Plan.EmergencyType, description: str,
@@ -71,7 +55,10 @@ def view_plan_statistics(plan: Plan) -> str:
         # {"camp1":[1, 2, 3, 4], "camp2":[6, 7, 8, 9]}
         for camp in plan_statistics.items():
             camp_name, statistics_info = camp[0], camp[1]
-            num_of_volunteers, num_of_refugees, remaining_volunteers, extra_volunteers_needed = statistics_info[0], statistics_info[1], statistics_info[2], statistics_info[3]
+            num_of_volunteers, num_of_refugees, remaining_volunteers, extra_volunteers_needed = statistics_info[0], \
+                                                                                                statistics_info[1], \
+                                                                                                statistics_info[2], \
+                                                                                                statistics_info[3]
 
             statistics += f"Camp name: {camp_name}\n" \
                           f"Number of volunteers: {num_of_volunteers}\n" \
