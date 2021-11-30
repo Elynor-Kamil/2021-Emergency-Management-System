@@ -115,7 +115,6 @@ class Plan(IndexedDocument):
         """
         self.__is_closed = True
         self.__close_date = datetime.today().date()
-
         self.save()
 
     @property
