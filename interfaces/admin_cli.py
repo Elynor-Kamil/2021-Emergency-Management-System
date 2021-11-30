@@ -25,9 +25,9 @@ class AdminShell(EmsShell):
               "[ X ] Exit\n")
 
 
-    def precmd(self, option: str) -> int:
+    def precmd(self, option: str) -> str:
         """
-        Transfer option numbers to function name
+        Transfer option numbers to function name for Admin Menu
         """
         admin_options = {"logout": 0, "profile": 1, "manage_plan": 2,
                          "manage_volunteer_account": 3,
@@ -52,7 +52,8 @@ class AdminShell(EmsShell):
         self.admin_menu()
 
     # ----- basic commands for admins-----
-    def do_invalid_input(self, arg):
+    @staticmethod
+    def do_invalid_input(arg):
         """
         Display error message for invalid input
         """
@@ -100,13 +101,12 @@ class PlanMenu(AdminShell):
         print("\033[100m\033[4m\033[1mManage Emergency Plan\033[0m"
               "[ 1 ] Create a new emergency plan\n"
               "[ 2 ] View an emergency plan\n"
-              "[ 3 ] Close an emergency plan\n"
+              "[ 3 ] Close an emergency plan\n\n"
               "[ R ] Return to previous page\n")
 
-
-    def precmd(self, option: str) -> int:
+    def precmd(self, option: str) -> str:
         """
-        Handles two-word commands made with action words
+        Transfer option numbers to function name
         """
         admin_options = {"logout": 0, "create_plan": 1, "view_plan": 2,
                          "close_plan": 3,
@@ -172,8 +172,7 @@ class ManageVolunteerMenu(AdminShell):
             "[ R ] Return to previous page\n"
             "[ 0 ] Log-out\n")
 
-
-    def precmd(self, option: str) -> int:
+    def precmd(self, option: str) -> str:
         """
         Handles two-word commands made with action words
         """
@@ -201,7 +200,7 @@ class ManageVolunteerMenu(AdminShell):
 
 
     # ----- basic commands for volunteer account management -----
-    def do_create_volunteer(self, username:str,  password: str):
+    def do_create_volunteer(self, username: str, password: str):
         """
         Create a volunteer
         """
@@ -210,7 +209,7 @@ class ManageVolunteerMenu(AdminShell):
         password = input('Password: ')
         new_volunteer = Volunteer(username=username, password=password)
         print(f"Successfully created volunteer {new_volunteer.username}")
-        pass #add function and verification
+        pass  # add function and verification
 
     def do_edit_volunteer(self, arg):
         """
