@@ -156,6 +156,8 @@ class Document(metaclass=MetaDocument):
         raise self.ReferrerNotFound(referrer_type, field_name)
 
     def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
         return self._data == other._data
 
     def _add_referrer(self, referrer):
