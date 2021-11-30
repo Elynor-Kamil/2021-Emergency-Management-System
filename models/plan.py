@@ -114,6 +114,7 @@ class Plan(IndexedDocument):
         Set __is_closed flag to be True if plan is closed.
         """
         self.__is_closed = True
+        self.__close_date = datetime.today().date()
         self.save()
 
     @property

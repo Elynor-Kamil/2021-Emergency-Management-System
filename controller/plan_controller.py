@@ -95,6 +95,5 @@ def close_plan(plan_document: Plan):
     Use find_plan in combination with this function when admin requests for a plan to be closed.
     Inputted plan will be changed to read-only by changing the __is_closed flag in Plan class.
     """
-    Plan._Plan__close_date = datetime.today().date()
+    plan_document.close()
     plan_document.save()
-    return Plan.close(plan_document)
