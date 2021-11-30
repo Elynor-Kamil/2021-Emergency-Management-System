@@ -68,3 +68,7 @@ class TestVolunteer(unittest.TestCase):
 
     def tearDown(self) -> None:
         Volunteer.delete_all()
+
+
+if __name__ == '__main__':
+    unittest.main()

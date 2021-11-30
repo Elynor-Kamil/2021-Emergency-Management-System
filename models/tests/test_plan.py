@@ -11,6 +11,9 @@ class PlanTest(unittest.TestCase):
     Test Plan class
     """
 
+    def setUp(self) -> None:
+        Plan.delete_all()
+
     def test_create_plan(self):
         """
         Test Plan creation

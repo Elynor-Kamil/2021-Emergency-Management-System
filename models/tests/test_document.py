@@ -35,6 +35,9 @@ class BasicDocumentTest(TestCase):
         with self.assertRaises(Document.DuplicateKeyError):
             self.DemoIndexedDocument(name='test_duplicate', password='test2')
 
+    def tearDown(self) -> None:
+        self.DemoIndexedDocument.delete_all()
+
 
 class DocumentPersistenceTest(TestCase):
     class DemoIndexedDocument(IndexedDocument):
@@ -42,6 +45,7 @@ class DocumentPersistenceTest(TestCase):
         name = Field()
 
     def setUp(self) -> None:
+        self.DemoIndexedDocument.delete_all()
         self.DemoIndexedDocument(id=1, name='a')
         self.DemoIndexedDocument(id=2, name='b')
         self.DemoIndexedDocument(id=3, name='c')
@@ -78,6 +82,7 @@ class DocumentReferenceTest(TestCase):
         children = ReferenceDocumentsField()
 
     def setUp(self) -> None:
+        self.DemoNestedDocument.delete_all()
         children = [
             self.DemoDocument(name='a'),
             self.DemoDocument(name='b'),
@@ -111,7 +116,7 @@ class DocumentReferenceTest(TestCase):
             self.DemoNestedDocument(name='child_2', children=[]),
             self.DemoNestedDocument(name='child_3', children=[])
         ]
-        document = self.DemoNestedDocument(name='test', children=children)
+        document = self.DemoNestedDocument(name='test2', children=children)
         self.assertEqual(document.children.get('child_1'), children[0])
 
     def test_delete_referee_by_key(self):
@@ -120,7 +125,7 @@ class DocumentReferenceTest(TestCase):
             self.DemoNestedDocument(name='child_2', children=[]),
             self.DemoNestedDocument(name='child_3', children=[])
         ]
-        document = self.DemoNestedDocument(name='test', children=children)
+        document = self.DemoNestedDocument(name='test2', children=children)
         self.assertEqual(document.children.get('child_1'), children[0])
         del document.children['child_1']
         self.assertIsNone(document.children.get('child_1'))
