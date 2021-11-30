@@ -1,10 +1,14 @@
 from models.volunteer import Volunteer
 from models.camp import Camp
+from controller.controller_error import ControllerError
 
 
 def find_volunteer(username: str) -> Volunteer:
     volunteer_called = Volunteer.find(username)
-    return volunteer_called
+    if isinstance(volunteer_called, Volunteer):
+        return volunteer_called
+    else:
+        raise ControllerError(f"Invalid username: {username}. Please try again.")
 
 
 def create_volunteer(username: str,
@@ -13,14 +17,32 @@ def create_volunteer(username: str,
                      lastname: str,
                      phone: str,
                      camp: Camp) -> Volunteer:
-    volunteer_called = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
-                                 phone=phone)
-    camp.volunteers.add(volunteer_called)
-    return volunteer_called
+    if isinstance(camp, Camp):
+        try:
+            volunteer_called = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
+                                         phone=phone)
+            camp.volunteers.add(volunteer_called)
+            return volunteer_called
+        except Volunteer.InvalidUsernameException:
+            raise ControllerError(f"Invalid username: {username}. Username should be at least 4 characters.")
+        except Volunteer.InvalidPasswordException:
+            raise ControllerError(f"Invalid password: {password}. Password should be at least 4 characters.")
+        except Volunteer.InvalidFirstnameException:
+            raise ControllerError(f"Invalid name: {firstname}. First name should be more than 1 character.")
+        except Volunteer.InvalidLastnameException:
+            raise ControllerError(f"Invalid name: {lastname}. Last name should be more than 1 character.")
+        except Volunteer.InvalidPhoneException:
+            raise ControllerError(
+                f"Invalid phone number: {phone}. Phone number should start with a plus sign and international code")
+    else:
+        raise ControllerError(f"Camp {camp} does not exist.")
 
 
 def view_volunteer_profile(volunteer: Volunteer) -> str:
-    return str(volunteer)
+    if isinstance(volunteer, Volunteer):
+        return str(volunteer)
+    else:
+        raise ControllerError(f"Invalid input: {volunteer}. Please try again.")
 
 
 def edit_volunteer_profile(volunteer: Volunteer, firstname: str, lastname: str,
@@ -48,20 +70,27 @@ def change_volunteer_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> V
 
 
 def deactivate_volunteer(volunteer: Volunteer) -> Volunteer:
-    volunteer_called = volunteer
-    volunteer_called.account_activated = False
-    volunteer_called.save()
-    return volunteer_called
+    if isinstance(volunteer, Volunteer):
+        volunteer_called = volunteer
+        volunteer_called.account_activated = False
+        volunteer_called.save()
+        return volunteer_called
+    else:
+        raise ControllerError(f"Invalid input: {volunteer}. Please try again.")
 
 
 def reactivate_volunteer(volunteer: Volunteer) -> Volunteer:
-    volunteer_called = volunteer
-    volunteer_called.account_activated = True
-    volunteer_called.save()
-    return volunteer_called
+    if isinstance(volunteer, Volunteer):
+        volunteer_called = volunteer
+        volunteer_called.account_activated = True
+        volunteer_called.save()
+        return volunteer_called
+    else:
+        raise ControllerError(f"Invalid input: {volunteer}. Please try again.")
 
 
 def delete_volunteer(volunteer: Volunteer) -> None:
-    volunteer_called = volunteer
-    volunteer_called.camp = None
-    volunteer_called.delete()
+    if isinstance(volunteer, Volunteer):
+        volunteer.delete()
+    else:
+        raise ControllerError(f"Invalid input: {volunteer}. Please try again.")
