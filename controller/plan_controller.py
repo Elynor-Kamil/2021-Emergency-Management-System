@@ -3,6 +3,7 @@ from typing import Iterable, Type
 
 from models.plan import Plan
 from models.camp import Camp
+from controller import controller_error
 
 
 def list_emergency_types() -> Type[Enum]:
@@ -14,7 +15,7 @@ def list_emergency_types() -> Type[Enum]:
 
 def create_camps(name: str) -> Camp:
     """
-    Add new camp to plan given the Plan.
+    Create new camp.
     """
     camp = Camp(name=name)
     return camp
@@ -25,6 +26,8 @@ def create_plan(plan_name: str, emergency_type: Plan.EmergencyType, description:
                 camps: Iterable[Camp]) -> Plan:
     """
     Creates plan given relevant inputs.
+
+    Note: once issue #38 is resolved, need to add exception for camps having the same name.
     """
     return Plan(name=plan_name, emergency_type=emergency_type, description=description,
                 geographical_area=geographical_area, camps=camps)
@@ -72,7 +75,10 @@ def find_plan(plan_name: str) -> Plan:
     Finds the relevant plan with a given plan name.
     """
     plan_document = Plan.find(key=plan_name)
-    return plan_document
+    if plan_document is not None:
+        if isinstance(plan_document, Plan):
+            return plan_document
+    raise controller_error.ControllerError('message')
 
 
 def close_plan(plan_document: Plan):
