@@ -1,5 +1,5 @@
 import unittest
-from models.plan_statistics import find_volunteers, find_refugees
+from models.plan_statistics import find_volunteers, find_refugees, plan_statistics_function
 from models.camp import Camp
 from models.refugee import Refugee
 from models.volunteer import Volunteer
@@ -396,7 +396,7 @@ class PlanStatisticsTest(unittest.TestCase):
         Also tests the feature to check how many additional volunteers are recommended (number of refugees * 20),
         hence should return 27 in the third list position in the plan_statistics value list.
         """
-        Plan(name='test_plan1',
+        Plan(name='test_plan12',
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
              geographical_area='London',
@@ -407,7 +407,7 @@ class PlanStatisticsTest(unittest.TestCase):
                                 phone='+447519955439')
         volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
                                 phone='+447511111111')
-        test_plan = Plan.find('test_plan1')
+        test_plan = Plan.find('test_plan12')
         test_camp = test_plan.camps.get('camp1')
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
         refugee1 = Refugee(firstname="Tom",
@@ -416,12 +416,12 @@ class PlanStatisticsTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
-        test_plan_statistics = plan_statistics_function('test_plan1')
+        test_plan_statistics = plan_statistics_function(test_plan)
         print(test_plan_statistics)
         test_dictionary = {
             'camp1': [3, 600, 0, 27]
         }
-        self.assertDictEqual(self.test_dictionary, self.test_plan_statistics)
+        self.assertDictEqual(test_dictionary, test_plan_statistics)
         self.tearDown()
 
     def plan_statistics_two_plans_exist_test(self):
@@ -464,15 +464,16 @@ class PlanStatisticsTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
-        test_plan_statistics = plan_statistics_function('test_plan1')
+        test_plan_statistics1 = plan_statistics_function('test_plan1')
         test_camp.refugees.add(refugee2)
-        test_plan_statistics = plan_statistics_function('test_plan2')
+        test_plan_statistics2 = plan_statistics_function('test_plan2')
         print(test_plan_statistics)
         test_dictionary = {
             'camp1': [2, 7, 1, 0]
         }
-        self.assertDictEqual(self.test_dictionary, self.test_plan_statistics)
+        self.assertDictEqual(test_dictionary, test_plan_statistics1, test_plan_statistics2)
         self.tearDown()
+
 
 
 
