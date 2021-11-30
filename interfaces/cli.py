@@ -1,7 +1,6 @@
 from cmd import Cmd
 
-from models.admin import Admin
-from models.user import User, require_role
+from models.user import User
 
 
 class EmsShell(Cmd):
@@ -61,7 +60,3 @@ class EmsShell(Cmd):
         Print user info
         """
         print(self.user)
-
-    @require_role(Admin)
-    def do_sudo(self, arg):
-        print('Admin access verified')
