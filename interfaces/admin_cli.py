@@ -5,7 +5,9 @@ from data.users import users_catalog
 from models.admin import Admin
 from models.user import User, require_role
 from models.volunteer import Volunteer
-from controller.plan_controller import create_plan
+from models.plan import Plan
+import controller.plan_controller as plan_controller
+
 
 class AdminShell(EmsShell):
     """
@@ -107,30 +109,37 @@ class PlanMenu(AdminShell):
         """
         Create a plan
         """
-        import controller.plan_controller as plan
+
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new emergency plan"))
         e_name = input("Enter emergency plan name:")
+        plan_controller.list_emergency_types()
         e_type = input("Choose a emergency type:")
         e_description = input("Enter description:")
-        e_geoarea = input("Enter emergency plan graphical_area:")
-        e_camp_number = input("Enter the number of camps:")
-        e_camps = input("Enter camp names:")
-
-        plan.create_plan(e_name, e_type, e_description, e_geoarea, e_camps)
+        e_geo_area = input("Enter emergency plan graphical_area:")
+        camp = input("Enter camp names (use comma to separate camps): ")
+        ## add formatting
+        e_camps = []
+        e_camps.append(camp)
+        plan_controller.create_plan(e_name, e_type, e_description, e_geo_area, e_camps)
 
     def do_view_plan(self, arg):
         """
         View a plan
         """
-        print("connect to view plan...")  # add function
-        pass
+        plan = input("Enter the plan name:")
+        find_plan = plan_controller.find_plan(plan)
+        if isinstance(find_plan, Plan):
+            plan_controller.view_plan_statistics(plan)
+        else:
+            print("Plan not found. Please re-enter plan name")
 
     def do_close_plan(self, arg):
         """
         Delete a plan
         """
-        print("connect to close plan...")  # add function
-        pass
+        plan = input("Enter the plan name:")
+        plan_controller.find_plan(plan)
+        plan_controller.close_plan(plan)
 
 
 

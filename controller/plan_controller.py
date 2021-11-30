@@ -36,9 +36,9 @@ def create_plan(plan_name: str, emergency_type: Plan.EmergencyType, description:
     try:
         return Plan()
     except Plan.CampNotFoundError:
-        raise UserInputError('')
+        raise UserInputError('message')
     except Plan.PastStartDateException:
-        raise UserInputError('')
+        raise UserInputError('message')
     pass
 
 
