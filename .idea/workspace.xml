@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="unit test updates for test_plan_statistics">
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="unit test updates for test_plan_controller for view_plan_statistics function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/plan_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/test/test_refugee.py" beforeDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -296,7 +295,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638283441703</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="unit test updates for test_plan_controller for view_plan_statistics function">
+      <created>1638285035440</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1638285035441</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -325,6 +331,7 @@
     <MESSAGE value="updates to plan controller plan statistics" />
     <MESSAGE value="adding folder and file for controller unit tests" />
     <MESSAGE value="unit test updates for test_plan_statistics" />
-    <option name="LAST_COMMIT_MESSAGE" value="unit test updates for test_plan_statistics" />
+    <MESSAGE value="unit test updates for test_plan_controller for view_plan_statistics function" />
+    <option name="LAST_COMMIT_MESSAGE" value="unit test updates for test_plan_controller for view_plan_statistics function" />
   </component>
 </project>
