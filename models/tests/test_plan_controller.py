@@ -55,14 +55,16 @@ class PlanControllerTest(unittest.TestCase):
         """
         Test plan closure date is set to today's date when plan is closed.
         """
+        self.setUp()
         plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
+        print(plan.close_date)
         close_plan(plan)
+        print(plan.close_date)
         self.assertEqual(date.today(), plan.close_date)
-        self.setUp()
 
     def test_find_plan_controller(self):
         """
