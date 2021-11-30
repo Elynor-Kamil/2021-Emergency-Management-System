@@ -83,7 +83,7 @@ class TestVolunteer(unittest.TestCase):
         test_camp = test_plan.camps.get('camp1')
         test_camp.volunteers.add(volunteer_a)
 
-        self.assertEqual(volunteer_a.camps, 'camp1')
+        self.assertEqual(volunteer_a.camp, 'camp1')
         self.tearDown()
 
 if __name__ == '__main__':
