@@ -106,7 +106,6 @@ class PlanTest(unittest.TestCase):
                     camps=[Camp(name='TestCamp')])
         self.assertEqual(date.today(), plan.start_date)
 
-    # might need to put the following tests solely in test_plan_controller
     def test_plan_status(self):
         """
         Test status flag of plan. Should be false is plan is open.
