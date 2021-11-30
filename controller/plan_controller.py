@@ -15,6 +15,9 @@ def manage_plan_menu():
 
 
 def list_emergency_types() -> dict:
+    """
+    Dictionary of emergency types.
+    """
     emergency_types = {'earthquake': Plan.EmergencyType.EARTHQUAKE,
                        'fire': Plan.EmergencyType.FIRE,
                        'tsunami': Plan.EmergencyType.TSUNAMI,
@@ -28,7 +31,7 @@ def list_emergency_types() -> dict:
 
 def create_camps(camp_name: str, plan_document: Plan) -> None:
     """
-    Add new camp to plan.
+    Add new camp to plan given the Plan.
     """
     camp = Camp(name=camp_name)
     camp.save()
