@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="unit tests for plan_statistics" />
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="view_plan_statistics updates in plan_controller">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/tests/test_refugee.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_refugee.py" afterDir="false" />
+    </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +38,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
@@ -256,7 +260,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638225979110</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="view_plan_statistics updates in plan_controller">
+      <created>1638226084300</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1638226084300</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -279,6 +290,7 @@
     <MESSAGE value="update refugee class and unittest" />
     <MESSAGE value="update name with error handling in refugee class" />
     <MESSAGE value="unit tests for plan_statistics" />
-    <option name="LAST_COMMIT_MESSAGE" value="unit tests for plan_statistics" />
+    <MESSAGE value="view_plan_statistics updates in plan_controller" />
+    <option name="LAST_COMMIT_MESSAGE" value="view_plan_statistics updates in plan_controller" />
   </component>
 </project>
