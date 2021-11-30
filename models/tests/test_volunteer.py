@@ -2,6 +2,7 @@ import unittest
 from models.volunteer import Volunteer
 from models.plan_statistics import find_volunteers
 from models.plan import Plan
+from models.plan import Camp
 
 
 class TestVolunteer(unittest.TestCase):
