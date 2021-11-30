@@ -60,10 +60,7 @@ class EmsShell(Cmd):
         """
         Print user info
         """
-        print(f'username: {self.user.username}\n'
-              f'role: {self.user.__class__.__name__}')
-        if self.user.__class__.__name__ == 'Volunteer':
-            print(self.user)
+        print(self.user)
 
     @require_role(Admin)
     def do_sudo(self, arg):

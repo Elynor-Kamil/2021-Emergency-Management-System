@@ -83,12 +83,13 @@ class Volunteer(User):
 
     def __str__(self):
         try:
-            camp_str = f'belongs to camp {self.camp} under {self.camp.plan}'
+            camp_str = f'{self.camp} @ {self.camp.plan}'
         except Document.ReferrerNotFound:
-            camp_str = 'does not belong to any camp'
-        return f"Volunteer username: {self.username}\n" \
+            camp_str = 'not assigned'
+        return f"{super().__str__()}\n" \
                f"Account activated: {self.account_activated}\n" \
-               f"Volunteer {self.firstname} {self.lastname} {camp_str}.\n" \
+               f"Name: {self.firstname} {self.lastname}\n" \
+               f"Camp: {camp_str}\n" \
                f"Phone Number: {self.phone}\n" \
                f"Availability: {self.availability}\n" \
                f"Date joined: {self.__creation_date}\n"
