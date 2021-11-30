@@ -1,6 +1,7 @@
 import unittest
 from models.volunteer import Volunteer
 from models.plan_statistics import find_volunteers
+from models.plan import Plan
 
 
 class TestVolunteer(unittest.TestCase):
