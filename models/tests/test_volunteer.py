@@ -1,6 +1,8 @@
 import unittest
 from models.volunteer import Volunteer
 from models.plan_statistics import find_volunteers
+from models.plan import Plan
+from models.plan import Camp
 
 
 class TestVolunteer(unittest.TestCase):
@@ -81,7 +83,7 @@ class TestVolunteer(unittest.TestCase):
         test_camp = test_plan.camps.get('camp1')
         test_camp.volunteers.add(volunteer_a)
 
-        self.assertEqual(volunteer_a.camps, 'camp1')
+        self.assertEqual(volunteer_a.camp.name, test_camp.name)
         self.tearDown()
 
 if __name__ == '__main__':
