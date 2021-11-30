@@ -1,10 +1,8 @@
-from datetime import datetime
 from enum import Enum
 from typing import Iterable, Type
 
 from models.plan import Plan
 from models.camp import Camp
-from models.base.document import IndexedDocument
 
 
 def list_emergency_types() -> Type[Enum]:
@@ -14,21 +12,21 @@ def list_emergency_types() -> Type[Enum]:
     return Plan.EmergencyType
 
 
-def create_camps(camp_name: str) -> Camp:
+def create_camps(name: str) -> Camp:
     """
     Add new camp to plan given the Plan.
     """
-    camp = Camp(name=camp_name)
+    camp = Camp(name=name)
     return camp
 
 
-def create_plan(name: str, emergency_type: Plan.EmergencyType, description: str,
+def create_plan(plan_name: str, emergency_type: Plan.EmergencyType, description: str,
                 geographical_area: str,
                 camps: Iterable[Camp]) -> Plan:
     """
     Creates plan given relevant inputs.
     """
-    return Plan(name=name, emergency_type=emergency_type, description=description,
+    return Plan(name=plan_name, emergency_type=emergency_type, description=description,
                 geographical_area=geographical_area, camps=camps)
 
 
@@ -69,7 +67,7 @@ def view_plan_statistics(plan: Plan) -> str:
         return plan_info + statistics
 
 
-def find_plan(plan_name: str) -> IndexedDocument:
+def find_plan(plan_name: str) -> Plan:
     """
     Finds the relevant plan with a given plan name.
     """
