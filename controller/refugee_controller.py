@@ -1,8 +1,17 @@
 ###---- Manage Refugee Menu ----
 from datetime import date
+from enum import Enum
+from typing import Type
 
 from models.camp import Camp
 from models.refugee import Refugee
+
+
+def list_medical_condition_types() -> Type[Enum]:
+    """
+    List all options for medical condition type.
+    """
+    pass
 
 
 def create_refugee(firstname: str,
