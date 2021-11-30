@@ -111,7 +111,7 @@ class Plan(IndexedDocument):
 
     def close(self, __is_closed=None):
         """
-        Set __is_closed flag to be True, if plan is closed.
+        Set __is_closed flag to be True if plan is closed.
         """
         self.__is_closed = True
         self.save()
