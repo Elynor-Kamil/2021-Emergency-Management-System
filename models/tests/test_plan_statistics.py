@@ -6,6 +6,7 @@ from models.volunteer import Volunteer
 from models.plan import Plan
 from datetime import date
 
+
 class PlanStatisticsVolunteerTest(unittest.TestCase):
     """
     Class for testing cases involving volunteer counts in plan statistics.
@@ -42,7 +43,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_count = find_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
-        self.tearDown()
 
     def test_deactivated_volunteer_not_counted(self):
         """
@@ -69,7 +69,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
-        self.tearDown()
 
     def test_partially_active_volunteer_count(self):
         """
@@ -95,7 +94,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 2)
-        self.tearDown()
 
     def test_deactivated_volunteer_not_counted(self):
         """
@@ -122,8 +120,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
-        self.tearDown()
-
 
     def test_available_volunteer_count(self):
         """
@@ -149,8 +145,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_count = find_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
-        self.tearDown()
-
 
     def test_unavailable_volunteer_not_counted(self):
         """
@@ -177,8 +171,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
-        self.tearDown()
-
 
     def test_partially_available_volunteer_count(self):
         """
@@ -204,8 +196,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 2)
-        self.tearDown()
-
 
     def test_unavailable_volunteer_not_counted(self):
         """
@@ -232,8 +222,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         volunteer_count = find_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
-        self.tearDown()
-
 
     def test_no_volunteers_in_file(self):
         """
@@ -244,14 +232,12 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
              geographical_area='London',
-                         camps=[Camp(name='camp9')])
+             camps=[Camp(name='camp9')])
         test_plan = Plan.find('test_plan8')
         test_camp = test_plan.camps.get('camp9')
         volunteer_count = find_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 0)
-        self.tearDown()
-
 
     def test_volunteer_count_multiple_camps(self):
         """
@@ -279,7 +265,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
 
         self.assertEqual(volunteer_count_camp1, 1)
         self.assertEqual(volunteer_count_camp2, 2)
-        self.tearDown()
 
 
 class PlanStatisticsRefugeeTest(unittest.TestCase):
@@ -315,7 +300,6 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         refugee_count = find_refugees(test_camp)
 
         self.assertEqual(refugee_count, 6)
-        self.tearDown()
 
     def test_refugee_count_multiple_families_one_camp(self):
         """
@@ -343,13 +327,11 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         refugee_count = find_refugees(test_camp)
 
         self.assertEqual(refugee_count, 7)
-        self.tearDown()
-
 
     def test_refugee_count_multiple_camps(self):
         """
         Test to check that refugee count is correct for a single camp when refugee families exist at multiple
-        camps under the same plan.            """
+        camps under the same plan."""
         Plan(name='test_plan11',
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
@@ -370,13 +352,11 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         test_camp2 = test_plan.camps.get('camp15')
         test_camp2.refugees.add(refugee1, refugee2)
 
-
         refugee_count_camp1 = find_refugees(test_camp1)
         refugee_count_camp2 = find_refugees(test_camp2)
 
         self.assertEqual(refugee_count_camp1, 0)
         self.assertEqual(refugee_count_camp2, 7)
-        self.tearDown()
 
 
 class PlanStatisticsTest(unittest.TestCase):
@@ -389,14 +369,14 @@ class PlanStatisticsTest(unittest.TestCase):
         """
         Plan.delete_all()
 
-    def plan_statistics_for_one_camp_test(self):
+    def test_plan_statistics_for_one_camp(self):
         """
         Test to check number of volunteers and refugees returned by plan_statistics_function
         for a single camp is correct.
         Also tests the feature to check how many additional volunteers are recommended (number of refugees * 20),
         hence should return 27 in the third list position in the plan_statistics value list.
         """
-        Plan(name='test_plan12',
+        Plan(name='test_plan1',
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
              geographical_area='London',
@@ -407,7 +387,7 @@ class PlanStatisticsTest(unittest.TestCase):
                                 phone='+447519955439')
         volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
                                 phone='+447511111111')
-        test_plan = Plan.find('test_plan12')
+        test_plan = Plan.find('test_plan1')
         test_camp = test_plan.camps.get('camp1')
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
         refugee1 = Refugee(firstname="Tom",
@@ -417,14 +397,12 @@ class PlanStatisticsTest(unittest.TestCase):
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
         test_plan_statistics = plan_statistics_function(test_plan)
-        print(test_plan_statistics)
         test_dictionary = {
             'camp1': [3, 600, 0, 27]
         }
         self.assertDictEqual(test_dictionary, test_plan_statistics)
-        self.tearDown()
 
-    def plan_statistics_two_plans_exist_test(self):
+    def test_plan_statistics_two_plans_exist(self):
         """
         Test to check number of volunteers and refugees returned by plan_statistics_function
         for a single camp is correct, when there is another plan that also exists with volunteers and refugees.
@@ -463,17 +441,12 @@ class PlanStatisticsTest(unittest.TestCase):
                            num_of_family_member=2,
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
-        test_camp.refugees.add(refugee1)
-        test_plan_statistics1 = plan_statistics_function('test_plan1')
-        test_camp.refugees.add(refugee2)
-        test_plan_statistics2 = plan_statistics_function('test_plan2')
-        print(test_plan_statistics)
+        test_camp1.refugees.add(refugee1)
+        test_plan_statistics1 = plan_statistics_function(test_plan1)
+        test_camp2.refugees.add(refugee2)
+        test_plan_statistics2 = plan_statistics_function(test_plan2)
         test_dictionary = {
-            'camp1': [2, 7, 1, 0]
+            'camp1': [2, 6, 1, 0]
         }
-        self.assertDictEqual(test_dictionary, test_plan_statistics1, test_plan_statistics2)
-        self.tearDown()
-
-
-
+        self.assertDictEqual(test_dictionary, test_plan_statistics1)
 
