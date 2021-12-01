@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="small update to get rid of extra directory" />
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Getting rid of unnecessary call">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/plan_controller.py" afterDir="false" />
+    </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638288795037</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Getting rid of unnecessary call">
+      <created>1638362166248</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1638362166249</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -337,6 +347,7 @@
     <MESSAGE value="unit test updates for test_plan_statistics" />
     <MESSAGE value="unit test updates for test_plan_controller for view_plan_statistics function" />
     <MESSAGE value="small update to get rid of extra directory" />
-    <option name="LAST_COMMIT_MESSAGE" value="small update to get rid of extra directory" />
+    <MESSAGE value="Getting rid of unnecessary call" />
+    <option name="LAST_COMMIT_MESSAGE" value="Getting rid of unnecessary call" />
   </component>
 </project>
