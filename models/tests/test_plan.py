@@ -3,7 +3,6 @@ from datetime import date
 
 from models.camp import Camp
 from models.plan import Plan
-from controller.plan_controller import close_plan
 
 
 class PlanTest(unittest.TestCase):
@@ -106,7 +105,7 @@ class PlanTest(unittest.TestCase):
                     camps=[Camp(name='TestCamp')])
         self.assertEqual(date.today(), plan.start_date)
 
-    def test_plan_status(self):
+    def test_initialised_plan_not_closed(self):
         """
         Test status flag of plan. Should be false is plan is open.
         """
@@ -115,7 +114,7 @@ class PlanTest(unittest.TestCase):
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
-        self.assertEqual(False, plan.close_plan_status)
+        self.assertEqual(False, plan.is_closed)
 
     def test_close_plan(self):
         """
@@ -126,10 +125,10 @@ class PlanTest(unittest.TestCase):
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
-        close_plan(plan)
-        self.assertEqual(True, plan.close_plan_status)
+        plan.close()
+        self.assertEqual(True, plan.is_closed)
 
-    def test_no_close_date(self):
+    def test_initialised_plan_no_close_date(self):
         """
         Test that close date is not set during plan creation.
         """
@@ -149,5 +148,5 @@ class PlanTest(unittest.TestCase):
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
-        close_plan(plan)
+        plan.close()
         self.assertEqual(date.today(), plan.close_date)
