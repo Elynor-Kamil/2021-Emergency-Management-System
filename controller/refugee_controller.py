@@ -31,8 +31,7 @@ def create_refugee(user_id: str,
             plan_name = str(plan.name)
             curr_plan = Plan.find(plan_name)
             if camp in curr_plan.camps:
-                new_refugee = Refugee(
-                                      firstname = firstname,
+                new_refugee = Refugee(firstname = firstname,
                                       lastname = lastname,
                                       num_of_family_member = num_of_family_member,
                                       starting_date = starting_date,
@@ -40,13 +39,13 @@ def create_refugee(user_id: str,
                 camp.refugees.add(new_refugee)
                 return new_refugee
     except Refugee.InvalidNameException:
-        raise ControllerError(f"Invalid refugee name. Please try again.")
+        raise ControllerError(f"Invalid refugee name: {firstname, lastname}. Firstname and lastname should be string.")
     except Refugee.InvalidNumOfFamilyMemberException:
-        raise ControllerError(f"Invalid number of family member. Please try again.")
+        raise ControllerError(f"Invalid number of family member: {num_of_family_member}. Number of family member should be a positive integer.")
     except Refugee.InvalidStartingDateException:
-        raise ControllerError(f"Invalid starting date. Please try again.")
+        raise ControllerError(f"Invalid starting date: {starting_date}. Starting date should before today.")
     except Refugee.InvalidCampException:
-        raise ControllerError(f"Invalid camp. Please try again.")
+        raise ControllerError(f"Invalid camp: {camp}. The camp is not found.")
 
 
 def find_refugee(refugee_id: int) -> Refugee:
