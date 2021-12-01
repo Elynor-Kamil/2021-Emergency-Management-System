@@ -20,13 +20,12 @@ class PlanControllerTest(unittest.TestCase):
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
         pc.close_plan(plan)
-        self.assertEqual(True, plan.is_closed)
+        self.assertTrue(plan.is_closed)
 
     def test_initialised_plan_no_close_date(self):
         """
-        Test plan closure date is set to today's date when plan is closed.
+        Test plan closure date is None if a plan has not been closed.
         """
-        self.setUp()
         plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
