@@ -11,11 +11,45 @@ class TestVolunteerController(unittest.TestCase):
                                                phone='+447519953189', camp=Camp(name='UCL'))
         self.assertEqual(type(volunteer_called), Volunteer)
 
+    def test_create_volunteer_invalid_username(self):
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yun', password='root', firstname='Yunsy', lastname='Yin',
+                                phone='+447519953189', camp=Camp(name='UCL'))
+
+    def test_create_volunteer_invalid_password(self):
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Yin',
+                                phone='+447519953189', camp=Camp(name='UCL'))
+
+    def test_create_volunteer_invalid_firstname(self):
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yunsy', password='roo', firstname='Y', lastname='Yin',
+                                phone='+447519953189', camp=Camp(name='UCL'))
+
+    def test_create_volunteer_invalid_lastname(self):
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Y',
+                                phone='+447519953189', camp=Camp(name='UCL'))
+
+    def test_create_volunteer_invalid_phone_without_international_code(self):
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Yin',
+                                phone='07519953189', camp=Camp(name='UCL'))
+
+    def test_create_volunteer_invalid_phone_too_short(self):
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Yin',
+                                phone='+44751', camp=Camp(name='UCL'))
+
     def test_find_volunteer(self):
         vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin', phone='+447519953189',
                             camp=Camp(name='UCL'))
         volunteer_called = vc.find_volunteer('yunsy')
         self.assertEqual(type(volunteer_called), Volunteer)
+
+    def test_find_volunteer_invalid_input(self):
+        with self.assertRaises(vc.ControllerError):
+            vc.find_volunteer('Yunsy')
 
     def test_view_volunteer_profile(self):
         volunteer_called = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
