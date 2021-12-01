@@ -72,18 +72,17 @@ class TestVolunteer(unittest.TestCase):
         """
         Test to check functionality for adding a volunteer to a camp.
         """
-        Plan(name='test_plan1',
+        camp = Camp(name='camp1')
+        plan = Plan(name='test_plan1',
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
              geographical_area='London',
-             camps=[Camp(name='camp1')])
+             camps=[camp])
         volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                                 phone='+447519953189')
-        test_plan = Plan.find('test_plan1')
-        test_camp = test_plan.camps.get('camp1')
-        test_camp.volunteers.add(volunteer_a)
+        camp.volunteers.add(volunteer_a)
 
-        self.assertEqual(volunteer_a.camp.name, test_camp.name)
+        self.assertEqual(volunteer_a.camp.name, camp.name)
 
 if __name__ == '__main__':
     unittest.main()
