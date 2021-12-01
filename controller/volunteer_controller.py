@@ -4,25 +4,41 @@ from models.camp import Camp
 from controller.controller_error import ControllerError
 
 
-def find_volunteer(username: str) -> Volunteer:
-    volunteer_called = Volunteer.find(username)
-    return volunteer_called
-
-
+###---- Manage Volunteer Menu ----
 def create_volunteer(username: str,
                      password: str,
                      firstname: str,
                      lastname: str,
                      phone: str,
                      camp: Camp) -> Volunteer:
-    volunteer_called = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
-                                 phone=phone)
-    camp.volunteers.add(volunteer_called)
-    return volunteer_called
+    try:
+        volunteer_called = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
+                                     phone=phone)
+        camp.volunteers.add(volunteer_called)
+        return volunteer_called
+    except Volunteer.InvalidUsernameException:
+        raise ControllerError(f"Invalid username: {username}. Username should be at least 4 characters.")
+    except Volunteer.InvalidPasswordException:
+        raise ControllerError(f"Invalid password: {password}. Password should be at least 4 characters.")
+    except Volunteer.InvalidFirstnameException:
+        raise ControllerError(f"Invalid name: {firstname}. First name should be more than 1 character.")
+    except Volunteer.InvalidLastnameException:
+        raise ControllerError(f"Invalid name: {lastname}. Last name should be more than 1 character.")
+    except Volunteer.InvalidPhoneException:
+        raise ControllerError(
+            f"Invalid phone number: {phone}. Phone number should start with a plus sign and international code")
+
+
+def find_volunteer(username: str) -> Volunteer:
+    pass
 
 
 def view_volunteer_profile(volunteer: Volunteer) -> str:
-    return str(volunteer)
+    """
+    Admin
+    Yunsy, Yingbo
+    """
+    pass
 
 
 def edit_firstname(volunteer: Volunteer, firstname: str) -> Volunteer:
@@ -68,7 +84,7 @@ def edit_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> Volunteer:
         camp.save()
         return volunteer_called
     else:
-        if old_camp.plan() == camp.plan():
+        if old_camp.plan == camp.plan:
             old_camp.volunteers.remove(volunteer_called)
             old_camp.save()
             camp.volunteers.add(volunteer_called)
@@ -92,24 +108,25 @@ def edit_availability(volunteer: Volunteer, availability: str) -> Volunteer:
         volunteer_called.save()
         return volunteer_called
     else:
-        raise ControllerError(f"Invalid input: {availability}. Only True or False is accepted.")
+        raise ControllerError(f"Invalid input: {availability}. Only 'True' or 'False' is accepted.")
 
 
 def deactivate_volunteer(volunteer: Volunteer) -> Volunteer:
-    volunteer_called = volunteer
-    volunteer_called.account_activated = False
-    volunteer_called.save()
-    return volunteer_called
+    """
+    Yunsy, Yingbo
+    """
+    pass
 
 
 def reactivate_volunteer(volunteer: Volunteer) -> Volunteer:
-    volunteer_called = volunteer
-    volunteer_called.account_activated = True
-    volunteer_called.save()
-    return volunteer_called
+    """
+    Yunsy, Yingbo
+    """
+    pass
 
 
 def delete_volunteer(volunteer: Volunteer) -> None:
-    volunteer_called = volunteer
-    volunteer_called.camp = None
-    volunteer_called.delete()
+    """
+    Yunsy, Yingbo
+    """
+    pass
