@@ -7,9 +7,6 @@ from models.plan import Plan
 from controller.refugee_controller import create_refugee, find_refugee, view_refugee
 
 
-import controller.refugee_controller as rc
-
-
 class RefugeeControllerTest(unittest.TestCase):
     """
     Class for testing cases in create refugee function.
@@ -49,7 +46,7 @@ class FindRefugeeTest(unittest.TestCase):
     """
     Class for testing cases in find refugee function.
     """
-    def test_find_refugee_return_refugee_found(self):
+    def test_find_and_return_refugee(self):
         """
         Test case where refugee specified is found in the file.
         """

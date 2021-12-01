@@ -11,7 +11,6 @@ from controller.controller_error import ControllerError
 def list_medical_condition_types() -> Type[Enum]:
     """
     List all options for medical condition type.
-    :return:
     """
     return Refugee.MedicalCondition()
 
@@ -24,7 +23,7 @@ def create_refugee(user_id: str,
                    starting_date: date,
                    medical_condition_type: Refugee.MedicalCondition) -> Refugee:
     """
-    Function to create and save refugee.
+    Function to create and save refugee data.
     """
     try:
         for plan in Plan.all():
