@@ -84,7 +84,6 @@ class TestVolunteer(unittest.TestCase):
         test_camp.volunteers.add(volunteer_a)
 
         self.assertEqual(volunteer_a.camp.name, test_camp.name)
-        self.tearDown()
 
 if __name__ == '__main__':
     unittest.main()

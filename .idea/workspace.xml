@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="unit test updates for test_plan_controller for view_plan_statistics function">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/test/test_refugee.py" beforeDir="false" />
-    </list>
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="small update to get rid of extra directory" />
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -302,7 +299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638285035441</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="small update to get rid of extra directory">
+      <created>1638288795036</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1638288795037</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -332,6 +336,7 @@
     <MESSAGE value="adding folder and file for controller unit tests" />
     <MESSAGE value="unit test updates for test_plan_statistics" />
     <MESSAGE value="unit test updates for test_plan_controller for view_plan_statistics function" />
-    <option name="LAST_COMMIT_MESSAGE" value="unit test updates for test_plan_controller for view_plan_statistics function" />
+    <MESSAGE value="small update to get rid of extra directory" />
+    <option name="LAST_COMMIT_MESSAGE" value="small update to get rid of extra directory" />
   </component>
 </project>
