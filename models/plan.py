@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from enum import Enum
-from typing import Iterable
+from typing import Iterable, Union
 
 from models.base.document import IndexedDocument
 from models.base.field import Field, ReferenceDocumentsField
@@ -109,7 +109,7 @@ class Plan(IndexedDocument):
         else:
             self.save()
 
-    def close(self, __is_closed=None):
+    def close(self):
         """
         Set __is_closed flag to be True if plan is closed.
         """
@@ -118,15 +118,16 @@ class Plan(IndexedDocument):
         self.save()
 
     @property
-    def close_date(self) -> date:
+    def close_date(self) -> Union[date, None]:
         """
         Get the read only close date of the plan.
+        It will return None if plan is not closed.
         """
         if self.__is_closed:
             return self.__close_date
 
     @property
-    def close_plan_status(self):
+    def is_closed(self) -> bool:
         """
         Get the read only status of the plan.
         """
