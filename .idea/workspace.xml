@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Getting rid of unnecessary call">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Updating phrasing for remaining_volunteers to avoid ambiguity">
       <change beforePath="$PROJECT_DIR$/controller/plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/plan_controller.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
@@ -316,7 +315,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638362166249</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Updating phrasing for remaining_volunteers to avoid ambiguity">
+      <created>1638362474554</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1638362474554</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -348,6 +354,7 @@
     <MESSAGE value="unit test updates for test_plan_controller for view_plan_statistics function" />
     <MESSAGE value="small update to get rid of extra directory" />
     <MESSAGE value="Getting rid of unnecessary call" />
-    <option name="LAST_COMMIT_MESSAGE" value="Getting rid of unnecessary call" />
+    <MESSAGE value="Updating phrasing for remaining_volunteers to avoid ambiguity" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating phrasing for remaining_volunteers to avoid ambiguity" />
   </component>
 </project>
