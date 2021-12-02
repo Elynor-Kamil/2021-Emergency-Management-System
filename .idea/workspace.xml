@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="fix unittest">
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Changes per PR comments to simplify tests and remove duplicates.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/refugee.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/refugee.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -118,11 +116,11 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
-      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
       <item itemvalue="Python tests.Python tests in test_document.py" />
       <item itemvalue="Python tests.Python tests in test_plan.py" />
       <item itemvalue="Python tests.Python tests in test_plan_statistics.py" />
+      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
+      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
     </list>
     <recent_temporary>
       <list>
@@ -325,7 +323,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638450214153</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Changes per PR comments to simplify tests and remove duplicates.">
+      <created>1638480800748</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1638480800748</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -357,6 +362,7 @@
     <MESSAGE value="unit test updates for test_plan_controller for view_plan_statistics function" />
     <MESSAGE value="small update to get rid of extra directory" />
     <MESSAGE value="fix unittest" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix unittest" />
+    <MESSAGE value="Changes per PR comments to simplify tests and remove duplicates." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes per PR comments to simplify tests and remove duplicates." />
   </component>
 </project>
