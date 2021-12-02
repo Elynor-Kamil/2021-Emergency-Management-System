@@ -37,7 +37,8 @@ class Volunteer(IndexedDocument):
 
         self.check_volunteer_username(username)
         self.check_volunteer_password(password)
-        self.check_volunteer_name(firstname, lastname)
+        self.check_volunteer_firstname(firstname)
+        self.check_volunteer_lastname(lastname)
         self.check_volunteer_phone(phone)
 
         super().__init__(username=username,
@@ -49,25 +50,32 @@ class Volunteer(IndexedDocument):
                          availability=availability,
                          _Volunteer__creation_date=datetime.datetime.now().date())
 
-    def check_volunteer_username(self, username):
+    @classmethod
+    def check_volunteer_username(cls, username):
         if len(username) < 4:
-            raise self.InvalidUsernameException(username)
+            raise cls.InvalidUsernameException(username)
 
-    def check_volunteer_password(self, password):
+    @classmethod
+    def check_volunteer_password(cls, password):
         if len(password) < 4:
-            raise self.InvalidPasswordException(password)
+            raise cls.InvalidPasswordException(password)
 
-    def check_volunteer_name(self, firstname, lastname):
+    @classmethod
+    def check_volunteer_firstname(cls, firstname):
         if len(firstname) <= 1:
-            raise self.InvalidFirstnameException(firstname)
-        elif len(lastname) <= 1:
-            raise self.InvalidLastnameException(lastname)
+            raise cls.InvalidFirstnameException(firstname)
 
-    def check_volunteer_phone(self, phone):
+    @classmethod
+    def check_volunteer_lastname(cls, lastname):
+        if len(lastname) <= 1:
+            raise cls.InvalidLastnameException(lastname)
+
+    @classmethod
+    def check_volunteer_phone(cls, phone):
         phone_text = r"\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]" \
                      r"|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{5,14}$"
         if not re.search(phone_text, phone):
-            raise self.InvalidPhoneException(phone)
+            raise cls.InvalidPhoneException(phone)
 
     @property
     def camp(self):

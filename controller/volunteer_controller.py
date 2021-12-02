@@ -14,10 +14,10 @@ def create_volunteer(username: str,
                      phone: str,
                      camp: Camp) -> Volunteer:
     try:
-        volunteer_called = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
-                                     phone=phone)
-        camp.volunteers.add(volunteer_called)
-        return volunteer_called
+        volunteer = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
+                              phone=phone)
+        camp.volunteers.add(volunteer)
+        return volunteer
     except (Volunteer.InvalidUsernameException,
             Volunteer.InvalidPasswordException,
             Volunteer.InvalidFirstnameException,
@@ -27,9 +27,9 @@ def create_volunteer(username: str,
 
 
 def find_volunteer(username: str) -> Volunteer:
-    volunteer_called = Volunteer.find(username)
-    if isinstance(volunteer_called, Volunteer):
-        return volunteer_called
+    volunteer = Volunteer.find(username)
+    if isinstance(volunteer, Volunteer):
+        return volunteer
     else:
         raise ControllerError(f"User {username} not found. Please try again.")
 
