@@ -450,4 +450,3 @@ class PlanStatisticsTest(unittest.TestCase):
                                      'num_of_volunteers': 2,
                                      'num_volunteers_vs_standard': '2:1'}}
         self.assertDictEqual(test_dictionary, test_plan_statistics1)
-

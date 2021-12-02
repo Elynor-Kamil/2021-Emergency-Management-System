@@ -75,3 +75,4 @@ def close_plan(plan: Plan):
     Shalaka, Elynor
     """
     pass
+
