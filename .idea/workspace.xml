@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="unit test updates for test_plan_controller for view_plan_statistics function">
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Updating phrasing for remaining_volunteers to avoid ambiguity">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/test/test_refugee.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/tests/test_volunteer.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_volunteer.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +44,7 @@
     <property name="TODO_SCOPE" value="All Places" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_view_plan_statistics_returns_str">
+  <component name="RunManager" selected="Python tests.Python tests for test_volunteer.TestVolunteer.test_adding_volunteer_to_camp">
     <configuration name="Python tests for test_plan_controller.PlanStatisticsControllerTest.test_plan_info_returns_str" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -101,7 +101,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_volunteer.TestVolunteer.test_adding_volunteer_to_camp" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -111,17 +111,17 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist&quot;" />
+      <option name="_new_target" value="&quot;test_volunteer.TestVolunteer.test_adding_volunteer_to_camp&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests for test_volunteer.TestVolunteer.test_adding_volunteer_to_camp" />
         <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_view_plan_statistics_returns_str" />
         <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_plan_info_returns_str" />
         <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_statistics_returns_str" />
         <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_for_one_camp" />
-        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
       </list>
     </recent_temporary>
   </component>
@@ -302,7 +302,35 @@
       <option name="project" value="LOCAL" />
       <updated>1638285035441</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="small update to get rid of extra directory">
+      <created>1638288795036</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1638288795037</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Getting rid of unnecessary call">
+      <created>1638362166248</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1638362166249</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Updating phrasing for remaining_volunteers to avoid ambiguity">
+      <created>1638362474554</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1638362474554</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Updating phrasing for remaining_volunteers to avoid ambiguity">
+      <created>1638362592653</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1638362592654</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -332,6 +360,9 @@
     <MESSAGE value="adding folder and file for controller unit tests" />
     <MESSAGE value="unit test updates for test_plan_statistics" />
     <MESSAGE value="unit test updates for test_plan_controller for view_plan_statistics function" />
-    <option name="LAST_COMMIT_MESSAGE" value="unit test updates for test_plan_controller for view_plan_statistics function" />
+    <MESSAGE value="small update to get rid of extra directory" />
+    <MESSAGE value="Getting rid of unnecessary call" />
+    <MESSAGE value="Updating phrasing for remaining_volunteers to avoid ambiguity" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating phrasing for remaining_volunteers to avoid ambiguity" />
   </component>
 </project>
