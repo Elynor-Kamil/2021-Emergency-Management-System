@@ -118,11 +118,11 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
+      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
       <item itemvalue="Python tests.Python tests in test_document.py" />
       <item itemvalue="Python tests.Python tests in test_plan.py" />
       <item itemvalue="Python tests.Python tests in test_plan_statistics.py" />
-      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
-      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
     </list>
     <recent_temporary>
       <list>
