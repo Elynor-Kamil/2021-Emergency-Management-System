@@ -49,57 +49,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         Test case where only deactive volunteers are in the file.
         If this passes, volunteer_count should equal 0, since deactivated volunteers are not counted in this function.
         """
-        Plan(name='test_plan2',
-             emergency_type=Plan.EmergencyType.EARTHQUAKE,
-             description='Test emergency plan',
-             geographical_area='London',
-             camps=[Camp(name='camp2')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
-                                phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
-                                phone='+447511111111')
-        test_plan = Plan.find('test_plan2')
-        test_camp = test_plan.camps.get('camp2')
-        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
-        volunteer_a.account_activated = False
-        volunteer_b.account_activated = False
-        volunteer_c.account_activated = False
-
-        volunteer_count = ps.count_volunteers(test_camp)
-        self.assertEqual(volunteer_count, 0)
-
-    def test_partially_active_volunteer_count(self):
-        """
-        Test case where some active and some deactivated volunteers are in the file.
-        This test is to make sure that only the active volunteers are counted and the deactivated volunteers
-        are disregarded in the count.
-        """
-        Plan(name='test_plan3',
-             emergency_type=Plan.EmergencyType.EARTHQUAKE,
-             description='Test emergency plan',
-             geographical_area='London',
-             camps=[Camp(name='camp3')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
-                                phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
-                                phone='+447511111111')
-        test_plan = Plan.find('test_plan3')
-        test_camp = test_plan.camps.get('camp3')
-        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
-        volunteer_a.account_activated = False
-
-        volunteer_count = ps.count_volunteers(test_camp)
-        self.assertEqual(volunteer_count, 2)
-
-    def test_deactivated_volunteer_not_counted(self):
-        """
-        Test case where only deactive volunteers are in the file.
-        If this passes, volunteer_count should equal 0, since deactivated volunteers are not counted in this function.
-        """
         Plan(name='test_plan4',
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
@@ -164,57 +113,6 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan5')
         test_camp = test_plan.camps.get('camp6')
-        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
-        volunteer_a.availability = False
-        volunteer_b.availability = False
-        volunteer_c.availability = False
-
-        volunteer_count = ps.count_volunteers(test_camp)
-        self.assertEqual(volunteer_count, 0)
-
-    def test_partially_available_volunteer_count(self):
-        """
-        Test case where some active and some deactivated volunteers are in the file.
-        This test is to make sure that only the active volunteers are counted and the deactivated volunteers
-        are disregarded in the count.
-        """
-        Plan(name='test_plan6',
-             emergency_type=Plan.EmergencyType.EARTHQUAKE,
-             description='Test emergency plan',
-             geographical_area='London',
-             camps=[Camp(name='camp7')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
-                                phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
-                                phone='+447511111111')
-        test_plan = Plan.find('test_plan6')
-        test_camp = test_plan.camps.get('camp7')
-        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
-        volunteer_a.availability = False
-
-        volunteer_count = ps.count_volunteers(test_camp)
-        self.assertEqual(volunteer_count, 2)
-
-    def test_unavailable_volunteer_not_counted(self):
-        """
-        Test case where only deactive volunteers are in the file.
-        If this passes, volunteer_count should equal 0, since deactivated volunteers are not counted in this function.
-        """
-        Plan(name='test_plan7',
-             emergency_type=Plan.EmergencyType.EARTHQUAKE,
-             description='Test emergency plan',
-             geographical_area='London',
-             camps=[Camp(name='camp8')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
-                                phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
-                                phone='+447511111111')
-        test_plan = Plan.find('test_plan7')
-        test_camp = test_plan.camps.get('camp8')
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
         volunteer_a.availability = False
         volunteer_b.availability = False

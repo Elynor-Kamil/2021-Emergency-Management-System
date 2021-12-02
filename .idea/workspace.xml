@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Changes per PR comments to simplify tests and remove duplicates.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +30,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="20N9l19yg2gGKsOmAbJyq2GBfyG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -116,11 +116,11 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
+      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
       <item itemvalue="Python tests.Python tests in test_document.py" />
       <item itemvalue="Python tests.Python tests in test_plan.py" />
       <item itemvalue="Python tests.Python tests in test_plan_statistics.py" />
-      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
-      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
     </list>
     <recent_temporary>
       <list>
