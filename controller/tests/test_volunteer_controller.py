@@ -7,9 +7,9 @@ from models.camp import Camp
 class TestVolunteerController(unittest.TestCase):
 
     def test_create_volunteer(self):
-        volunteer_called = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                               phone='+447519953189', camp=Camp(name='UCL'))
-        self.assertEqual(type(volunteer_called), Volunteer)
+        volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                        phone='+447519953189', camp=Camp(name='UCL'))
+        self.assertEqual(type(volunteer), Volunteer)
 
     def test_create_volunteer_invalid_username(self):
         with self.assertRaises(vc.ControllerError):
@@ -44,39 +44,36 @@ class TestVolunteerController(unittest.TestCase):
     def test_find_volunteer(self):
         vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin', phone='+447519953189',
                             camp=Camp(name='UCL'))
-        volunteer_called = vc.find_volunteer('yunsy')
-        self.assertEqual(type(volunteer_called), Volunteer)
+        volunteer = vc.find_volunteer('yunsy')
+        self.assertIsInstance(volunteer, Volunteer)
 
-    def test_find_volunteer_invalid_input(self):
+    def test_find_nonexistent_volunteer(self):
         with self.assertRaises(vc.ControllerError):
             vc.find_volunteer('Yunsy')
 
     def test_view_volunteer_profile(self):
-        volunteer_called = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                               phone='+447519953189',
-                                               camp=Camp(name='UCL'))
-        volunteer_called_profile = vc.view_volunteer_profile(volunteer_called)
-        self.assertEqual(type(volunteer_called_profile), str)
+        volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                        phone='+447519953189', camp=Camp(name='UCL'))
+        volunteer_profile = vc.view_volunteer_profile(volunteer)
+        self.assertIsInstance(volunteer_profile, str)
 
     def test_deactivate_volunteer(self):
-        volunteer_called = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                               phone='+447519953189',
-                                               camp=Camp(name='UCL'))
-        volunteer_deactivated = vc.deactivate_volunteer(volunteer_called)
+        volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                        phone='+447519953189', camp=Camp(name='UCL'))
+        volunteer_deactivated = vc.deactivate_volunteer(volunteer)
         self.assertFalse(volunteer_deactivated.account_activated)
 
     def test_reactivate_volunteer(self):
-        volunteer_called = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                               phone='+447519953189',
-                                               camp=Camp(name='UCL'))
-        volunteer_reactivated = vc.reactivate_volunteer(volunteer_called)
+        volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                        phone='+447519953189', camp=Camp(name='UCL'))
+        volunteer_reactivated = vc.reactivate_volunteer(volunteer)
         self.assertTrue(volunteer_reactivated.account_activated)
 
     def test_delete_volunteer(self):
-        volunteer_called = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                               phone='+447519953189',
-                                               camp=Camp(name='UCL'))
-        self.assertIsNone(vc.delete_volunteer(volunteer_called))
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                phone='+447519953189', camp=Camp(name='UCL'))
+            vc.find_volunteer('Yunsy')
 
 
 if __name__ == '__main__':
