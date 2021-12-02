@@ -49,18 +49,16 @@ def view_plan_statistics(plan: Plan) -> str:
     plan_info = f"Plan name: {plan_name}\n"
     statistics = ""
 
-
-
-    # {"camp1":[1, 2, 3, 4], "camp2":[6, 7, 8, 9]}
     for camp in plan_statistics.items():
         camp_name, statistics_info = camp[0], camp[1]
-        num_of_volunteers, num_of_refugees, remaining_volunteers, extra_volunteers_needed = statistics_info[0], statistics_info[1], statistics_info[2], statistics_info[3]
+        num_of_refugees, num_of_volunteers, num_volunteers_vs_standard = statistics_info['num_of_refugees'], \
+                                                                         statistics_info['num_of_volunteers'], \
+                                                                         statistics_info['num_volunteers_vs_standard']
 
         statistics += f"Camp name: {camp_name}\n" \
-                      f"Number of volunteers: {num_of_volunteers}\n" \
                       f"Number of refugees: {num_of_refugees}\n" \
-                      f"Number of current volunteers who should be left in the camp: {remaining_volunteers}\n" \
-                      f"Number of extra volunteers needed: {extra_volunteers_needed}\n\n"
+                      f"Number of volunteers: {num_of_volunteers}\n" \
+                      f"Number of volunteers vs standard: {num_volunteers_vs_standard}\n\n"
 
     return plan_info + statistics
 

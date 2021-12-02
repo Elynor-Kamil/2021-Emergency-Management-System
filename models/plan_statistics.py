@@ -6,24 +6,19 @@ from datetime import date
 import math
 
 
-def find_volunteers(Camp):
+def count_volunteers(Camp):
     """
     Function to find the number of active volunteers at a camp. If a volunteer is not active then they will not be included in the count.
     """
-    volunteer_count = 0
-    for volunteer in Camp.volunteers:
-        if volunteer.availability == True and volunteer.account_activated == True:
-            volunteer_count += 1
+    volunteer_count = sum([1 for volunteer in Camp.volunteers if volunteer.availability and volunteer.account_activated])
     return volunteer_count
 
 
-def find_refugees(Camp):
+def count_refugees(Camp):
     """
     Function to find the number of refugees at a camp. Includes the count of both the head of family and the family members in a single count.
     """
-    refugee_count = 0
-    for refugee in Camp.refugees:
-        refugee_count += refugee.num_of_family_member
+    refugee_count = sum([refugee.num_of_family_member for refugee in Camp.refugees])
     return refugee_count
 
 
@@ -31,26 +26,24 @@ def plan_statistics_function(Plan):
     """
     Review the plan data for a specific plan and return each camp in a plan with total active volunteers and total refugees. Done as a dictionary.
     """
-    plan_statistics = {}
+    plan_statistics_dict = {}
     for camp in Plan.camps:
-        num_of_volunteers = find_volunteers(camp)
-        num_of_refugees = find_refugees(camp)
-        plan_statistics[camp.name] = [num_of_volunteers, num_of_refugees]
-        calculate_volunteer_needed(camp, plan_statistics)
-    return plan_statistics
+        num_of_volunteers = count_volunteers(camp)
+        num_of_refugees = count_refugees(camp)
+        num_volunteers_vs_standard = calculate_ideal_volunteers_needed(num_of_volunteers, num_of_refugees)
+        plan_statistics_dict[camp.name] = {'num_of_refugees': num_of_refugees,
+                                           'num_of_volunteers': num_of_volunteers,
+                                           'num_volunteers_vs_standard': num_volunteers_vs_standard}
+    return plan_statistics_dict
 
 
-def calculate_volunteer_needed(Camp, plan_statistics):
+def calculate_ideal_volunteers_needed(num_of_volunteers, num_of_refugees):
     """
     Calculate the extra volunteers needed and remaining volunteers not needed for a camp by 1:20 number of volunteers and number of refugees ratio.
     """
-    num_of_volunteers, num_of_refugees = plan_statistics[Camp.name]
-    remaining_volunteers, extra_volunteers_needed = 0, 0
-    ideal_volunteers_num = int(math.ceil(num_of_refugees / 20))
-    if ideal_volunteers_num < num_of_volunteers:
-        remaining_volunteers = num_of_volunteers - ideal_volunteers_num
-    elif num_of_volunteers < ideal_volunteers_num:
-        extra_volunteers_needed = ideal_volunteers_num - num_of_volunteers
-    plan_statistics[Camp.name].append(remaining_volunteers)
-    plan_statistics[Camp.name].append(extra_volunteers_needed)
+    TARGET_REFUGEE_VOLUNTEER_RATIO = 20
+    ideal_volunteers_num = int(math.ceil(num_of_refugees / TARGET_REFUGEE_VOLUNTEER_RATIO))
+
+    return f"{num_of_volunteers}:{ideal_volunteers_num}"
+
 

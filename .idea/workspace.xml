@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Updating phrasing for remaining_volunteers to avoid ambiguity">
+      <change beforePath="$PROJECT_DIR$/.idea/2021-Emergency-Management-System.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2021-Emergency-Management-System.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tests/test_volunteer.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_volunteer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/plan_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,6 +35,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="20N9l19yg2gGKsOmAbJyq2GBfyG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -44,8 +50,8 @@
     <property name="TODO_SCOPE" value="All Places" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_volunteer.TestVolunteer.test_adding_volunteer_to_camp">
-    <configuration name="Python tests for test_plan_controller.PlanStatisticsControllerTest.test_plan_info_returns_str" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_view_plan_statistics_returns_str">
+    <configuration name="Python tests for test_plan_controller.PlanStatisticsControllerTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -55,11 +61,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_controller.PlanStatisticsControllerTest.test_plan_info_returns_str&quot;" />
+      <option name="_new_target" value="&quot;test_plan_controller.PlanStatisticsControllerTest&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_plan_controller.PlanStatisticsControllerTest.test_statistics_returns_str" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_plan_controller.PlanStatisticsControllerTest.test_view_plan_statistics_return_result" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -69,7 +75,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_controller.PlanStatisticsControllerTest.test_statistics_returns_str&quot;" />
+      <option name="_new_target" value="&quot;test_plan_controller.PlanStatisticsControllerTest.test_view_plan_statistics_return_result&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -101,7 +107,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_volunteer.TestVolunteer.test_adding_volunteer_to_camp" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -111,17 +117,17 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_volunteer.TestVolunteer.test_adding_volunteer_to_camp&quot;" />
+      <option name="_new_target" value="&quot;test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_volunteer.TestVolunteer.test_adding_volunteer_to_camp" />
         <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_view_plan_statistics_returns_str" />
-        <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_plan_info_returns_str" />
-        <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_statistics_returns_str" />
+        <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest.test_view_plan_statistics_return_result" />
+        <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest" />
         <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_for_one_camp" />
+        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
       </list>
     </recent_temporary>
   </component>

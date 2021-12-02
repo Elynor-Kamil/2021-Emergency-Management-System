@@ -1,5 +1,5 @@
 import unittest
-from models.plan_statistics import find_volunteers, find_refugees, plan_statistics_function
+import models.plan_statistics as ps
 from models.camp import Camp
 from models.refugee import Refugee
 from models.volunteer import Volunteer
@@ -40,7 +40,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp1')
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
 
@@ -67,7 +67,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_b.account_activated = False
         volunteer_c.account_activated = False
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
 
     def test_partially_active_volunteer_count(self):
@@ -92,7 +92,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
         volunteer_a.account_activated = False
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 2)
 
     def test_deactivated_volunteer_not_counted(self):
@@ -118,7 +118,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_b.account_activated = False
         volunteer_c.account_activated = False
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
 
     def test_available_volunteer_count(self):
@@ -142,7 +142,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp5')
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
 
@@ -169,7 +169,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_b.availability = False
         volunteer_c.availability = False
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
 
     def test_partially_available_volunteer_count(self):
@@ -194,7 +194,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
         volunteer_a.availability = False
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 2)
 
     def test_unavailable_volunteer_not_counted(self):
@@ -220,7 +220,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_b.availability = False
         volunteer_c.availability = False
 
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
 
     def test_no_volunteers_in_file(self):
@@ -235,7 +235,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              camps=[Camp(name='camp9')])
         test_plan = Plan.find('test_plan8')
         test_camp = test_plan.camps.get('camp9')
-        volunteer_count = find_volunteers(test_camp)
+        volunteer_count = ps.count_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 0)
 
@@ -260,8 +260,8 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp2 = test_plan.camps.get('camp11')
         test_camp2.volunteers.add(volunteer_b, volunteer_c)
 
-        volunteer_count_camp1 = find_volunteers(test_camp1)
-        volunteer_count_camp2 = find_volunteers(test_camp2)
+        volunteer_count_camp1 = ps.count_volunteers(test_camp1)
+        volunteer_count_camp2 = ps.count_volunteers(test_camp2)
 
         self.assertEqual(volunteer_count_camp1, 1)
         self.assertEqual(volunteer_count_camp2, 2)
@@ -396,9 +396,10 @@ class PlanStatisticsTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
-        test_plan_statistics = plan_statistics_function(test_plan)
-        test_dictionary = {
-            'camp1': [3, 600, 0, 27]
+        test_plan_statistics = ps.plan_statistics_function(test_plan)
+        test_dictionary = {'camp1': {'num_of_refugees': 600,
+                                     'num_of_volunteers': 3,
+                                     'num_volunteers_vs_standard': '3:30'}
         }
         self.assertDictEqual(test_dictionary, test_plan_statistics)
 
@@ -442,11 +443,11 @@ class PlanStatisticsTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp1.refugees.add(refugee1)
-        test_plan_statistics1 = plan_statistics_function(test_plan1)
+        test_plan_statistics1 = ps.plan_statistics_function(test_plan1)
         test_camp2.refugees.add(refugee2)
-        test_plan_statistics2 = plan_statistics_function(test_plan2)
-        test_dictionary = {
-            'camp1': [2, 6, 1, 0]
-        }
+        test_plan_statistics2 = ps.plan_statistics_function(test_plan2)
+        test_dictionary = {'camp1': {'num_of_refugees': 6,
+                                     'num_of_volunteers': 2,
+                                     'num_volunteers_vs_standard': '2:1'}}
         self.assertDictEqual(test_dictionary, test_plan_statistics1)
 
