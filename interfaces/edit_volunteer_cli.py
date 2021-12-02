@@ -1,4 +1,4 @@
-from models.volunteer import Volunteer
+import controller.volunteer_controller as vc
 from models.camp import Camp
 from interfaces.admin_cli import ManageVolunteerMenu
 
@@ -12,8 +12,8 @@ class EditVolunteerMenu(ManageVolunteerMenu):
         print("""
          Select an item you'd like to edit:
          --------
-         1) Firstname
-         2) Lastname
+         1) First name
+         2) Last name
          3) Phone number
          4) Camp
          5) Availability
@@ -32,7 +32,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
                                   "return": "r"}
 
         ### Add input error handling
-        if option.isdigit():
+        if option.isdigit() and 0 <= int(option) <= 5:
             return list(edit_volunteer_options.keys())[list(edit_volunteer_options.values()).index(int(option))]
         elif option == "r" or "R":
             return list(edit_volunteer_options.keys())[list(edit_volunteer_options.values()).index(option.lower())]
@@ -45,35 +45,40 @@ class EditVolunteerMenu(ManageVolunteerMenu):
     # ----- basic commands for volunteer account management -----
     def do_edit_firstname(self):
         username = input("Username: ")
-        firstname = input(f"Original firstname is {find_volunteer(username).firstname}. New firstname: ")
-        edit_firstname(username, firstname)
-        print(f"Updated successfully! New firstname is {find_volunteer(username).firstname}.")
+        firstname = input(f"Original first name is {vc.find_volunteer(username).firstname}. New first name: ")
+        volunteer = vc.find_volunteer(username)
+        vc.edit_firstname(volunteer, firstname)
+        print(f"Updated successfully! New first name is {vc.find_volunteer(username).firstname}.")
 
     def do_edit_lastname(self):
         username = input("Username: ")
-        lastname = input(f"Original lastname is {find_volunteer(username).lastname}. New lastname: ")
-        edit_lastname(username, lastname)
-        print(f"Updated successfully! New lastname is {find_volunteer(username).lastname}.")
+        lastname = input(f"Original last name is {vc.find_volunteer(username).lastname}. New last name: ")
+        volunteer = vc.find_volunteer(username)
+        vc.edit_lastname(volunteer, lastname)
+        print(f"Updated successfully! New last name is {vc.find_volunteer(username).lastname}.")
 
     def do_edit_phone(self):
         username = input("Username: ")
-        phone = input(f"Original phone number is {find_volunteer(username).phone}. New phone number: ")
-        edit_phone(username, phone)
-        print(f"Updated successfully! New phone number is {find_volunteer(username).phone}.")
+        phone = input(f"Original phone number is {vc.find_volunteer(username).phone}. New phone number: ")
+        volunteer = vc.find_volunteer(username)
+        vc.edit_phone(volunteer, phone)
+        print(f"Updated successfully! New phone number is {vc.find_volunteer(username).phone}.")
 
     def do_edit_camp(self):
         username = input("Username: ")
         ### Available camps vary by user role
-        camp = Camp(input(f"Original assigned camp is {find_volunteer(username).camp}. New assigned camp: "))
+        camp = Camp(input(f"Original assigned camp is {vc.find_volunteer(username).camp}. New assigned camp: "))
         is_admin = self.user.__class__.__name__
-        edit_camp(username, camp, is_admin)
-        print(f"Updated successfully! New assigned camp is {find_volunteer(username).camp}.")
+        volunteer = vc.find_volunteer(username)
+        vc.edit_camp(volunteer, camp, is_admin)
+        print(f"Updated successfully! New assigned camp is {vc.find_volunteer(username).camp}.")
 
     def do_edit_availability(self):
         username = input("Username: ")
-        availability = input(f"Original availability is {find_volunteer(username).availability}. Switch it to: ")
-        edit_availability(username, availability)
-        print(f"Updated successfully! The availability is now {find_volunteer(username).availability}.")
+        availability = input(f"Original availability is {vc.find_volunteer(username).availability}. Switch it to: ")
+        volunteer = vc.find_volunteer(username)
+        vc.edit_availability(volunteer, availability)
+        print(f"Updated successfully! The availability is now {vc.find_volunteer(username).availability}.")
 
     def do_return(self):
         ManageVolunteerMenu().cmdloop()
