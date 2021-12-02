@@ -9,7 +9,7 @@ class TestVolunteerController(unittest.TestCase):
     def test_create_volunteer(self):
         volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                                         phone='+447519953189', camp=Camp(name='UCL'))
-        self.assertEqual(type(volunteer), Volunteer)
+        self.assertIsInstance(volunteer, Volunteer)
 
     def test_create_volunteer_invalid_username(self):
         with self.assertRaises(vc.ControllerError):
@@ -60,14 +60,14 @@ class TestVolunteerController(unittest.TestCase):
     def test_deactivate_volunteer(self):
         volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                                         phone='+447519953189', camp=Camp(name='UCL'))
-        volunteer_deactivated = vc.deactivate_volunteer(volunteer)
-        self.assertFalse(volunteer_deactivated.account_activated)
+        volunteer = vc.deactivate_volunteer(volunteer)
+        self.assertFalse(volunteer.account_activated)
 
     def test_reactivate_volunteer(self):
         volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                                         phone='+447519953189', camp=Camp(name='UCL'))
-        volunteer_reactivated = vc.reactivate_volunteer(volunteer)
-        self.assertTrue(volunteer_reactivated.account_activated)
+        volunteer = vc.reactivate_volunteer(volunteer)
+        self.assertTrue(volunteer.account_activated)
 
     def test_delete_volunteer(self):
         with self.assertRaises(vc.ControllerError):
