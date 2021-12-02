@@ -297,7 +297,7 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp12')
         test_camp.refugees.add(refugee1)
 
-        refugee_count = find_refugees(test_camp)
+        refugee_count = ps.count_refugees(test_camp)
 
         self.assertEqual(refugee_count, 6)
 
@@ -324,7 +324,7 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp13')
         test_camp.refugees.add(refugee1, refugee2)
 
-        refugee_count = find_refugees(test_camp)
+        refugee_count = ps.count_refugees(test_camp)
 
         self.assertEqual(refugee_count, 7)
 
@@ -352,8 +352,8 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         test_camp2 = test_plan.camps.get('camp15')
         test_camp2.refugees.add(refugee1, refugee2)
 
-        refugee_count_camp1 = find_refugees(test_camp1)
-        refugee_count_camp2 = find_refugees(test_camp2)
+        refugee_count_camp1 = ps.count_refugees(test_camp1)
+        refugee_count_camp2 = ps.count_refugees(test_camp2)
 
         self.assertEqual(refugee_count_camp1, 0)
         self.assertEqual(refugee_count_camp2, 7)
