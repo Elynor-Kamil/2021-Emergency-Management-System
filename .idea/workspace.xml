@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Updating phrasing for remaining_volunteers to avoid ambiguity">
-      <change beforePath="$PROJECT_DIR$/.idea/2021-Emergency-Management-System.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2021-Emergency-Management-System.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/plan_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_plan_statistics.py" afterDir="false" />
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="fix test_refugee to original">
+      <change beforePath="$PROJECT_DIR$/models/tests/test_refugee.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_refugee.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -336,7 +330,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638362592654</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="fix test_refugee to original">
+      <created>1638447583524</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1638447583524</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -369,6 +370,7 @@
     <MESSAGE value="small update to get rid of extra directory" />
     <MESSAGE value="Getting rid of unnecessary call" />
     <MESSAGE value="Updating phrasing for remaining_volunteers to avoid ambiguity" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updating phrasing for remaining_volunteers to avoid ambiguity" />
+    <MESSAGE value="fix test_refugee to original" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix test_refugee to original" />
   </component>
 </project>
