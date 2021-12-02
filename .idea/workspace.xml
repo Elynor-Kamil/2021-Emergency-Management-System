@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="small update to get rid of extra directory">
-      <change beforePath="$PROJECT_DIR$/.idea/2021-Emergency-Management-System.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2021-Emergency-Management-System.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="fix unittest">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tests/test_refugee.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tests/test_refugee.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/plan_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan_statistics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/refugee.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/refugee.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,6 +31,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="20N9l19yg2gGKsOmAbJyq2GBfyG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -46,7 +46,7 @@
     <property name="TODO_SCOPE" value="All Places" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist">
+  <component name="RunManager" selected="Python tests.Python tests in test_plan_statistics.py">
     <configuration name="Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -126,8 +126,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
         <item itemvalue="Python tests.Python tests in test_plan_statistics.py" />
+        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest.test_plan_statistics_two_plans_exist" />
         <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsVolunteerTest" />
         <item itemvalue="Python tests.Python tests in test_plan.py" />
         <item itemvalue="Python tests.Python tests in test_document.py" />
@@ -318,7 +318,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638288795037</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="fix unittest">
+      <created>1638450214153</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1638450214153</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -349,6 +356,7 @@
     <MESSAGE value="unit test updates for test_plan_statistics" />
     <MESSAGE value="unit test updates for test_plan_controller for view_plan_statistics function" />
     <MESSAGE value="small update to get rid of extra directory" />
-    <option name="LAST_COMMIT_MESSAGE" value="small update to get rid of extra directory" />
+    <MESSAGE value="fix unittest" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix unittest" />
   </component>
 </project>

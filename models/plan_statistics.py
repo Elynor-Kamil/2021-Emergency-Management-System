@@ -24,7 +24,8 @@ def count_refugees(Camp):
 
 def plan_statistics_function(Plan):
     """
-    Review the plan data for a specific plan and return each camp in a plan with total active volunteers and total refugees. Done as a dictionary.
+    Review the plan data for a specific plan and return each camp in a plan with total active volunteers and total refugees.
+    :return: {'Camp': {'num_of_refugees': int, 'num_of_volunteers': int, 'num_volunteers_vs_standard': int}}
     """
     plan_statistics_dict = {}
     for camp in Plan.camps:
