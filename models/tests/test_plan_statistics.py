@@ -16,6 +16,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
+        Volunteer.delete_all()
         Plan.delete_all()
 
     def test_active_volunteer_count(self):
@@ -29,11 +30,11 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              description='Test emergency plan',
              geographical_area='London',
              camps=[Camp(name='camp1')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan1')
         test_camp = test_plan.camps.get('camp1')
@@ -53,11 +54,11 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              description='Test emergency plan',
              geographical_area='London',
              camps=[Camp(name='camp4')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan4')
         test_camp = test_plan.camps.get('camp4')
@@ -80,11 +81,11 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              description='Test emergency plan',
              geographical_area='London',
              camps=[Camp(name='camp5')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan4')
         test_camp = test_plan.camps.get('camp5')
@@ -104,11 +105,11 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              description='Test emergency plan',
              geographical_area='London',
              camps=[Camp(name='camp6')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan5')
         test_camp = test_plan.camps.get('camp6')
@@ -145,11 +146,11 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              description='Test emergency plan',
              geographical_area='London',
              camps=[Camp(name='camp10'), Camp(name='camp11')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan8')
         test_camp1 = test_plan.camps.get('camp10')
@@ -279,11 +280,11 @@ class PlanStatisticsTest(unittest.TestCase):
              description='Test emergency plan',
              geographical_area='London',
              camps=[Camp(name='camp1')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan1')
         test_camp = test_plan.camps.get('camp1')
@@ -318,11 +319,11 @@ class PlanStatisticsTest(unittest.TestCase):
              description='Test emergency plan',
              geographical_area='London',
              camps=[Camp(name='camp2')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
                                 phone='+447511111111')
         test_plan1 = Plan.find('test_plan1')
         test_camp1 = test_plan1.camps.get('camp1')
