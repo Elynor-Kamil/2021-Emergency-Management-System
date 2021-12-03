@@ -17,10 +17,10 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         to avoid corrupting other tests
         """
         for plan in Plan.all():
-            plan.delete()
+            plan.delete_all()
 
         for volunteer in Volunteer.all():
-            volunteer.delete()
+            volunteer.delete_all()
 
 
     def test_active_volunteer_count(self):
