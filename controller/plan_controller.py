@@ -1,19 +1,14 @@
 from enum import Enum
-from typing import Iterable
+from typing import Iterable, Type
 
 from models.plan import Plan
 from models.camp import Camp
 
 
-###---- Manage Plan Menu ----
-def manage_plan_menu():
+def list_emergency_types() -> Type[Enum]:
     """
-    Vanessa
+    List all options for emergency type.
     """
-    pass
-
-
-def list_emergency_types() -> Enum:
     pass
 
 

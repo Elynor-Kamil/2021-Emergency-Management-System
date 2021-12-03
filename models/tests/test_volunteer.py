@@ -7,28 +7,28 @@ from models.plan import Camp
 class TestVolunteer(unittest.TestCase):
 
     def test_create_volunteer(self):
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        self.assertEqual(type(volunteer_a), Volunteer)
+        volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                              phone='+447519953189')
+        self.assertIsInstance(volunteer, Volunteer)
 
     def test_delete_volunteer(self):
-        volunteer_a = Volunteer.find('yunsy')
-        volunteer_a.delete()
+        volunteer = Volunteer.find('yunsy')
+        volunteer.delete()
         self.assertIsNone(Volunteer.find('yunsy'))
 
     def test_deactivate_volunteer(self):
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_a.accountActivated = False
-        volunteer_a.save()
-        self.assertFalse(volunteer_a.accountActivated)
+        volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                              phone='+447519953189')
+        volunteer.account_activated = False
+        volunteer.save()
+        self.assertFalse(volunteer.account_activated)
 
     def test_reactivate_volunteer(self):
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_a.accountActivated = True
-        volunteer_a.save()
-        self.assertTrue(volunteer_a.accountActivated)
+        volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                              phone='+447519953189')
+        volunteer.account_activated = True
+        volunteer.save()
+        self.assertTrue(volunteer.account_activated)
 
     def test_invalid_username(self):
         with self.assertRaises(Volunteer.InvalidUsernameException):
