@@ -1,9 +1,8 @@
 import unittest
-import models.plan_statistics as ps
+from models.plan import Plan
 from models.camp import Camp
 from models.refugee import Refugee
 from models.volunteer import Volunteer
-from models.plan import Plan
 from datetime import date
 
 
@@ -40,7 +39,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp1')
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
 
-        volunteer_count = ps.count_volunteers(test_camp)
+        volunteer_count = Camp.count_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
 
@@ -67,7 +66,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_b.account_activated = False
         volunteer_c.account_activated = False
 
-        volunteer_count = ps.count_volunteers(test_camp)
+        volunteer_count = Camp.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
 
     def test_available_volunteer_count(self):
@@ -91,7 +90,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp5')
         test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
 
-        volunteer_count = ps.count_volunteers(test_camp)
+        volunteer_count = Camp.count_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 3)
 
@@ -118,7 +117,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         volunteer_b.availability = False
         volunteer_c.availability = False
 
-        volunteer_count = ps.count_volunteers(test_camp)
+        volunteer_count = Camp.count_volunteers(test_camp)
         self.assertEqual(volunteer_count, 0)
 
     def test_no_volunteers_in_file(self):
@@ -133,7 +132,7 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
              camps=[Camp(name='camp9')])
         test_plan = Plan.find('test_plan8')
         test_camp = test_plan.camps.get('camp9')
-        volunteer_count = ps.count_volunteers(test_camp)
+        volunteer_count = Camp.count_volunteers(test_camp)
 
         self.assertEqual(volunteer_count, 0)
 
@@ -158,8 +157,8 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         test_camp2 = test_plan.camps.get('camp11')
         test_camp2.volunteers.add(volunteer_b, volunteer_c)
 
-        volunteer_count_camp1 = ps.count_volunteers(test_camp1)
-        volunteer_count_camp2 = ps.count_volunteers(test_camp2)
+        volunteer_count_camp1 = Camp.count_volunteers(test_camp1)
+        volunteer_count_camp2 = Camp.count_volunteers(test_camp2)
 
         self.assertEqual(volunteer_count_camp1, 1)
         self.assertEqual(volunteer_count_camp2, 2)
@@ -195,7 +194,7 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp12')
         test_camp.refugees.add(refugee1)
 
-        refugee_count = ps.count_refugees(test_camp)
+        refugee_count = Camp.count_refugees(test_camp)
 
         self.assertEqual(refugee_count, 6)
 
@@ -222,14 +221,15 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         test_camp = test_plan.camps.get('camp13')
         test_camp.refugees.add(refugee1, refugee2)
 
-        refugee_count = ps.count_refugees(test_camp)
+        refugee_count = Camp.count_refugees(test_camp)
 
         self.assertEqual(refugee_count, 7)
 
     def test_refugee_count_multiple_camps(self):
         """
         Test to check that refugee count is correct for a single camp when refugee families exist at multiple
-        camps under the same plan."""
+        camps under the same plan.
+        """
         Plan(name='test_plan11',
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
@@ -250,8 +250,8 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         test_camp2 = test_plan.camps.get('camp15')
         test_camp2.refugees.add(refugee1, refugee2)
 
-        refugee_count_camp1 = ps.count_refugees(test_camp1)
-        refugee_count_camp2 = ps.count_refugees(test_camp2)
+        refugee_count_camp1 = Camp.count_refugees(test_camp1)
+        refugee_count_camp2 = Camp.count_refugees(test_camp2)
 
         self.assertEqual(refugee_count_camp1, 0)
         self.assertEqual(refugee_count_camp2, 7)
@@ -271,7 +271,7 @@ class PlanStatisticsTest(unittest.TestCase):
         """
         Test to check number of volunteers and refugees returned by plan_statistics_function
         for a single camp is correct.
-        Also tests the feature to check how many additional volunteers are recommended (number of refugees * 20),
+        Also tests the feature to check how many additional volunteers are recommended (number of refugees / 20),
         hence should return 27 in the third list position in the plan_statistics value list.
         """
         Plan(name='test_plan1',
@@ -294,7 +294,7 @@ class PlanStatisticsTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
-        test_plan_statistics = ps.plan_statistics_function(test_plan)
+        test_plan_statistics = Plan.plan_statistics_function(test_plan)
         test_dictionary = {'camp1': {'num_of_refugees': 600,
                                      'num_of_volunteers': 3,
                                      'num_volunteers_vs_standard': '3:30'}
@@ -341,9 +341,9 @@ class PlanStatisticsTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp1.refugees.add(refugee1)
-        test_plan_statistics1 = ps.plan_statistics_function(test_plan1)
+        test_plan_statistics1 = Plan.plan_statistics_function(test_plan1)
         test_camp2.refugees.add(refugee2)
-        test_plan_statistics2 = ps.plan_statistics_function(test_plan2)
+        test_plan_statistics2 = Plan.plan_statistics_function(test_plan2)
         test_dictionary = {'camp1': {'num_of_refugees': 6,
                                      'num_of_volunteers': 2,
                                      'num_volunteers_vs_standard': '2:1'}}

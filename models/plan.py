@@ -5,6 +5,7 @@ from typing import Iterable
 from models.base.document import IndexedDocument
 from models.base.field import Field, ReferenceDocumentsField
 from models.camp import Camp
+import math
 
 
 class Plan(IndexedDocument):
@@ -111,3 +112,27 @@ class Plan(IndexedDocument):
             raise self.MissingCampsError()
         else:
             self.save()
+
+    def plan_statistics_function(self):
+        """
+        Review the plan data and return each camp in the plan with total active volunteers and total refugees.
+        :return: {'Camp': {'num_of_refugees': int, 'num_of_volunteers': int, 'num_volunteers_vs_standard': int}}
+        """
+        plan_statistics_dict = {}
+        for camp in self.camps:
+            num_of_volunteers = camp.count_volunteers()
+            num_of_refugees = camp.count_refugees()
+            num_volunteers_vs_standard = self.__find_num_of_volunteers_vs_ideal_volunteers_num(num_of_volunteers, num_of_refugees)
+            plan_statistics_dict[camp.name] = {'num_of_refugees': num_of_refugees,
+                                               'num_of_volunteers': num_of_volunteers,
+                                               'num_volunteers_vs_standard': num_volunteers_vs_standard}
+        return plan_statistics_dict
+
+    def __find_num_of_volunteers_vs_ideal_volunteers_num(self, num_of_volunteers, num_of_refugees) -> str:
+        """
+        Function to find number of volunteers:ideal number of volunteers ratio by ideal 1:20 number volunteer ratio.
+        """
+        TARGET_REFUGEE_VOLUNTEER_RATIO = 20
+        ideal_volunteers_num = int(math.ceil(num_of_refugees / TARGET_REFUGEE_VOLUNTEER_RATIO))
+
+        return f"{num_of_volunteers}:{ideal_volunteers_num}"

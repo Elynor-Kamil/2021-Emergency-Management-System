@@ -3,7 +3,6 @@ from typing import Iterable
 
 from models.plan import Plan
 from models.camp import Camp
-from models.plan_statistics import plan_statistics_function
 
 
 ###---- Manage Plan Menu ----
@@ -44,7 +43,8 @@ def view_plan_statistics(plan: Plan) -> str:
     """
     Display plan statistics.
     """
-    plan_statistics = plan_statistics_function(plan)
+
+    plan_statistics = plan.plan_statistics_function()
     plan_name = str(plan.name)
     plan_info = f"Plan name: {plan_name}\n"
     statistics = ""
