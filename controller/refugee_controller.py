@@ -15,8 +15,7 @@ def list_medical_condition_types() -> Type[Enum]:
     return Refugee.MedicalCondition()
 
 
-def create_refugee(user_id: str,
-                   firstname: str,
+def create_refugee(firstname: str,
                    lastname: str,
                    camp: Camp,
                    num_of_family_member: int,
@@ -37,14 +36,11 @@ def create_refugee(user_id: str,
                                       medical_condition_type = medical_condition_type)
                 camp.refugees.add(new_refugee)
                 return new_refugee
-    except Refugee.InvalidNameException:
-        raise ControllerError(f"Invalid refugee name: {firstname, lastname}. Firstname and lastname should be string.")
-    except Refugee.InvalidNumOfFamilyMemberException:
-        raise ControllerError(f"Invalid number of family member: {num_of_family_member}. Number of family member should be a positive integer.")
-    except Refugee.InvalidStartingDateException:
-        raise ControllerError(f"Invalid starting date: {starting_date}. Starting date should before today.")
-    except Refugee.InvalidCampException:
-        raise ControllerError(f"Invalid camp: {camp}. The camp is not found.")
+    except (Refugee.InvalidNameException,
+            Refugee.InvalidNumOfFamilyMemberException,
+            Refugee.InvalidStartingDateException,
+            Refugee.InvalidCampException) as e:
+        raise ControllerError(str(e))
 
 
 def find_refugee(refugee_id: int) -> Refugee:
@@ -53,15 +49,12 @@ def find_refugee(refugee_id: int) -> Refugee:
     """
     try:
         for plan in Plan.all():
-            plan_name = str(plan.name)
-            curr_plan = Plan.find(plan_name)
-            for camp in curr_plan.camps:
+            for camp in plan.camps:
                 for refugee in camp.refugees:
                     if refugee_id == refugee.user_id:
                         return refugee
     except:
         raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
-
 
 
 def view_refugee(refugee: Refugee) -> str:
