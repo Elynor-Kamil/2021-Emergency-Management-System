@@ -1,6 +1,7 @@
 import unittest
 from datetime import date
 
+from controller.controller_error import ControllerError
 from models.camp import Camp
 from models.plan import Plan
 import controller.plan_controller as pc
@@ -131,6 +132,6 @@ class PlanControllerTest(unittest.TestCase):
                     description='Test emergency plan',
                     geographical_area='UK',
                     camps=[camp])
-        with self.assertRaises(pc.controller_error.ControllerError):
+        with self.assertRaises(ControllerError):
             pc.find_camp(plan, 'NonExistentCamp')
 
