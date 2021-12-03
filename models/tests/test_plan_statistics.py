@@ -16,8 +16,11 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
-        Volunteer.delete_all()
-        Plan.delete_all()
+        for plan in Plan.all():
+            plan.delete()
+
+        for volunteer in Volunteer.all():
+            volunteer.delete()
 
     def test_active_volunteer_count(self):
         """
@@ -175,8 +178,11 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
-        Volunteer.delete_all()
-        Plan.delete_all()
+        for plan in Plan.all():
+            plan.delete()
+
+        for volunteer in Volunteer.all():
+            volunteer.delete()
 
     def test_refugee_count_single_family(self):
         """
@@ -232,7 +238,7 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         Test to check that refugee count is correct for a single camp when refugee families exist at multiple
         camps under the same plan.
         """
-        Plan(name='test_plan11',
+        Plan(name='test_plan30',
              emergency_type=Plan.EmergencyType.EARTHQUAKE,
              description='Test emergency plan',
              geographical_area='London',
@@ -247,7 +253,7 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
                            num_of_family_member=1,
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
-        test_plan = Plan.find('test_plan11')
+        test_plan = Plan.find('test_plan30')
         test_camp1 = test_plan.camps.get('camp14')
         test_camp2 = test_plan.camps.get('camp15')
         test_camp2.refugees.add(refugee1, refugee2)
@@ -267,8 +273,11 @@ class PlanStatisticsTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
-        Volunteer.delete_all()
-        Plan.delete_all()
+        for plan in Plan.all():
+            plan.delete()
+
+        for volunteer in Volunteer.all():
+            volunteer.delete()
 
     def test_plan_statistics_for_one_camp(self):
         """
