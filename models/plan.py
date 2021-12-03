@@ -1,11 +1,10 @@
 from datetime import date, datetime
 from enum import Enum
-from typing import Iterable
+from typing import Iterable, Union
 
 from models.base.document import IndexedDocument
 from models.base.field import Field, ReferenceDocumentsField
 from models.camp import Camp
-import math
 
 
 class Plan(IndexedDocument):
@@ -18,6 +17,8 @@ class Plan(IndexedDocument):
     description = Field()
     geographical_area = Field()
     __start_date = Field()
+    __is_closed = Field()
+    __close_date = Field()
     camps = ReferenceDocumentsField(data_type=Camp)
 
     class EmergencyType(Enum):
@@ -41,14 +42,6 @@ class Plan(IndexedDocument):
         def __init__(self):
             super().__init__("It is mandatory to provide at least one camp")
 
-    class PastStartDateException(Exception):
-        """
-        Exception raised when start date entered is in the past.
-        """
-
-        def __init__(self):
-            super().__init__('Start date is in the past. Please enter a valid start date.')
-
     class CampNotFoundError(Exception):
         """
         Exception raised when a camp is not found in the emergency plan.
@@ -71,6 +64,7 @@ class Plan(IndexedDocument):
         :param geographical_area: geographical area affected by the emergency
         :param camps: camps to be included in the plan
         """
+
         if not camps:
             raise self.MissingCampsError()
         super().__init__(name=name,
@@ -78,6 +72,8 @@ class Plan(IndexedDocument):
                          description=description,
                          geographical_area=geographical_area,
                          _Plan__start_date=datetime.today().date(),
+                         _Plan__close_date=None,
+                         _Plan__is_closed=False,
                          camps=camps)
 
     @property
@@ -112,6 +108,30 @@ class Plan(IndexedDocument):
             raise self.MissingCampsError()
         else:
             self.save()
+
+    def close(self):
+        """
+        Set __is_closed flag to be True if plan is closed.
+        """
+        self.__is_closed = True
+        self.__close_date = datetime.today().date()
+        self.save()
+
+    @property
+    def close_date(self) -> Union[date, None]:
+        """
+        Get the read only close date of the plan.
+        It will return None if plan is not closed.
+        """
+        if self.__is_closed:
+            return self.__close_date
+
+    @property
+    def is_closed(self) -> bool:
+        """
+        Get the read only status of the plan.
+        """
+        return self.__is_closed
 
     def plan_statistics_function(self):
         """
