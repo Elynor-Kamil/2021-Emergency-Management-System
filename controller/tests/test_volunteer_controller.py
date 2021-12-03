@@ -4,11 +4,14 @@ from models.camp import Camp
 from models.plan import Plan
 
 
+
 class TestVolunteerController(unittest.TestCase):
 
     def test_edit_firstname(self):
+        camp = Camp(name='Camp')
+
         volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                        phone='+447519953189', camp=Camp(name='UCL'))
+                                        phone='+447519953189', camp=camp)
         volunteer = vc.edit_firstname(volunteer, 'Yun-Tzu')
         self.assertEqual(volunteer.firstname, 'Yun-Tzu')
 
