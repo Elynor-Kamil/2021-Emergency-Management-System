@@ -114,3 +114,23 @@ class PlanControllerTest(unittest.TestCase):
 
         expected = [Plan.find('First Plan'), Plan.find('Second Plan'), Plan.find('Third Plan')]
         self.assertListEqual(expected, pc.list_plans())
+
+    def test_find_camp_controller(self):
+        camp = Camp(name='TestCamp')
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='UK',
+                    camps=[camp])
+        self.assertEqual(pc.find_camp(plan, 'TestCamp'), camp)
+
+    def test_find_non_existent_camp_controller(self):
+        camp = Camp(name='TestCamp')
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='UK',
+                    camps=[camp])
+        with self.assertRaises(pc.controller_error.ControllerError):
+            pc.find_camp(plan, 'NonExistentCamp')
+

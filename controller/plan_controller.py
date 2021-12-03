@@ -62,3 +62,13 @@ def close_plan(plan: Plan):
     """
     plan.close()
     plan.save()
+
+
+def find_camp(plan: Plan, camp_name: str) -> Camp:
+    """
+    Finds the relevant camp with a given camp name within the given plan.
+    """
+    camp_document = plan.camps.get(camp_name)
+    if isinstance(camp_document, Camp):
+        return camp_document
+    raise controller_error.ControllerError('Camp not found.')
