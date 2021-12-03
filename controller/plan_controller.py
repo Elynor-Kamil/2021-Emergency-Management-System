@@ -41,14 +41,14 @@ def list_plans() -> list:
     List out all the plans.
     This would not be shown on the menu.
     """
-    pass
+    list_plan = Plan.all()
+    return list_plan
 
 
 def view_plan_statistics(plan: Plan) -> str:
     """
     Display plan statistics.
     """
-
     plan_statistics = plan.plan_statistics_function()
     plan_name = str(plan.name)
     plan_info = f"Plan name: {plan_name}\n"

@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from enum import Enum
 from typing import Iterable, Union
+import math
 
 from models.base.document import IndexedDocument
 from models.base.field import Field, ReferenceDocumentsField

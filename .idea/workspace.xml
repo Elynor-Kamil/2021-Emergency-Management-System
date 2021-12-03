@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="Move plan statistics functions to camp and plan classes">
+    <list default="true" id="2138ac06-58b5-4a02-bda5-6e95a8a35292" name="Changes" comment="fix merge conflict">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/plan_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/refugee_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/refugee_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/tests/test_plan_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/plan.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/plan.py" afterDir="false" />
     </list>
     <list id="7663f403-7cd4-4731-8f7c-645157a1aba1" name="Changes by zyb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +48,49 @@
     <property name="TODO_SCOPE" value="All Places" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test_volunteer.py">
+  <component name="RunManager" selected="Python tests.Python tests in test_plan_controller.py">
+    <configuration name="Python tests for test_plan_controller.PlanControllerTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="2021-Emergency-Management-System" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/controller/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_plan_controller.PlanControllerTest&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_plan_controller.PlanControllerTest.test_list_plans_controller" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="2021-Emergency-Management-System" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/controller/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_plan_controller.PlanControllerTest.test_list_plans_controller&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_plan_controller.PlanControllerTest.test_view_plan_statistics_returns_str" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="2021-Emergency-Management-System" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/controller/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_plan_controller.PlanControllerTest.test_view_plan_statistics_returns_str&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for test_plan_controller.PlanStatisticsControllerTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2021-Emergency-Management-System" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -57,20 +102,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_plan_controller.PlanStatisticsControllerTest&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_plan_statistics.PlanStatisticsTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2021-Emergency-Management-System" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_plan_statistics.PlanStatisticsTest&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -88,48 +119,20 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_plan_statistics.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2021-Emergency-Management-System" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/models/tests/test_plan_statistics.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_volunteer.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2021-Emergency-Management-System" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/models/tests/test_volunteer.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
-      <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest" />
-      <item itemvalue="Python tests.Python tests in test_plan_statistics.py" />
       <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest" />
       <item itemvalue="Python tests.Python tests in test_plan_controller.py" />
-      <item itemvalue="Python tests.Python tests in test_volunteer.py" />
+      <item itemvalue="Python tests.Python tests for test_plan_controller.PlanControllerTest" />
+      <item itemvalue="Python tests.Python tests for test_plan_controller.PlanControllerTest.test_view_plan_statistics_returns_str" />
+      <item itemvalue="Python tests.Python tests for test_plan_controller.PlanControllerTest.test_list_plans_controller" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests in test_volunteer.py" />
         <item itemvalue="Python tests.Python tests in test_plan_controller.py" />
-        <item itemvalue="Python tests.Python tests in test_plan_statistics.py" />
+        <item itemvalue="Python tests.Python tests for test_plan_controller.PlanControllerTest.test_list_plans_controller" />
+        <item itemvalue="Python tests.Python tests for test_plan_controller.PlanControllerTest.test_view_plan_statistics_returns_str" />
+        <item itemvalue="Python tests.Python tests for test_plan_controller.PlanControllerTest" />
         <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest" />
-        <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest" />
       </list>
     </recent_temporary>
   </component>
@@ -338,7 +341,21 @@
       <option name="project" value="LOCAL" />
       <updated>1638542751980</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="fix merge conflict">
+      <created>1638543282949</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1638543282949</updated>
+    </task>
+    <task id="LOCAL-00030" summary="fix merge conflict">
+      <created>1638543379869</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1638543379869</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -372,6 +389,7 @@
     <MESSAGE value="fix unittest" />
     <MESSAGE value="Changes per PR comments to simplify tests and remove duplicates." />
     <MESSAGE value="Move plan statistics functions to camp and plan classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move plan statistics functions to camp and plan classes" />
+    <MESSAGE value="fix merge conflict" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix merge conflict" />
   </component>
 </project>
