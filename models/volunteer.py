@@ -1,13 +1,12 @@
 import datetime
 import re
 
-from models.base.document import IndexedDocument
+from models.base.document import IndexedDocument, Document
 from models.base.field import Field
+from models.user import User
 
 
-class Volunteer(IndexedDocument):
-    username = Field(primary_key=True)
-    password = Field()
+class Volunteer(User):
     account_activated = Field()
     firstname = Field()
     lastname = Field()
@@ -83,9 +82,14 @@ class Volunteer(IndexedDocument):
         return self.find_referred_by(referrer_type=Camp)
 
     def __str__(self):
-        return f"Volunteer username: {self.username}\n" \
+        try:
+            camp_str = f'{self.camp} @ {self.camp.plan}'
+        except Document.ReferrerNotFound:
+            camp_str = 'not assigned'
+        return f"{super().__str__()}\n" \
                f"Account activated: {self.account_activated}\n" \
-               f"Volunteer {self.firstname} {self.lastname} belongs to camp {self.camp}.\n" \
+               f"Name: {self.firstname} {self.lastname}\n" \
+               f"Camp: {camp_str}\n" \
                f"Phone Number: {self.phone}\n" \
                f"Availability: {self.availability}\n" \
                f"Date joined: {self.__creation_date}\n"

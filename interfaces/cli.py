@@ -1,6 +1,5 @@
 from cmd import Cmd
 
-from data.users import users_catalog
 from models.user import User
 
 
@@ -20,11 +19,15 @@ class EmsShell(Cmd):
             username = input('Username: ')
             password = input('Password: ')
             try:
-                self.user = users_catalog[username].login(password)
+                user = User.find(username)
+                if not user:
+                    print('User not found')
+                    continue
+                self.user = user.login(password)
                 self.prompt = f'{self.user.username}> '
                 print(f'Welcome {self.user.username}')
-            except (KeyError, User.InvalidPassword):
-                print('Invalid username or password. Please try again.')
+            except User.InvalidPassword:
+                print('Invalid password. Please try again.')
 
     def do_logout(self, args):
         """
@@ -56,6 +59,4 @@ class EmsShell(Cmd):
         """
         Print user info
         """
-        print(f'username: {self.user.username}\n'
-              f'role: {self.user.__class__.__name__}')
-
+        print(self.user)

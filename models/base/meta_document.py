@@ -16,7 +16,22 @@ class MetaDocument(type):
 
         # Discover document fields
         doc_fields = {}
+
+        # Add all fields from superclasses
+        for base in bases:
+            if hasattr(base, '_fields'):
+                for field_name, field in base._fields.items():
+                    doc_fields[field_name] = field
+
         primary_key = None
+
+        # set primary key from parent class
+        for base in bases:
+            if hasattr(base, '_primary_key'):
+                if primary_key is not None:
+                    raise MetaDocument.MultiplePrimaryKeyError()
+                primary_key = base._primary_key
+
         for attr_name, attr_value in attrs.items():
             if not isinstance(attr_value, Field):
                 continue
@@ -42,7 +57,12 @@ class MetaIndexedDocument(MetaDocument):
         if "_persistence_path" not in attrs:
             attrs["_persistence_path"] = f'data/{name}'
 
+        # record persistence bases, so that subclasses are also persisted to parent classes
+        persistence_bases = []
+        for base in bases:
+            if hasattr(base, '_persistence_path'):
+                persistence_bases.append(base)
+        attrs["_persistence_bases"] = persistence_bases
+
         new_class = super().__new__(cls, name, bases, attrs)
-        sys.modules[new_class.__module__].__dict__[name] = new_class
-        new_class.reload()
         return new_class
