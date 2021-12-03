@@ -345,8 +345,9 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     @classmethod
     def __index_subclass(cls, child: Document) -> None:
         """
-        Save a child document to the parent index.
-        to be called from subclass.
+        Save a subclass instance to the index of the parent (this) class.
+        To be called from the _persist method of a subclass of another IndexedDocument,
+        such as to replace instances in the index of the parent class with instances of the subclass.
         :param child: child instance to be saved
         """
         cls.check_and_load_data()
