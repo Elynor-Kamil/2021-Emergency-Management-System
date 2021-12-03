@@ -48,7 +48,7 @@ class PlanControllerTest(unittest.TestCase):
 
     def test_find_plan_controller(self):
         """
-        Test to see find plan given plan name.
+        Test to see if find plan function returns the correct plan, given the plan name.
         """
         test_plan = Plan(name='My Plan',
                          emergency_type=Plan.EmergencyType.EARTHQUAKE,
