@@ -16,8 +16,8 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
-        Plan.delete_all()
         Volunteer.delete_all()
+        Plan.delete_all()
 
     def test_active_volunteer_count(self):
         """
@@ -175,8 +175,8 @@ class PlanStatisticsRefugeeTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
-        Plan.delete_all()
         Volunteer.delete_all()
+        Plan.delete_all()
 
     def test_refugee_count_single_family(self):
         """
@@ -267,8 +267,8 @@ class PlanStatisticsTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
-        Plan.delete_all()
         Volunteer.delete_all()
+        Plan.delete_all()
 
     def test_plan_statistics_for_one_camp(self):
         """
