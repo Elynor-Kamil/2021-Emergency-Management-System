@@ -26,9 +26,7 @@ def create_refugee(firstname: str,
     """
     try:
         for plan in Plan.all():
-            plan_name = str(plan.name)
-            curr_plan = Plan.find(plan_name)
-            if camp in curr_plan.camps:
+            if camp in plan.camps:
                 new_refugee = Refugee(firstname = firstname,
                                       lastname = lastname,
                                       num_of_family_member = num_of_family_member,
