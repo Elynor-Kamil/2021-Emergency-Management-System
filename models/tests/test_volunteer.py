@@ -1,10 +1,11 @@
 import unittest
 from models.volunteer import Volunteer
-from models.plan import Plan
-from models.plan import Camp
 
 
 class TestVolunteer(unittest.TestCase):
+
+    def setUp(self):
+        Volunteer.delete_all()
 
     def test_create_volunteer(self):
         volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
@@ -12,9 +13,10 @@ class TestVolunteer(unittest.TestCase):
         self.assertIsInstance(volunteer, Volunteer)
 
     def test_delete_volunteer(self):
-        volunteer = Volunteer.find('yunsy')
+        volunteer = Volunteer(username='peter', password='1234', firstname='Peter', lastname='Green',
+                              phone='+447519953189')
         volunteer.delete()
-        self.assertIsNone(Volunteer.find('yunsy'))
+        self.assertIsNone(Volunteer.find('peter'))
 
     def test_deactivate_volunteer(self):
         volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
@@ -60,28 +62,5 @@ class TestVolunteer(unittest.TestCase):
             Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                       phone='+12345')
 
-    def tearDown(self):
-        """
-        Function to delete stored data after a test has finished running
-        to avoid corrupting other tests
-        """
-        Plan.delete_all()
-
-    def test_adding_volunteer_to_camp(self):
-        """
-        Test to check functionality for adding a volunteer to a camp.
-        """
-        camp = Camp(name='camp1')
-        plan = Plan(name='test_plan1',
-             emergency_type=Plan.EmergencyType.EARTHQUAKE,
-             description='Test emergency plan',
-             geographical_area='London',
-             camps=[camp])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        camp.volunteers.add(volunteer_a)
-
-        self.assertEqual(volunteer_a.camp.name, camp.name)
-
-if __name__ == '__main__':
-    unittest.main()
+    def tearDown(self) -> None:
+        Volunteer.delete_all()

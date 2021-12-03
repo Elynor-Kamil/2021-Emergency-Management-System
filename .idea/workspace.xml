@@ -117,10 +117,10 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest" />
       <item itemvalue="Python tests.Python tests for test_plan_statistics.PlanStatisticsTest" />
-      <item itemvalue="Python tests.Python tests in test_plan_controller.py" />
       <item itemvalue="Python tests.Python tests in test_plan_statistics.py" />
+      <item itemvalue="Python tests.Python tests for test_plan_controller.PlanStatisticsControllerTest" />
+      <item itemvalue="Python tests.Python tests in test_plan_controller.py" />
       <item itemvalue="Python tests.Python tests in test_volunteer.py" />
     </list>
     <recent_temporary>
