@@ -16,8 +16,9 @@ class PlanStatisticsVolunteerTest(unittest.TestCase):
         Function to delete stored data after a test has finished running
         to avoid corrupting other tests
         """
-        Volunteer.delete_all()
         Plan.delete_all()
+        Volunteer.delete_all()
+
 
     def test_active_volunteer_count(self):
         """
