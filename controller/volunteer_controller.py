@@ -84,19 +84,10 @@ def edit_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> Volunteer:
             raise ControllerError(f"Invalid camp: {camp}. You can only select a camp under the same plan.")
 
 
-def edit_availability(volunteer: Volunteer, availability: str) -> Volunteer:
-    list_true = ["True", "true", "T", "1"]
-    list_false = ["False", "false", "F", "0"]
-    if availability in list_true:
-        volunteer.availability = True
-        volunteer.save()
-        return volunteer
-    elif availability in list_false:
-        volunteer.availability = False
-        volunteer.save()
-        return volunteer
-    else:
-        raise ControllerError(f"Invalid input: {availability}. Only 'True' or 'False' is accepted.")
+def edit_availability(volunteer: Volunteer, availability: bool) -> Volunteer:
+    volunteer.availability = availability
+    volunteer.save()
+    return volunteer
 
 
 def deactivate_volunteer(volunteer: Volunteer) -> Volunteer:
