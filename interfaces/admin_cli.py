@@ -6,6 +6,7 @@ from controller.controller_error import ControllerError
 from interfaces.cli import EmsShell
 
 from models.admin import Admin
+from models.camp import Camp
 from models.user import User, require_role
 from models.volunteer import Volunteer
 from models.plan import Plan
@@ -124,7 +125,7 @@ class PlanMenu(AdminShell):
         """
         self.plan_menu()
 
-    def return_previous_page(self) -> bool:
+    def return_previous_page(self):
         super().return_previous_page()
 
     # ----- basic commands -----
@@ -166,6 +167,9 @@ class PlanMenu(AdminShell):
                                         description=e_description,
                                         geographical_area=e_geo_area,
                                         camps=camps)
+            print("\x1b[6;30;42m success! \x1b[0m")
+            print(f"Plan {e_name} created.")
+            self.return_previous_page()
         except ControllerError:
             print("\033[31m {}\033[00m".format("** Unable to create an emergency plan. Press R to return and retry."))
             self.return_previous_page()
@@ -249,12 +253,35 @@ class ManageVolunteerMenu(AdminShell):
         #1 Create a volunteer
         """
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))
+        # STEP 1: validate if plan exists
+        while True:
+            plan = input("Enter the camp that the new volunteer belongs to:")
+            try:
+                find_plan = plan_controller.find_plan(plan)
+                plan = find_plan
+                break
+            except ControllerError:
+                print(f"\033[31m * Plan {plan} not found. Please re-enter plan name. \033[00m")
+                continue
+
+        # STEP 2: validate if camp exists
+        while True:
+            camp = input("Enter the camp that the new volunteer belongs to:")
+            try:
+                find_camp = plan_controller.find_camp(camp)
+                camp = find_camp
+                break
+            except ControllerError:
+                print(f"\033[31m * Camp {camp} not found. Please re-enter camp name. \033[00m")
+                continue
+
+        # STEP 3: other user inputs
         username = input("Enter volunteer's username:")
         password = input("Enter volunteer's password:")
         firstname = input("Enter volunteer's firstname:")
         lastname = input("Enter volunteer's lastname:")
-        phone = input("Enter volunteer's phone:")
-        camp = input("Enter volunteer's camp")
+        phone = input("Enter volunteer's phone (start from +):")
+
         while True:
             try:
                 volunteer_controller.create_volunteer(username=username,
@@ -264,11 +291,10 @@ class ManageVolunteerMenu(AdminShell):
                                                       phone=phone, camp=camp)
                 print("\x1b[6;30;42m success! \x1b[0m")
                 print(f"Volunteer {username} created.")
-                self.return_previous_page()
                 break
-            except ControllerError:
+            except ControllerError as e:
                 print(f'\033[31m* Failed to create volunteer \033[00m{username}.')
-                self.return_previous_page()
+                print(f'\033[31m* {e.message} \033[00m')
                 continue
 
     def do_view_volunteer(self, arg):
@@ -420,15 +446,16 @@ class ManageRefugeeMenu(AdminShell):
 
         while True:
             try:
-                refugee_controller.create_refugee(firstname=r_firstname, lastname=r_lastname, camp=r_camp,
-                                                  num_of_family_member=num_of_family_member,
-                                                  medical_condition_type=medical_condition)
-                print("\x1b[6;30;42m success! \x1b[0m")
-                print(f"Volunteer {username} created.")
+                refugee = refugee_controller.create_refugee(firstname=r_firstname, lastname=r_lastname, camp=r_camp,
+                                                            num_of_family_member=num_of_family_member,
+                                                            medical_condition_type=medical_condition)
+                print("\x1b[6;30;42m success! \x1b[0m\r")
+                print(f"Refugee {r_firstname} {r_lastname} created. Refugee ID: {refugee.user_id}.")
+                print(f"Please note down refugee ID as it is required when viewing refugee profile.")
                 self.return_previous_page()
                 break
             except ControllerError:
-                print(f'\033[31m* Failed to create a refugee profile for\033[00m {r_firstname}')
+                print(f'\033[31m* Failed to create a refugee profile for\033[00m {r_firstname} {r_lastname} ')
                 continue
 
     def do_view_refugee(self, arg):

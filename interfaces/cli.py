@@ -30,7 +30,7 @@ class EmsShell(Cmd):
             try:
                 user = User.find(username)
                 if not user:
-                    print("\033[31m {}\033[00m".format('** User not found'))
+                    print("\033[31m {}\033[00m".format('** Account not found.'))
                     continue
                 self.user = user.login(password)
                 self.prompt = f'{self.user.username}> '
@@ -38,7 +38,11 @@ class EmsShell(Cmd):
                 if isinstance(self.user, Admin):
                     AdminShell(self.user).cmdloop()
                 elif isinstance(self.user, Volunteer):
-                    VolunteerShell(self.user).cmdloop()
+                    if self.user.account_activated == True:
+                        VolunteerShell(self.user).cmdloop()
+                    else:
+                        print("\033[31m {}\033[00m".format("** Your account is deactivated. Please contact admin."))
+                        sys.exit()
             except (KeyError, User.InvalidPassword):
                 print("\033[31m {}\033[00m".format("** Invalid username or password. Please try again."))
 
