@@ -45,6 +45,30 @@ def list_plans() -> list:
     return list_plan
 
 
+def view_plan_statistics(plan: Plan) -> str:
+    """
+    Display plan statistics.
+    """
+
+    plan_statistics = plan.plan_statistics_function()
+    plan_name = str(plan.name)
+    plan_info = f"Plan name: {plan_name}\n"
+    statistics = ""
+
+    for camp in plan_statistics.items():
+        camp_name, statistics_info = camp[0], camp[1]
+        num_of_refugees, num_of_volunteers, num_volunteers_vs_standard = statistics_info['num_of_refugees'], \
+                                                                         statistics_info['num_of_volunteers'], \
+                                                                         statistics_info['num_volunteers_vs_standard']
+
+        statistics += f"Camp name: {camp_name}\n" \
+                      f"Number of refugees: {num_of_refugees}\n" \
+                      f"Number of volunteers: {num_of_volunteers}\n" \
+                      f"Number of volunteers vs standard: {num_volunteers_vs_standard}\n\n"
+
+    return plan_info + statistics
+
+
 def find_plan(plan_name: str) -> Plan:
     """
     Finds the relevant plan with a given plan name.
