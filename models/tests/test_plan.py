@@ -104,3 +104,49 @@ class PlanTest(unittest.TestCase):
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
         self.assertEqual(date.today(), plan.start_date)
+
+    def test_initialised_plan_not_closed(self):
+        """
+        Test status flag of plan. Should be false is plan is open.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        self.assertEqual(False, plan.is_closed)
+
+    def test_close_plan(self):
+        """
+        Test status flag of plan. Should be true when plan is closed.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        plan.close()
+        self.assertEqual(True, plan.is_closed)
+
+    def test_initialised_plan_no_close_date(self):
+        """
+        Test that close date is not set during plan creation.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        self.assertEqual(None, plan.close_date)
+
+    def test_close_date_set(self):
+        """
+        Test plan closure date is set to today's date when plan is closed.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        plan.close()
+        self.assertEqual(date.today(), plan.close_date)

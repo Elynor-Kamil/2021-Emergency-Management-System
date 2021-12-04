@@ -16,11 +16,11 @@ class User(IndexedDocument):
     __salt = Field()
     __password_hash = Field()
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, username: str, password: str, **kwargs):
         salt = os.urandom(32)
         super().__init__(username=username,
                          _User__salt=salt,
-                         _User__password_hash=self.__hash_password(password, salt))
+                         _User__password_hash=self.__hash_password(password, salt), **kwargs)
 
     @staticmethod
     def __hash_password(password: str, salt: bytes) -> bytes:
@@ -43,6 +43,13 @@ class User(IndexedDocument):
 
     def update_password(self, password: str) -> None:
         self.__password_hash = self.__hash_password(password, self.__salt)
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} '{self.username}'>"
+
+    def __str__(self):
+        return f'Username: {self.username}\n' \
+               f'Role: {self.__class__.__name__}'
 
 
 def require_role(*roles: type):

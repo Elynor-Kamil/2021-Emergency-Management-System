@@ -4,29 +4,33 @@ from models.volunteer import Volunteer
 
 class TestVolunteer(unittest.TestCase):
 
+    def setUp(self):
+        Volunteer.delete_all()
+
     def test_create_volunteer(self):
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        self.assertEqual(type(volunteer_a), Volunteer)
+        volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                              phone='+447519953189')
+        self.assertIsInstance(volunteer, Volunteer)
 
     def test_delete_volunteer(self):
-        volunteer_a = Volunteer.find('yunsy')
-        volunteer_a.delete()
-        self.assertIsNone(Volunteer.find('yunsy'))
+        volunteer = Volunteer(username='peter', password='1234', firstname='Peter', lastname='Green',
+                              phone='+447519953189')
+        volunteer.delete()
+        self.assertIsNone(Volunteer.find('peter'))
 
     def test_deactivate_volunteer(self):
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_a.accountActivated = False
-        volunteer_a.save()
-        self.assertFalse(volunteer_a.accountActivated)
+        volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                              phone='+447519953189')
+        volunteer.account_activated = False
+        volunteer.save()
+        self.assertFalse(volunteer.account_activated)
 
     def test_reactivate_volunteer(self):
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
-                                phone='+447519953189')
-        volunteer_a.accountActivated = True
-        volunteer_a.save()
-        self.assertTrue(volunteer_a.accountActivated)
+        volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                              phone='+447519953189')
+        volunteer.account_activated = True
+        volunteer.save()
+        self.assertTrue(volunteer.account_activated)
 
     def test_invalid_username(self):
         with self.assertRaises(Volunteer.InvalidUsernameException):
@@ -58,6 +62,5 @@ class TestVolunteer(unittest.TestCase):
             Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                       phone='+12345')
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def tearDown(self) -> None:
+        Volunteer.delete_all()

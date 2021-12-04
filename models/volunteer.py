@@ -1,13 +1,12 @@
 import datetime
 import re
 
-from models.base.document import IndexedDocument
+from models.base.document import IndexedDocument, Document
 from models.base.field import Field
+from models.user import User
 
 
-class Volunteer(IndexedDocument):
-    username = Field(primary_key=True)
-    password = Field()
+class Volunteer(User):
     account_activated = Field()
     firstname = Field()
     lastname = Field()
@@ -35,10 +34,11 @@ class Volunteer(IndexedDocument):
         :param availability:  whether the volunteer is available to join a new emergency plan
         """
 
-        self.__check_volunteer_username(username)
-        self.__check_volunteer_password(password)
-        self.__check_volunteer_name(firstname, lastname)
-        self.__check_volunteer_phone(phone)
+        self.check_volunteer_username(username)
+        self.check_volunteer_password(password)
+        self.check_volunteer_firstname(firstname)
+        self.check_volunteer_lastname(lastname)
+        self.check_volunteer_phone(phone)
 
         super().__init__(username=username,
                          password=password,
@@ -49,25 +49,32 @@ class Volunteer(IndexedDocument):
                          availability=availability,
                          _Volunteer__creation_date=datetime.datetime.now().date())
 
-    def __check_volunteer_username(self, username):
+    @classmethod
+    def check_volunteer_username(cls, username):
         if len(username) < 4:
-            raise self.InvalidUsernameException(username)
+            raise cls.InvalidUsernameException(username)
 
-    def __check_volunteer_password(self, password):
+    @classmethod
+    def check_volunteer_password(cls, password):
         if len(password) < 4:
-            raise self.InvalidPasswordException(password)
+            raise cls.InvalidPasswordException(password)
 
-    def __check_volunteer_name(self, firstname, lastname):
+    @classmethod
+    def check_volunteer_firstname(cls, firstname):
         if len(firstname) <= 1:
-            raise self.InvalidFirstnameException(firstname)
-        elif len(lastname) <= 1:
-            raise self.InvalidLastnameException(lastname)
+            raise cls.InvalidFirstnameException(firstname)
 
-    def __check_volunteer_phone(self, phone):
+    @classmethod
+    def check_volunteer_lastname(cls, lastname):
+        if len(lastname) <= 1:
+            raise cls.InvalidLastnameException(lastname)
+
+    @classmethod
+    def check_volunteer_phone(cls, phone):
         phone_text = r"\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]" \
                      r"|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{5,14}$"
         if not re.search(phone_text, phone):
-            raise self.InvalidPhoneException(phone)
+            raise cls.InvalidPhoneException(phone)
 
     @property
     def camp(self):
@@ -75,9 +82,14 @@ class Volunteer(IndexedDocument):
         return self.find_referred_by(referrer_type=Camp)
 
     def __str__(self):
-        return f"Volunteer username: {self.username}\n" \
+        try:
+            camp_str = f'{self.camp} @ {self.camp.plan}'
+        except Document.ReferrerNotFound:
+            camp_str = 'not assigned'
+        return f"{super().__str__()}\n" \
                f"Account activated: {self.account_activated}\n" \
-               f"Volunteer {self.firstname} {self.lastname} belongs to camp {self.camp}.\n" \
+               f"Name: {self.firstname} {self.lastname}\n" \
+               f"Camp: {camp_str}\n" \
                f"Phone Number: {self.phone}\n" \
                f"Availability: {self.availability}\n" \
                f"Date joined: {self.__creation_date}\n"
@@ -120,4 +132,5 @@ class Volunteer(IndexedDocument):
         """
 
         def __init__(self, phone):
-            super().__init__(f"Invalid phone number: {phone}.")
+            super().__init__(
+                f"Invalid phone number: {phone}. Phone number should start with a plus sign and international code")

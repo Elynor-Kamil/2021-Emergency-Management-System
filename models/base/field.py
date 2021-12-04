@@ -73,7 +73,8 @@ class ReferenceSet:
         """
         self.__owner = owner
         for document in self.__ref_documents:
-            document._add_referrer(owner)
+            if getattr(document, '_add_referrer', None) is not None:
+                document._add_referrer(owner)
         return self
 
     def __add_references(self, *documents: Document) -> None:
@@ -101,14 +102,15 @@ class ReferenceSet:
 
     def add(self, *references) -> None:
         """
-        Add documents to the reference set.
+        Add documents to the reference set. Changes are automatically saved.
         :param references: documents of the same type
         """
         self.__add_references(*references)
+        self.__owner.save()
 
     def remove(self, item) -> None:
         """
-        Remove a referenced document from the reference set.
+        Remove a referenced document from the reference set. Changes are automatically saved.
         A ValueError is raised if the item is not in the reference set.
         :param item: a document existing in the reference set
         """
@@ -116,7 +118,9 @@ class ReferenceSet:
             self.__index.pop(item.key)
         i = self.__ref_documents.index(item)
         self.__ref_documents[i]._remove_referrer(self.__owner)
+        self.__ref_documents[i].save()
         self.__ref_documents.remove(item)
+        self.__owner.save()
 
     def get(self, key) -> Union[Document, None]:
         """
@@ -144,6 +148,8 @@ class ReferenceSet:
         self.__ref_documents.remove(item)
         del self.__index[key]
         item._remove_referrer(self.__owner)
+        item.save()
+        self.__owner.save()
 
     def __len__(self):
         return len(self.__ref_documents)
@@ -163,13 +169,13 @@ class ReferenceDocumentsField(Field):
         :param data_type: the type of the referenced documents
         """
         super().__init__(**kwargs)
-        self.__data_type = data_type
+        self._data_type = data_type
 
     def __set__(self, instance, value: Union[ReferenceSet, Sequence[Document]]):
         if isinstance(value, ReferenceSet):
             if value.data_type is None:
-                value.data_type = self.__data_type
-            elif value.data_type != self.__data_type:
+                value.data_type = self._data_type
+            elif value.data_type != self._data_type:
                 raise ReferenceSet.MultipleTypeError
             super().__set__(instance, value._with_owner(instance))
         else:
@@ -181,8 +187,9 @@ class ReferenceDocumentsField(Field):
                 raise self.InvalidValueError(value)
             if instance._initialised:
                 for document in self.__get__(instance, instance.__class__):
-                    document._remove_referrer(instance)  # Remove the old references
-            super().__set__(instance, ReferenceSet(value, self.__data_type, instance))
+                    if getattr(document, "_referenced_by", None) is not None:
+                        document._remove_referrer(instance)  # Remove the old references
+            super().__set__(instance, ReferenceSet(value, self._data_type, instance))
 
     def __get__(self, instance, owner):
         obj = super().__get__(instance, owner)

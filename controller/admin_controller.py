@@ -3,10 +3,6 @@ from models.user import User
 ###---- Admin Menu ----
 def view_admin_profile(user: User) -> str:
     """
-    Dennis
+    Print information about the user.
     """
-    pass
-
-
-
-
+    return str(user)

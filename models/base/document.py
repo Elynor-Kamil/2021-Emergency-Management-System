@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import os
 import pickle
+import sys
 from typing import Union
 
-from models.base.field import ReferenceDocumentsField
+from models.base.field import ReferenceDocumentsField, ReferenceSet
 from models.base.meta_document import MetaDocument, MetaIndexedDocument
 
 
@@ -93,10 +94,35 @@ class Document(metaclass=MetaDocument):
 
     def save(self) -> None:
         """
+        Save all documents associated with this document.
+        """
+        self._persist()
+        self._save_referrers()  # Recursively look for root level documents and save them.
+        self._save_referees()  # Also save all documents that this document references.
+
+    def _persist(self) -> None:
+        """
+        By default, documents are not persisted. To be overridden by subclasses.
+        """
+        return
+
+    def _save_referrers(self) -> None:
+        """
         Recursively call save on the root-level document
         """
         for referrer in self._referenced_by:
-            referrer.save()
+            referrer._persist()
+            referrer._save_referrers()
+
+    def _save_referees(self) -> None:
+        """
+        Recursively save all referees.
+        """
+        for field_name, field in self._fields.items():
+            if isinstance(field, ReferenceDocumentsField):
+                for referee in getattr(self, field_name):
+                    referee._persist()
+                    referee._save_referees()
 
     def delete(self) -> None:
         """
@@ -130,15 +156,17 @@ class Document(metaclass=MetaDocument):
         raise self.ReferrerNotFound(referrer_type, field_name)
 
     def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
         return self._data == other._data
 
-    def _add_referrer(self, referer):
-        if referer not in self._referenced_by:
-            self._referenced_by.append(referer)
+    def _add_referrer(self, referrer):
+        if referrer not in self._referenced_by:
+            self._referenced_by.append(referrer)
 
-    def _remove_referrer(self, referer):
-        if referer in self._referenced_by:
-            self._referenced_by.remove(referer)
+    def _remove_referrer(self, referrer):
+        if referrer in self._referenced_by:
+            self._referenced_by.remove(referrer)
 
     def __unlink_referee(self, referee):
         for field_name, field in self._fields.items():
@@ -148,8 +176,32 @@ class Document(metaclass=MetaDocument):
                     documents.remove(referee)
         self.save()
 
+    def _get_root_document(self):
+        """
+        Get the root-level document.
+        """
+        for referrer in self._referenced_by:
+            root = referrer._get_root_document()
+            if root is not None:
+                return root
+
     def __str__(self):
         return f'{self.__class__.__name__}({self._data})'
+
+    def __getstate__(self):
+        """
+        Customise pickling: referrers are not pickled to avoid circular references.
+        Instead, root-level documents of the referrers are marked and loaded while unpickling.
+        referrer pointers are relinked by loading the referrer indices.
+        """
+        state = self.__dict__.copy()
+        referrer_roots = set()
+        for referrer in self._referenced_by:
+            root = referrer._get_root_document()
+            referrer_roots.add((root.__module__, getattr(root.__class__, '__qualname__', root.__class__.__name__)))
+        state['_referrer_roots'] = referrer_roots
+        state['_referenced_by'] = []
+        return state
 
 
 class IndexedDocument(Document, metaclass=MetaIndexedDocument):
@@ -163,10 +215,58 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     to change the path, override the _persistence_path property.
     """
 
+    __objects = None
+
+    class Pickler(pickle.Pickler):
+        """
+        Custom pickler to persist references to other IndexedDocuments.
+        """
+
+        def __init__(self, file, base_class):
+            super().__init__(file)
+            self.base_class = base_class
+
+        def persistent_id(self, obj):
+            if not isinstance(obj, self.base_class) and isinstance(obj, IndexedDocument):
+                return obj.__module__, getattr(obj.__class__, '__qualname__', obj.__class__.__name__), obj.key
+            else:
+                return None
+
+    class Unpickler(pickle.Unpickler):
+        """
+        Custom unpickler to restore references to other IndexedDocuments.
+        """
+
+        def persistent_load(self, pid):
+            module, classname, key = pid
+            return IndexedDocument.DeferredReference(module, classname, key)
+
+    class DeferredReference:
+        """
+        A reference to an IndexedDocument that is not yet loaded to avoid circular references.
+        These are restored after loading the whole index.
+        """
+
+        def __init__(self, module, classname, key):
+            self.module = module
+            self.classname = classname
+            self.key = key
+
+        def restore(self):
+            """
+            Restore the referenced document.
+            """
+            __import__(self.module)
+            index = pickle._getattribute(sys.modules[self.module], self.classname)[0]
+            return index.find(self.key)
+
+    @persist
     def __init__(self, **kwargs):
+        self.__class__.check_and_load_data()
         if not self._primary_key:
             raise Document.PrimaryKeyNotDefinedError(self)
         super().__init__(**kwargs)
+        self.__class__.__objects[self.key] = self
 
     @classmethod
     def reload(cls) -> None:
@@ -175,20 +275,86 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         """
         try:
             with open(cls._persistence_path, 'rb') as f:
-                cls.__objects = pickle.load(f)
+                cls.__objects = cls.Unpickler(f).load()
+                for key in cls.__objects:
+                    # Restore deferred references to referees
+                    cls.__objects[key] = cls.__restore_reference(cls.__objects[key])
+                    # Load all indices referring to this document to relink referrers
+                    cls.__restore_referrer(cls.__objects[key])
         except FileNotFoundError:
             cls.__objects = {}
 
-    def save(self) -> None:
+    @classmethod
+    def __restore_reference(cls, value):
+        """
+        Restore deferred references to other IndexedDocuments recursively.
+        :param value: a DeferredReference, Document, ReferenceSet, or field value
+        :return: the restored value, or None if it was a field value
+        """
+        if isinstance(value, cls.DeferredReference):
+            return value.restore()
+        elif isinstance(value, Document):
+            for field_name, field in value._fields.items():
+                restored_field = cls.__restore_reference(getattr(value, field_name))
+                if restored_field is not None:
+                    setattr(value, field_name, restored_field)
+            return value
+        elif isinstance(value, ReferenceSet):
+            return [cls.__restore_reference(doc) for doc in value]
+        else:
+            return None
+
+    @classmethod
+    def __restore_referrer(cls, obj) -> None:
+        """
+        Load all indices referring to this document to relink referrers.
+        :param obj: an unpickled IndexedDocument instance
+        """
+        if getattr(obj, '_referrer_roots', None):
+            for mod, classname in obj._referrer_roots:
+                __import__(mod)
+                index = pickle._getattribute(sys.modules[mod], classname)[0]
+                index.check_and_load_data()
+            delattr(obj, '_referrer_roots')
+
+    @classmethod
+    def check_and_load_data(cls):
+        """
+        Check if the index is loaded, if not, load it.
+        """
+        if cls.__objects is None:
+            cls.reload()
+
+    def _persist(self) -> None:
         """
         Save all documents of the same type (i.e. the index) to disk.
-        Also save all root-level documents referencing this document.
+        If the class is a subclass of IndexedDocument, also persist to parent indices.
         """
-        self.__class__.__objects[self.key] = self
+        self.__class__.check_and_load_data()
         os.makedirs(os.path.dirname(self._persistence_path), exist_ok=True)
         with open(self._persistence_path, 'wb') as f:
-            pickle.dump(self.__class__.__objects, f)
-        super().save()
+            self.Pickler(f, self.__class__).dump(self.__class__.__objects)
+
+        # Also save to parent indices
+        for persistence_base in self._persistence_bases:
+            persistence_base.__index_subclass(self)
+
+    def _get_root_document(self):
+        return self
+
+    @classmethod
+    def __index_subclass(cls, child: Document) -> None:
+        """
+        Save a subclass instance to the index of the parent (this) class.
+        To be called from the _persist method of a subclass of another IndexedDocument,
+        such as to replace instances in the index of the parent class with instances of the subclass.
+        :param child: child instance to be saved
+        """
+        cls.check_and_load_data()
+        cls.__objects[child.key] = child
+        os.makedirs(os.path.dirname(cls._persistence_path), exist_ok=True)
+        with open(cls._persistence_path, 'wb') as f:
+            pickle.dump(cls.__objects, f)
 
     @classmethod
     def find(cls, key) -> Union[None, IndexedDocument]:
@@ -197,6 +363,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         :param key: the primary key value
         :return: the document, or None if not found
         """
+        cls.check_and_load_data()
         return cls.__objects.get(key)
 
     @classmethod
@@ -205,15 +372,16 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         Get all documents of this type.
         :return: a list of all documents
         """
+        cls.check_and_load_data()
         return list(cls.__objects.values())
 
     def delete(self) -> None:
         """
         Remove the document from the index, all references to it, and persist the change.
         """
+        self.__class__.check_and_load_data()
         del self.__class__.__objects[self.key]
-        with open(self._persistence_path, 'wb') as f:
-            pickle.dump(self.__class__.__objects, f)
+        self._persist()
         super().delete()
 
     @classmethod
@@ -221,6 +389,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         """
         Remove all documents of this type and persist the change.
         """
+        cls.check_and_load_data()
         for document in cls.all():
             super().delete(document)
         try:
