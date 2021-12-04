@@ -49,7 +49,7 @@ def find_refugee(refugee_id: int) -> Refugee:
         for plan in Plan.all():
             for camp in plan.camps:
                 refugee = camp.refugees.get(refugee_id)
-                if refugee:
+                if refugee is not None:
                     return refugee
                 else:
                     raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
@@ -62,4 +62,3 @@ def view_refugee(refugee: Refugee) -> str:
     Function to be used by admin and volunteer to return refugee specified as a string.
     """
     return str(refugee)
-

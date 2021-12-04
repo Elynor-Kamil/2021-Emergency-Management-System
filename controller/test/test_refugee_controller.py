@@ -42,8 +42,8 @@ class RefugeeControllerTest(unittest.TestCase):
                           starting_date=date(2020, 1, 2),
                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee)
-        refugee_user_id = refugee.user_id
-        retrieved_refugee = rc.find_refugee(refugee_user_id)
+        refugee_id = refugee.user_id
+        retrieved_refugee = rc.find_refugee(refugee_id)
         self.assertEqual(refugee, retrieved_refugee)
 
 
