@@ -54,8 +54,9 @@ class MetaIndexedDocument(MetaDocument):
     """
 
     def __new__(cls, name, bases, attrs):
-        if "_persistence_path" not in attrs:
-            attrs["_persistence_path"] = f'data/{name}'
+        if "_persistence_path" not in attrs and name != "IndexedDocument":
+            prefix = 'test_' if 'unittest' in sys.modules else ''
+            attrs["_persistence_path"] = f'{prefix}data/{name}'
 
         # record persistence bases, so that subclasses are also persisted to parent classes
         persistence_bases = []
