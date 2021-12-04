@@ -5,6 +5,9 @@ from models.user import User, require_role
 
 class UserTest(TestCase):
 
+    def setUp(self) -> None:
+        User.delete_all()
+
     def test_create_user(self):
         user = User(username='test_username', password='test_password')
         self.assertEqual(user.username, 'test_username')
@@ -44,3 +47,6 @@ class UserTest(TestCase):
         self.assertTrue(test_admin(session))
         session.user = self.MockRoleB()
         self.assertIsNone(test_admin(session))
+
+    def tearDown(self) -> None:
+        User.delete_all()

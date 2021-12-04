@@ -77,6 +77,10 @@ class Document(metaclass=MetaDocument):
             super().__init__(f"Instanced is not referenced by "
                              f"{attribute_name or 'any field'} in {referrer_type or 'Any type'}")
 
+    class PersistenceError(Exception):
+        def __init__(self, message):
+            super().__init__(message)
+
     @persist
     def __init__(self, **kwargs):
         """
@@ -198,6 +202,9 @@ class Document(metaclass=MetaDocument):
         referrer_roots = set()
         for referrer in self._referenced_by:
             root = referrer._get_root_document()
+            if not root:
+                raise self.PersistenceError(f'Cannot save {repr(self)} because it is referenced by '
+                                            f'{repr(referrer)} which does not have a persistent parent.')
             referrer_roots.add((root.__module__, getattr(root.__class__, '__qualname__', root.__class__.__name__)))
         state['_referrer_roots'] = referrer_roots
         state['_referenced_by'] = []
