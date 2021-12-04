@@ -25,15 +25,13 @@ def create_refugee(firstname: str,
     Function to create and save refugee data.
     """
     try:
-        for plan in Plan.all():
-            if camp in plan.camps:
-                new_refugee = Refugee(firstname=firstname,
-                                      lastname=lastname,
-                                      num_of_family_member=num_of_family_member,
-                                      starting_date=starting_date,
-                                      medical_condition_type=medical_condition_type)
-                camp.refugees.add(new_refugee)
-                return new_refugee
+        new_refugee = Refugee(firstname=firstname,
+                              lastname=lastname,
+                              num_of_family_member=num_of_family_member,
+                              starting_date=starting_date,
+                              medical_condition_type=medical_condition_type)
+        camp.refugees.add(new_refugee)
+        return new_refugee
     except (Refugee.InvalidNameException,
             Refugee.InvalidNumOfFamilyMemberException,
             Refugee.InvalidStartingDateException,
