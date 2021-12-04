@@ -42,18 +42,18 @@ class EditVolunteerMenu(ManageVolunteerMenu):
 
     def edit_volunteer_menu(self) -> None:
         volunteer_edit = self.check_username()
-        print("\n\033[100m\033[4m\033[1m{}\033[0m\n".format("Edit Volunteer Profile"))
+        print("\n\033[100m\033[4m\033[1m{}\033[0m".format("Edit Volunteer Profile"))
         print(
-            "Select the information to edit :\n"
+            f"You're editing {volunteer_edit.username}'s profile. Select the information to edit :\n"
             f"[ 1 ] First name: {volunteer_edit.firstname}\n"
             f"[ 2 ] Last name: {volunteer_edit.lastname}\n"
-            f"[ 3 ] Phone number: {volunteer_edit.lastname}\n"
+            f"[ 3 ] Phone number: {volunteer_edit.phone}\n"
             f"[ 4 ] Camp: {volunteer_edit.camp}\n"
-            f"[ 5 ] Availability: {volunteer_edit.availability}\n"
+            f"[ 5 ] Availability: {volunteer_edit.availability}\n\n"
             f"[ R ] Return to previous page\n"
             f"[ 0 ] Log-out\n")
 
-    def precmd(self, option: str) -> int:
+    def precmd(self, option: str) -> str:
         if option.isdigit() and int(option) in list(self.edit_options.values()):
             return list(self.edit_options.keys())[list(self.edit_options.values()).index(int(option))]
         elif option.upper() == 'R':
@@ -72,7 +72,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
         super().return_previous_page()
 
     # ----- basic commands for volunteer account management -----
-    def do_edit_firstname(self, volunteer):
+    def do_edit_firstname(self, arg):
         volunteer_edit = self.check_username()
         print(f"Original first name is {volunteer_edit.firstname}.")
         while True:
@@ -90,7 +90,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
                     f"\033[31m** Invalid first name {firstname}. First name should have at least 2 characters.\033[00m")
                 continue
 
-    def do_edit_lastname(self):
+    def do_edit_lastname(self, arg):
         volunteer_edit = self.check_username()
         print(f"Original last name is {volunteer_edit.lastname}.")
         while True:
@@ -107,7 +107,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
                 print(f"\033[31m** Invalid last name {lastname}. Last name should have at least 2 characters.\033[00m")
                 continue
 
-    def do_edit_phone(self):
+    def do_edit_phone(self, arg):
         volunteer_edit = self.check_username()
         print(f"Original phone number is {volunteer_edit.phone}.")
         print("(Phone number should include country code with a + sign.")
@@ -126,7 +126,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
                       f"Phone number should include country code with a + sign.\033[00m")
                 continue
 
-    def do_edit_camp(self):
+    def do_edit_camp(self, arg):
         volunteer_edit = self.check_username()
         print(f"Original assigned camp is {volunteer_edit.camp} for Plan {volunteer_edit.camp.plan}.")
         while True:
@@ -137,7 +137,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
             volunteer_controller.edit_camp(volunteer_edit, camp, self.is_admin)
             print(f"Updated successfully! New assigned camp is {volunteer_edit.camp}.")
 
-    def do_edit_availability(self):
+    def do_edit_availability(self, arg):
         # need refinement
         pass
         username = input("Username: ")
@@ -149,7 +149,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
             f"Updated successfully! The availability is now {volunteer_controller.find_volunteer(username).availability}.")
         pass
 
-    def do_return_menu(self):
+    def do_return_menu(self, arg):
         if isinstance(self.user, Admin):
             ManageVolunteerMenu(self.user).cmdloop()
         elif isinstance(self.user, Volunteer):

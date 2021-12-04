@@ -109,15 +109,16 @@ class PlanMenu(AdminShell):
     """
     PlanMenu is the command line interface for emergency plan management.
     """
-    plan_options = {"logout": 0, "create_plan": 1, "view_plan": 2,
-                    "close_plan": 3,
+    plan_options = {"logout": 0, "create_plan": 1, "list_plans": 2, "view_plan": 3,
+                    "close_plan": 4,
                     "return_main_menu": "r"}
 
     def plan_menu(self) -> None:
         print("\033[100m\033[4m\033[1mManage Emergency Plan\033[0m\n"
               "[ 1 ] Create a new emergency plan\n"
-              "[ 2 ] View an emergency plan\n"
-              "[ 3 ] Close an emergency plan\n\n"
+              "[ 2 ] View all existing emergency plans\n"
+              "[ 3 ] View an emergency plan statiscis\n"
+              "[ 4 ] Close an emergency plan\n\n"
               "[ R ] Return to Main Menu\n")
 
     def precmd(self, option: str) -> str:
@@ -152,7 +153,7 @@ class PlanMenu(AdminShell):
         #1 Create a plan
         """
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new emergency plan"))
-        e_name = input("Enter emergency plan name:")
+        e_name = input("Enter emergency plan name: ")
         # -- handle emergency type
         print("Enter a emergency type from the list")
         emergency_types = plan_controller.list_emergency_types()
@@ -168,16 +169,19 @@ class PlanMenu(AdminShell):
             except KeyError:
                 print(f'Type {e_type} is not on the list. Please re-enter type:')
 
-        e_description = input("Enter description:")
-        e_geo_area = input("Enter geographical area:")
+        e_description = input("Enter description: ")
+        e_geo_area = input("Enter geographical area: ")
         while True:
             camps_input = input("Enter camp names (use comma to separate camps): ")
             camp_names = camps_input.split(",")
+            if camp_names == '':
+                print("\033[31m {}\033[00m".format("** Camp name cannot be empty."))
+                continue
             try:
                 camps = [plan_controller.create_camps(name) for name in camp_names]
                 break
             except ControllerError:
-                print("Failed to create camps. Please check and re-enter")
+                print("\033[31m {}\033[00m".format("** Failed to create camps. Please check and re-enter"))
                 continue
         try:
             plan_controller.create_plan(plan_name=e_name,
@@ -192,12 +196,19 @@ class PlanMenu(AdminShell):
             print("\033[31m {}\033[00m".format("** Unable to create an emergency plan. Press R to return and retry."))
             self.return_previous_page()
 
+    def do_list_plans(self, arg):
+        """
+        #2 List out all the existing plans
+        """
+        plan_controller.list_plans()
+        self.return_previous_page()
+
     def do_view_plan(self, arg):
         """
-        #2 View a plan
+        #3 View a plan
         """
         while True:
-            plan = input("Enter the plan name:")
+            plan = input("Enter the plan name: ")
             find_plan = plan_controller.find_plan(plan)
             try:
                 plan_controller.view_plan_statistics(find_plan)
@@ -209,10 +220,10 @@ class PlanMenu(AdminShell):
 
     def do_close_plan(self, arg):
         """
-        #3 Delete a plan
+        #4 Delete a plan
         """
         while True:
-            plan = input("Enter the plan name:")
+            plan = input("Enter the plan name: ")
             find_plan = plan_controller.find_plan(plan)
             try:
                 plan_controller.close_plan(find_plan)
@@ -274,7 +285,10 @@ class ManageVolunteerMenu(AdminShell):
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))
         # STEP 1: validate if plan exists
         while True:
-            plan = input("Enter the plan that the new volunteer belongs to:")
+            plan = input("Enter the plan that the new volunteer belongs to (or press # to exit): ")
+            if plan == '#':
+                ManageVolunteerMenu(self.user).cmdloop()
+                break
             try:
                 find_plan = plan_controller.find_plan(plan)
                 plan = find_plan
@@ -285,7 +299,10 @@ class ManageVolunteerMenu(AdminShell):
 
         # STEP 2: validate if camp exists
         while True:
-            camp = input("Enter the camp that the new volunteer belongs to:")
+            camp = input("Enter the camp that the new volunteer belongs to (or press # to exit): ")
+            if camp == '#':
+                ManageVolunteerMenu(self.user).cmdloop()
+                break
             try:
                 find_camp = plan_controller.find_camp(plan=plan, camp_name=camp)
                 camp = find_camp
@@ -295,13 +312,13 @@ class ManageVolunteerMenu(AdminShell):
                 continue
 
         # STEP 3: other user inputs
-        username = input("Enter volunteer's username:")
-        password = input("Enter volunteer's password:")
-        firstname = input("Enter volunteer's first name:")
-        lastname = input("Enter volunteer's last name:")
-        phone = input("Enter volunteer's phone (start from + sign and national code):")
-
         while True:
+            username = input("Enter volunteer's username: ")
+            password = input("Enter volunteer's password: ")
+            firstname = input("Enter volunteer's first name: ")
+            lastname = input("Enter volunteer's last name: ")
+            phone = input("Enter volunteer's phone (start from + sign and national code): ")
+
             try:
                 volunteer_controller.create_volunteer(username=username,
                                                       password=password,
@@ -313,21 +330,22 @@ class ManageVolunteerMenu(AdminShell):
                 self.return_previous_page()
                 break
             except ControllerError as e:
-                print(f'\033[31m* Failed to create volunteer \033[00m{username}.')
+                print(f'\033[31mFailed to create volunteer \033[00m{username} due to the following reasons:')
                 print(f'\033[31m* {e.message} \033[00m')
-                continue
+                self.return_previous_page()
+                break
 
     def do_view_volunteer(self, arg):
         """
         #2 View a volunteer's details
         """
         while True:
-            username = input("Enter the volunteer's username to reactivate (Press # to leave this page):")
+            username = input("Enter the volunteer's username to view (Press # to leave this page): ")
             if username == '#':
                 ManageVolunteerMenu(self.user).cmdloop()
             try:
                 find_volunteer = volunteer_controller.find_volunteer(username)
-                volunteer_controller.view_volunteer_profile(find_volunteer)
+                print(volunteer_controller.view_volunteer_profile(find_volunteer))
                 self.return_previous_page()
                 break
             except ControllerError:
@@ -338,23 +356,15 @@ class ManageVolunteerMenu(AdminShell):
         """
         #3 Edit a volunteer's details via EditVolunteerMenu
         """
-        while True:
-            username = input("Enter the volunteer's username to edit (Press # to leave this page):")
-            if username == '#':
-                ManageVolunteerMenu(self.user).cmdloop()
-            try:
-                find_volunteer = volunteer_controller.find_volunteer(username)
-                pass  # link to menu
-            except ControllerError:
-                print(f"\033[31m* Volunteer {username} not found. Please check and re-enter.\033[00m")
-                continue
+        from interfaces.edit_profile_cli import EditVolunteerMenu
+        EditVolunteerMenu(self.user).cmdloop()
 
     def do_deactivate_volunteer(self, arg):
         """
         #4 Changing a volunteer's status to deactivated
         """
         while True:
-            username = input("Enter the volunteer's username to deactivate (Press # to leave this page):")
+            username = input("Enter the volunteer's username to deactivate (Press # to leave this page): ")
             if username == '#':
                 ManageVolunteerMenu(self.user).cmdloop()
             try:
@@ -373,7 +383,7 @@ class ManageVolunteerMenu(AdminShell):
         #5 Changing a volunteer's status to active
         """
         while True:
-            username = input("Enter the volunteer's username to reactivate (Press # to leave this page):")
+            username = input("Enter the volunteer's username to reactivate (Press # to leave this page): ")
             if username == '#':
                 ManageVolunteerMenu(self.user).cmdloop()
             try:
@@ -392,7 +402,7 @@ class ManageVolunteerMenu(AdminShell):
         #6 Delete a volunteer
         """
         while True:
-            username = input("Enter the volunteer's username to delete (Press # to leave this page):")
+            username = input("Enter the volunteer's username to delete (Press # to leave this page): ")
             if username == '#':
                 ManageVolunteerMenu(self.user).cmdloop()
             try:
@@ -444,9 +454,9 @@ class ManageRefugeeMenu(AdminShell):
         #1 Create a refugee profile
         """
         print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new refugee profile"))
-        r_firstname = input("Enter refugee's first name:")
-        r_lastname = input("Enter refugee's last name:")
-        r_camp = input("Enter refugee's camp:")
+        r_firstname = input("Enter refugee's first name: ")
+        r_lastname = input("Enter refugee's last name: ")
+        r_camp = input("Enter refugee's camp: ")
         num_of_family_member = int(input("Enter the number of family members:"))
 
         # handle medical_condition
@@ -485,7 +495,7 @@ class ManageRefugeeMenu(AdminShell):
         """
         while True:
             try:
-                refugee_id = int(input("Enter the refugee's ID to view:"))
+                refugee_id = int(input("Enter the refugee's ID to view: "))
                 try:
                     find_refugee = refugee_controller.find_refugee(refugee_id)
                     refugee_controller.view_refugee(find_refugee)
