@@ -117,7 +117,7 @@ class PlanMenu(AdminShell):
         print("\033[100m\033[4m\033[1mManage Emergency Plan\033[0m\n"
               "[ 1 ] Create a new emergency plan\n"
               "[ 2 ] View all existing emergency plans\n"
-              "[ 3 ] View an emergency plan statiscis\n"
+              "[ 3 ] View an emergency plan statistics\n"
               "[ 4 ] Close an emergency plan\n\n"
               "[ R ] Return to Main Menu\n")
 

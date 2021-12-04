@@ -21,7 +21,7 @@ class VolunteerShell(EmsShell):
               "[ 0 ] Log-out\n"
               "[ X ] Exit\n")
 
-    def precmd(self, option: str) -> int:
+    def precmd(self, option: str) -> str:
         """
         Transfer option numbers to function name for volunteer menu
         """
@@ -51,4 +51,5 @@ class VolunteerShell(EmsShell):
         """
         #2: Enter ManageRefugeeMenu for further actions
         """
+        from interfaces.admin_cli import ManageRefugeeMenu
         ManageRefugeeMenu(self.user).cmdloop
