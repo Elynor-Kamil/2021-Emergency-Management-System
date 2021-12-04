@@ -51,6 +51,8 @@ def find_refugee(refugee_id: int) -> Refugee:
                 refugee = camp.refugees.get(refugee_id)
                 if refugee:
                     return refugee
+                else:
+                    raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
     except:
         raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
 
