@@ -12,7 +12,7 @@ def list_medical_condition_types() -> Type[Enum]:
     """
     List all options for medical condition type.
     """
-    return Refugee.MedicalCondition()
+    return Refugee.MedicalCondition
 
 
 def create_refugee(firstname: str,
