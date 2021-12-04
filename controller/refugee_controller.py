@@ -2,17 +2,16 @@
 from datetime import date
 from enum import Enum
 from typing import Type
-from models.plan import Plan
+
 from models.camp import Camp
 from models.refugee import Refugee
-from controller.controller_error import ControllerError
 
 
 def list_medical_condition_types() -> Type[Enum]:
     """
     List all options for medical condition type.
     """
-    return Refugee.MedicalCondition
+    pass
 
 
 def create_refugee(firstname: str,
@@ -22,41 +21,31 @@ def create_refugee(firstname: str,
                    starting_date: date,
                    medical_condition_type: Refugee.MedicalCondition) -> Refugee:
     """
-    Function to create and save refugee data.
+    Yingbo, Michelle
+    A function used by admin and volunteer.
     """
-    try:
-        new_refugee = Refugee(firstname=firstname,
-                              lastname=lastname,
-                              num_of_family_member=num_of_family_member,
-                              starting_date=starting_date,
-                              medical_condition_type=medical_condition_type)
-        camp.refugees.add(new_refugee)
-        return new_refugee
-    except (Refugee.InvalidNameException,
-            Refugee.InvalidNumOfFamilyMemberException,
-            Refugee.InvalidStartingDateException,
-            Refugee.InvalidCampException) as e:
-        raise ControllerError(str(e))
+    pass
 
 
 def find_refugee(refugee_id: int) -> Refugee:
     """
-    Function to find if refugee exists and returns the refugee class profile. Raise error if no such refugee exist.
+    Yingbo, Michelle
+
     """
-    try:
-        for plan in Plan.all():
-            for camp in plan.camps:
-                refugee = camp.refugees.get(refugee_id)
-                if refugee is not None:
-                    return refugee
-                else:
-                    raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
-    except:
-        raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
+    pass
 
 
 def view_refugee(refugee: Refugee) -> str:
     """
-    Function to be used by admin and volunteer to return refugee specified as a string.
+    Yingbo, Michelle
+    A function used by admin and volunteer.
     """
-    return str(refugee)
+    pass
+
+
+def delete_refugee(refugee: Refugee) -> None:
+    """
+    Yingbo
+    A function used by admin and volunteer.
+    """
+    pass
