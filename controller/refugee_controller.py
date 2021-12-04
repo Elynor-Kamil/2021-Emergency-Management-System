@@ -12,7 +12,7 @@ def list_medical_condition_types() -> Type[Enum]:
     """
     List all options for medical condition type.
     """
-    return Refugee.MedicalCondition()
+    return Refugee.MedicalCondition
 
 
 def create_refugee(firstname: str,
@@ -27,11 +27,11 @@ def create_refugee(firstname: str,
     try:
         for plan in Plan.all():
             if camp in plan.camps:
-                new_refugee = Refugee(firstname = firstname,
-                                      lastname = lastname,
-                                      num_of_family_member = num_of_family_member,
-                                      starting_date = starting_date,
-                                      medical_condition_type = medical_condition_type)
+                new_refugee = Refugee(firstname=firstname,
+                                      lastname=lastname,
+                                      num_of_family_member=num_of_family_member,
+                                      starting_date=starting_date,
+                                      medical_condition_type=medical_condition_type)
                 camp.refugees.add(new_refugee)
                 return new_refugee
     except (Refugee.InvalidNameException,
@@ -43,14 +43,14 @@ def create_refugee(firstname: str,
 
 def find_refugee(refugee_id: int) -> Refugee:
     """
-    Function to find if refugee exists and returns the refugee class profile. Raise error if no such refugee exist.
+    Function to find if refugee exists and returns the refugee class profile. Return None if no such refugee exist.
     """
     try:
         for plan in Plan.all():
             for camp in plan.camps:
-                refugee = camp.refugees.get(refugee_id)
-                if refugee:
-                    return refugee
+                for refugee in camp.refugees:
+                    if refugee_id == refugee.user_id:
+                        return refugee
     except:
         raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
 
@@ -60,4 +60,3 @@ def view_refugee(refugee: Refugee) -> str:
     Function to be used by admin and volunteer to return refugee specified as a string.
     """
     return str(refugee)
-
