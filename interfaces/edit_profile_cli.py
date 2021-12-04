@@ -74,40 +74,72 @@ class EditVolunteerMenu(ManageVolunteerMenu):
     # ----- basic commands for volunteer account management -----
     def do_edit_firstname(self, volunteer):
         volunteer_edit = self.check_username()
-        firstname = input(f"Original first name is {volunteer_edit.firstname}. Please enter new first name: ")
-        volunteer_controller.edit_firstname(volunteer_edit, firstname)
-        print("\x1b[6;30;42m success! \x1b[0m")
-        print(f"Volunteer's first name is changed to {volunteer_edit.firstname}")
-        self.return_previous_page()
+        print(f"Original first name is {volunteer_edit.firstname}.")
+        while True:
+            firstname = input("Please enter new first name (or press # to exit this page):")
+            if firstname == '#':
+                EditVolunteerMenu(self.user).cmdloop()
+                break
+            try:
+                volunteer_controller.edit_firstname(volunteer_edit, firstname)
+                print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's first name is changed to {volunteer_edit.firstname}")
+                self.return_previous_page()
+                break
+            except ControllerError:
+                print(
+                    f"\033[31m** Invalid first name {firstname}. First name should have at least 2 characters.\033[00m")
+                continue
 
     def do_edit_lastname(self):
-        username = input("Username: ")
-        lastname = input(
-            f"Original last name is {volunteer_controller.find_volunteer(username).lastname}. New last name: ")
-        volunteer = volunteer_controller.find_volunteer(username)
-        volunteer.edit_lastname(volunteer, lastname)
-        print(f"Updated successfully! New last name is {volunteer_controller.find_volunteer(username).lastname}.")
-        pass
+        volunteer_edit = self.check_username()
+        print(f"Original last name is {volunteer_edit.lastname}.")
+        while True:
+            lastname = input("Please enter new last name (or press # to exit this page):")
+            if lastname == '#':
+                EditVolunteerMenu(self.user).cmdloop()
+                break
+            try:
+                volunteer_controller.edit_lastname(volunteer_edit, lastname)
+                print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's last name is changed to {volunteer_edit.lastname}")
+                self.return_previous_page()
+                break
+            except ControllerError:
+                print(f"\033[31m** Invalid last name {lastname}. Last name should have at least 2 characters.\033[00m")
+                continue
 
     def do_edit_phone(self):
-        username = input("Username: ")
-        phone = input(
-            f"Original phone number is {volunteer_controller.find_volunteer(username).phone}. New phone number: ")
-        volunteer = volunteer_controller.find_volunteer(username)
-        volunteer_controller.edit_phone(volunteer, phone)
-        print(f"Updated successfully! New phone number is {volunteer_controller.find_volunteer(username).phone}.")
-        pass
+        volunteer_edit = self.check_username()
+        print(f"Original phone number is {volunteer_edit.phone}.")
+        print("(Phone number should include country code with a + sign.")
+        while True:
+            phone = input("Please enter new phone number (or press # to exit this page):")
+            if phone == '#':
+                EditVolunteerMenu(self.user).cmdloop()
+                break
+            try:
+                volunteer_controller.edit_phone(volunteer_edit, phone)
+                print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's phone number is changed to {volunteer_edit.phone}")
+                self.return_previous_page()
+                break
+            except ControllerError:
+                print(f"\033[31m** Invalid phone number {phone}. "
+                      f"Phone number should include country code with a + sign.\033[00m")
+                continue
 
     def do_edit_camp(self):
         volunteer_edit = self.check_username()
         print(f"Original assigned camp is {volunteer_edit.camp} for Plan {volunteer_edit.camp.plan}.")
         while True:
             camp = input("Enter New assigned camp:")
+            # need to add check camp
+            pass
             ### Available camps vary by user role
             volunteer_controller.edit_camp(volunteer_edit, camp, self.is_admin)
             print(f"Updated successfully! New assigned camp is {volunteer_edit.camp}.")
 
     def do_edit_availability(self):
+        # need refinement
+        pass
         username = input("Username: ")
         availability = input(
             f"Original availability is {volunteer_controller.find_volunteer(username).availability}. Switch it to: ")

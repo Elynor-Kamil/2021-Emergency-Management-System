@@ -14,7 +14,7 @@ class VolunteerShell(EmsShell):
                          "exit": "x"}
 
     def volunteer_menu(self) -> None:
-        print("\033[100m\033[4m\033[1m{}\033[0m ".format("Admin Menu"))
+        print("\033[100m\033[4m\033[1m{}\033[0m ".format("Volunteer Menu"))
         print("\033[1mWelcome to EMS. Please choose an option to continue:\033[0m\n"
               "[ 1 ] Edit my details\n"
               "[ 2 ] Manage Refugee Profile\n\n"

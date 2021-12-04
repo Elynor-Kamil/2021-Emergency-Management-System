@@ -34,7 +34,7 @@ class EmsShell(Cmd):
                     continue
                 self.user = user.login(password)
                 self.prompt = f'{self.user.username}> '
-                print(f'Welcome {self.user.username}. Your role is {self.user.__class__.__name__}.\n')
+                print(f'\033[1mWelcome {self.user.username}. Your role is {self.user.__class__.__name__}.\033[0m\n')
                 if isinstance(self.user, Admin):
                     AdminShell(self.user).cmdloop()
                 elif isinstance(self.user, Volunteer):

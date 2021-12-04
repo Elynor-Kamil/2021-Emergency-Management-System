@@ -180,12 +180,12 @@ class PlanMenu(AdminShell):
                 print("Failed to create camps. Please check and re-enter")
                 continue
         try:
-            plan_controller.create_plan(name=e_name,
+            plan_controller.create_plan(plan_name=e_name,
                                         emergency_type=e_type,
                                         description=e_description,
                                         geographical_area=e_geo_area,
                                         camps=camps)
-            print("\x1b[6;30;42m success! \x1b[0m")
+            print("\x1b[6;30;42m success! \x1b[0m\t")
             print(f"Plan {e_name} created.")
             self.return_previous_page()
         except ControllerError:
@@ -216,6 +216,8 @@ class PlanMenu(AdminShell):
             find_plan = plan_controller.find_plan(plan)
             try:
                 plan_controller.close_plan(find_plan)
+                print("\x1b[6;30;42m success! \x1b[0m\t")
+                print(f"Plan {plan} deleted.")
                 self.return_previous_page()
                 break
             except ControllerError:
@@ -272,7 +274,7 @@ class ManageVolunteerMenu(AdminShell):
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))
         # STEP 1: validate if plan exists
         while True:
-            plan = input("Enter the camp that the new volunteer belongs to:")
+            plan = input("Enter the plan that the new volunteer belongs to:")
             try:
                 find_plan = plan_controller.find_plan(plan)
                 plan = find_plan
@@ -285,7 +287,7 @@ class ManageVolunteerMenu(AdminShell):
         while True:
             camp = input("Enter the camp that the new volunteer belongs to:")
             try:
-                find_camp = plan_controller.find_camp(camp)
+                find_camp = plan_controller.find_camp(plan=plan, camp_name=camp)
                 camp = find_camp
                 break
             except ControllerError:
@@ -297,7 +299,7 @@ class ManageVolunteerMenu(AdminShell):
         password = input("Enter volunteer's password:")
         firstname = input("Enter volunteer's first name:")
         lastname = input("Enter volunteer's last name:")
-        phone = input("Enter volunteer's phone (start from +):")
+        phone = input("Enter volunteer's phone (start from + sign and national code):")
 
         while True:
             try:
@@ -308,6 +310,7 @@ class ManageVolunteerMenu(AdminShell):
                                                       phone=phone, camp=camp)
                 print("\x1b[6;30;42m success! \x1b[0m")
                 print(f"Volunteer {username} created.")
+                self.return_previous_page()
                 break
             except ControllerError as e:
                 print(f'\033[31m* Failed to create volunteer \033[00m{username}.')
