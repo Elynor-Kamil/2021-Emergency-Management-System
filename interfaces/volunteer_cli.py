@@ -25,10 +25,10 @@ class VolunteerShell(EmsShell):
         """
         Transfer option numbers to function name for volunteer menu
         """
-        if option.isdigit() and int(option) in list(self.admin_options.values()):
-            return list(self.admin_options.keys())[list(self.admin_options.values()).index(int(option))]
+        if option.isdigit() and int(option) in list(self.volunteer_options.values()):
+            return list(self.volunteer_options.keys())[list(self.volunteer_options.values()).index(int(option))]
         elif option.upper() == 'X' or option.upper() == 'R':
-            return list(self.admin_options.keys())[list(self.admin_options.values()).index(option.lower())]
+            return list(self.volunteer_options.keys())[list(self.volunteer_options.values()).index(option.lower())]
         else:
             return "invalid_input"
 
