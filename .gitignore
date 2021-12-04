@@ -1,3 +1,5 @@
 data
+test_data
 models/tests/data
+models/tests/test_data
 models/tests/.pytest_cache
