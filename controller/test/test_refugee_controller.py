@@ -2,9 +2,8 @@ import unittest
 from datetime import date
 from models.camp import Camp
 from models.refugee import Refugee
-from models.volunteer import Volunteer
 from models.plan import Plan
-from controller.refugee_controller import create_refugee, find_refugee, view_refugee
+import controller.refugee_controller as r
 
 
 class RefugeeControllerTest(unittest.TestCase):
@@ -24,7 +23,7 @@ class RefugeeControllerTest(unittest.TestCase):
 
         test_plan = Plan.find('test_plan1')
         test_camp = test_plan.camps.get('camp1')
-        new_refugee = create_refugee("James", "Bond", test_camp, 6, date(2020, 1, 1), {Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER})
+        new_refugee = r.create_refugee("James", "Bond", test_camp, 6, date(2020, 1, 1), {Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER})
         self.assertIsInstance(new_refugee, Refugee)
 
 
@@ -47,7 +46,7 @@ class RefugeeControllerTest(unittest.TestCase):
                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee)
         refugee_user_id = refugee.user_id
-        retrieved_refugee = find_refugee(refugee_user_id)
+        retrieved_refugee = r.find_refugee(refugee_user_id)
         self.assertEqual(refugee, retrieved_refugee)
 
 
@@ -69,7 +68,7 @@ class RefugeeControllerTest(unittest.TestCase):
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
         refugee_user_id = 1111111111
-        refugee = find_refugee(refugee_user_id)
+        refugee = r.find_refugee(refugee_user_id)
         self.assertIsNone(refugee, refugee1)
 
 
@@ -90,7 +89,7 @@ class RefugeeControllerTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
-        refugee_str = view_refugee(refugee1)
+        refugee_str = r.view_refugee(refugee1)
         self.assertEqual(refugee_str, str(refugee1))
 
 if __name__ == '__main__':

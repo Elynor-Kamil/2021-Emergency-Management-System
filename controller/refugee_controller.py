@@ -43,14 +43,14 @@ def create_refugee(firstname: str,
 
 def find_refugee(refugee_id: int) -> Refugee:
     """
-    Function to find if refugee exists and returns the refugee class profile. Return None if no such refugee exist.
+    Function to find if refugee exists and returns the refugee class profile. Raise error if no such refugee exist.
     """
     try:
         for plan in Plan.all():
             for camp in plan.camps:
-                for refugee in camp.refugees:
-                    if refugee_id == refugee.user_id:
-                        return refugee
+                refugee = camp.refugees.get(refugee_id)
+                if refugee:
+                    return refugee
     except:
         raise ControllerError(f"Invalid refugee refugee_id: {refugee_id}. The refugee is not found.")
 
@@ -60,3 +60,4 @@ def view_refugee(refugee: Refugee) -> str:
     Function to be used by admin and volunteer to return refugee specified as a string.
     """
     return str(refugee)
+
