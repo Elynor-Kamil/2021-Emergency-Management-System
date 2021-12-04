@@ -7,6 +7,7 @@ from interfaces.cli import EmsShell
 
 from models.admin import Admin
 from models.camp import Camp
+from models.refugee import Refugee
 from models.user import User, require_role
 from models.volunteer import Volunteer
 from models.plan import Plan
@@ -60,12 +61,24 @@ class AdminShell(EmsShell):
         CEND = '\033[0m'
         print(f"{CRED} * Wrong input: Please re-enter an option from the menu, or enter X to exit.{CEND}")
 
+    def return_previous_page(self):
+        """
+        User returns to previous menu after action completed.
+        """
+        while True:
+            option = input("Enter R to return back to the previous menu.\n > ")
+            if option.upper() == 'R':
+                AdminShell(self.user).cmdloop()
+            else:
+                print("\033[31m {}\033[00m".format("** Invalid input. Enter R to return back to main menu."))
+                continue
+
     # ----- basic commands for admins-----
     def do_profile(self, arg):
         """
         Print user info
         """
-        print("\033[100m\033[4m\033[1m{}\033[0m\n".format("Your details:") +
+        print("\n\033[100m\033[4m\033[1m{}\033[0m\n".format("Your details:") +
               f'Username: {self.user.username}\n'
               f'Role: {self.user.__class__.__name__}\n')
         self.return_previous_page()
@@ -121,12 +134,17 @@ class PlanMenu(AdminShell):
     def preloop(self) -> None:
         """
         Display plan menu.
-        :return:
         """
         self.plan_menu()
 
     def return_previous_page(self):
-        super().return_previous_page()
+        while True:
+            option = input("Enter R to return back to the previous menu.\n > ")
+            if option.upper() == 'R':
+                PlanMenu(self.user).cmdloop()
+            else:
+                print("\033[31m {}\033[00m".format("** Invalid input. Enter R to return back to main menu."))
+                continue
 
     # ----- basic commands -----
     def do_create_plan(self, arg):
@@ -151,7 +169,7 @@ class PlanMenu(AdminShell):
                 print(f'Type {e_type} is not on the list. Please re-enter type:')
 
         e_description = input("Enter description:")
-        e_geo_area = input("Enter graphical area:")
+        e_geo_area = input("Enter geographical area:")
         while True:
             camps_input = input("Enter camp names (use comma to separate camps): ")
             camp_names = camps_input.split(",")
@@ -233,7 +251,6 @@ class ManageVolunteerMenu(AdminShell):
     def preloop(self) -> None:
         """
         Display manage volunteer menu.
-        :return:
         """
         self.volunteer_menu()
 
@@ -244,7 +261,7 @@ class ManageVolunteerMenu(AdminShell):
                 ManageVolunteerMenu(self.user).cmdloop()
                 break
             else:
-                print("Invalid input. Please try again.")
+                print("\033[31m {}\033[00m".format("** Invalid input. Enter R to return back to main menu."))
                 continue
 
     # ----- basic commands for volunteer account management -----
@@ -278,8 +295,8 @@ class ManageVolunteerMenu(AdminShell):
         # STEP 3: other user inputs
         username = input("Enter volunteer's username:")
         password = input("Enter volunteer's password:")
-        firstname = input("Enter volunteer's firstname:")
-        lastname = input("Enter volunteer's lastname:")
+        firstname = input("Enter volunteer's first name:")
+        lastname = input("Enter volunteer's last name:")
         phone = input("Enter volunteer's phone (start from +):")
 
         while True:
@@ -423,7 +440,7 @@ class ManageRefugeeMenu(AdminShell):
         """
         #1 Create a refugee profile
         """
-        print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new refugee profile"))
+        print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new refugee profile"))
         r_firstname = input("Enter refugee's first name:")
         r_lastname = input("Enter refugee's last name:")
         r_camp = input("Enter refugee's camp:")
@@ -436,13 +453,14 @@ class ManageRefugeeMenu(AdminShell):
         for key in medical_dict.keys():
             print(f'- {key}')
         while True:
-            medical_condition = input(">")
+            medical_condition = input("Enter refugee's medical condition from the list")
             try:
-                emergency = medical_dict[medical_condition]
-                medical_condition: Plan.EmergencyType = emergency
+                in_medical_condition = medical_dict[medical_condition]
+                medical_condition: Refugee.MedicalCondition = in_medical_condition
                 break
             except KeyError:
-                print(f'Type {medical_condition} is not on the list. Please re-enter type:')
+                print(f'\033[31m* Type {medical_condition} is not on the list.\033[00m')
+                continue
 
         while True:
             try:
@@ -455,7 +473,7 @@ class ManageRefugeeMenu(AdminShell):
                 self.return_previous_page()
                 break
             except ControllerError:
-                print(f'\033[31m* Failed to create a refugee profile for\033[00m {r_firstname} {r_lastname} ')
+                print(f'\033[31m* Failed to create a refugee profile for\033[00m {r_firstname} {r_lastname}')
                 continue
 
     def do_view_refugee(self, arg):
@@ -474,7 +492,7 @@ class ManageRefugeeMenu(AdminShell):
                     print(f"{refugee_id} not found. Please check and re-enter.")
                     continue
             except ValueError:
-                print("Invalid entry, please check and re-enter.")
+                print(f'\033[31m* Invalid refugee ID {refugee_id}. Please check and re-enter.\033[00m')
 
     def do_return_main_menu(self, arg):
         AdminShell(self.user).cmdloop()
