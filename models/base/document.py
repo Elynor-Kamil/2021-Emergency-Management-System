@@ -77,6 +77,10 @@ class Document(metaclass=MetaDocument):
             super().__init__(f"Instanced is not referenced by "
                              f"{attribute_name or 'any field'} in {referrer_type or 'Any type'}")
 
+    class PersistenceError(Exception):
+        def __init__(self, message):
+            super().__init__(message)
+
     @persist
     def __init__(self, **kwargs):
         """
@@ -198,6 +202,9 @@ class Document(metaclass=MetaDocument):
         referrer_roots = set()
         for referrer in self._referenced_by:
             root = referrer._get_root_document()
+            if not root:
+                raise self.PersistenceError(f'Cannot save {repr(self)} because it is referenced by '
+                                            f'{repr(referrer)} which does not have a persistent parent.')
             referrer_roots.add((root.__module__, getattr(root.__class__, '__qualname__', root.__class__.__name__)))
         state['_referrer_roots'] = referrer_roots
         state['_referenced_by'] = []
@@ -268,6 +275,11 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         super().__init__(**kwargs)
         self.__class__.__objects[self.key] = self
 
+        # Also save to parent indices
+        for persistence_base in self._persistence_bases:
+            persistence_base.__index_subclass_add(self)
+            persistence_base._persist()
+
     @classmethod
     def reload(cls) -> None:
         """
@@ -325,36 +337,41 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         if cls.__objects is None:
             cls.reload()
 
-    def _persist(self) -> None:
+    @classmethod
+    def _persist(cls) -> None:
         """
         Save all documents of the same type (i.e. the index) to disk.
         If the class is a subclass of IndexedDocument, also persist to parent indices.
         """
-        self.__class__.check_and_load_data()
-        os.makedirs(os.path.dirname(self._persistence_path), exist_ok=True)
-        with open(self._persistence_path, 'wb') as f:
-            self.Pickler(f, self.__class__).dump(self.__class__.__objects)
-
-        # Also save to parent indices
-        for persistence_base in self._persistence_bases:
-            persistence_base.__index_subclass(self)
+        cls.check_and_load_data()
+        os.makedirs(os.path.dirname(cls._persistence_path), exist_ok=True)
+        with open(cls._persistence_path, 'wb') as f:
+            cls.Pickler(f, cls).dump(cls.__objects)
 
     def _get_root_document(self):
         return self
 
     @classmethod
-    def __index_subclass(cls, child: Document) -> None:
+    def __index_subclass_add(cls, child: Document) -> None:
         """
         Save a subclass instance to the index of the parent (this) class.
-        To be called from the _persist method of a subclass of another IndexedDocument,
+        To be called from the __init__ method of a subclass of another IndexedDocument,
         such as to replace instances in the index of the parent class with instances of the subclass.
-        :param child: child instance to be saved
+        :param child: child instance to be added
         """
         cls.check_and_load_data()
         cls.__objects[child.key] = child
-        os.makedirs(os.path.dirname(cls._persistence_path), exist_ok=True)
-        with open(cls._persistence_path, 'wb') as f:
-            pickle.dump(cls.__objects, f)
+
+
+    @classmethod
+    def __index_subclass_remove(cls, child: Document) -> None:
+        """
+        Remove a subclass instance from the index of the parent (this) class.
+        To be called from the delete method of a subclass of another IndexedDocument,
+        :param child: child instance to be deleted
+        """
+        cls.check_and_load_data()
+        del cls.__objects[child.key]
 
     @classmethod
     def find(cls, key) -> Union[None, IndexedDocument]:
@@ -382,6 +399,10 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         self.__class__.check_and_load_data()
         del self.__class__.__objects[self.key]
         self._persist()
+        # Also save to parent indices
+        for persistence_base in self._persistence_bases:
+            persistence_base.__index_subclass_remove(self)
+            persistence_base._persist()
         super().delete()
 
     @classmethod

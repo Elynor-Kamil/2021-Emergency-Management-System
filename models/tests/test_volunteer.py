@@ -1,4 +1,6 @@
 import unittest
+
+from models.user import User
 from models.volunteer import Volunteer
 
 
@@ -11,12 +13,14 @@ class TestVolunteer(unittest.TestCase):
         volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
                               phone='+447519953189')
         self.assertIsInstance(volunteer, Volunteer)
+        self.assertEqual(User.find('yunsy'), volunteer)
 
     def test_delete_volunteer(self):
         volunteer = Volunteer(username='peter', password='1234', firstname='Peter', lastname='Green',
                               phone='+447519953189')
         volunteer.delete()
         self.assertIsNone(Volunteer.find('peter'))
+        self.assertIsNone(User.find('peter'))
 
     def test_deactivate_volunteer(self):
         volunteer = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
