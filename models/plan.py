@@ -134,7 +134,7 @@ class Plan(IndexedDocument):
         """
         return self.__is_closed
 
-    def plan_statistics_function(self):
+    def statistics(self):
         """
         Review the plan data and return each camp in the plan with total active volunteers and total refugees.
         :return: {'Camp': {'num_of_refugees': int, 'num_of_volunteers': int, 'num_volunteers_vs_standard': int}}
@@ -152,7 +152,7 @@ class Plan(IndexedDocument):
 
     def __find_num_of_volunteers_vs_ideal_volunteers_num(self, num_of_volunteers, num_of_refugees) -> str:
         """
-        Function to find number of volunteers:ideal number of volunteers ratio by ideal 1:20 number volunteer ratio.
+        Function to find number of volunteers:ideal number of volunteers ratio by ideal 1:20 volunteer number ratio.
         """
         TARGET_REFUGEE_VOLUNTEER_RATIO = 20
         ideal_volunteers_num = int(math.ceil(num_of_refugees / TARGET_REFUGEE_VOLUNTEER_RATIO))

@@ -50,7 +50,7 @@ def view_plan_statistics(plan: Plan) -> str:
     Display plan statistics.
     """
 
-    plan_statistics = plan.plan_statistics_function()
+    plan_statistics = plan.statistics()
     plan_name = str(plan.name)
     plan_info = f"Plan name: {plan_name}\n"
     statistics = ""

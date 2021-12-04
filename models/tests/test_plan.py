@@ -1,6 +1,7 @@
 import unittest
 from datetime import date
-
+from models.refugee import Refugee
+from models.volunteer import Volunteer
 from models.camp import Camp
 from models.plan import Plan
 
@@ -150,3 +151,97 @@ class PlanTest(unittest.TestCase):
                     camps=[Camp(name='TestCamp')])
         plan.close()
         self.assertEqual(date.today(), plan.close_date)
+
+
+class PlanStatisticsTest(unittest.TestCase):
+    """Class for testing cases involving refugee and volunteer counts in plan statistics."""
+
+    def tearDown(self):
+        """
+        Function to delete stored data after a test has finished running
+        to avoid corrupting other tests
+        """
+        Plan.delete_all()
+        Volunteer.delete_all()
+
+    def test_plan_statistics_for_one_camp(self):
+        """
+        Test to check number of volunteers and refugees returned by statistics function
+        for a single camp is correct.
+        Also tests the feature to check how many additional volunteers are recommended (number of refugees / 20),
+        hence should return 27 in the third list position in the plan_statistics value list.
+        """
+        Plan(name='test_plan1',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp1')])
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
+                                phone='+447519953189')
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
+                                phone='+447519955439')
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
+                                phone='+447511111111')
+        test_plan = Plan.find('test_plan1')
+        test_camp = test_plan.camps.get('camp1')
+        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
+        refugee1 = Refugee(firstname="Tom",
+                           lastname="Bond",
+                           num_of_family_member=600,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+        test_camp.refugees.add(refugee1)
+        test_plan_statistics = Plan.statistics(test_plan)
+        test_dictionary = {'camp1': {'num_of_refugees': 600,
+                                     'num_of_volunteers': 3,
+                                     'num_volunteers_vs_standard': '3:30'}
+        }
+        self.assertDictEqual(test_dictionary, test_plan_statistics)
+
+    def test_plan_statistics_two_plans_exist(self):
+        """
+        Test to check number of volunteers and refugees returned by statistics fucntion
+        for a single camp is correct, when there is another plan that also exists with volunteers and refugees.
+        Also tests where number of volunteers needed is less than the number currently at the camp,
+        hence should return 0 extra volunteers required at the end of the plan_statistics dictionary.
+        """
+        Plan(name='test_plan1',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp1')])
+        Plan(name='test_plan2',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp2')])
+        volunteer_a = Volunteer(username='William', password='root', firstname='William', lastname='Yin',
+                                phone='+447519953189')
+        volunteer_b = Volunteer(username='Mary', password='root', firstname='Mary', lastname='Shoemaker',
+                                phone='+447519955439')
+        volunteer_c = Volunteer(username='Lily', password='root', firstname='Lily', lastname='Smith',
+                                phone='+447511111111')
+        test_plan1 = Plan.find('test_plan1')
+        test_camp1 = test_plan1.camps.get('camp1')
+        test_camp1.volunteers.add(volunteer_a, volunteer_b)
+        test_plan2 = Plan.find('test_plan2')
+        test_camp2 = test_plan2.camps.get('camp2')
+        test_camp2.volunteers.add(volunteer_c)
+        refugee1 = Refugee(firstname="Tom",
+                           lastname="Bond",
+                           num_of_family_member=6,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+        refugee2 = Refugee(firstname="Terry",
+                           lastname="Bimble",
+                           num_of_family_member=2,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+        test_camp1.refugees.add(refugee1)
+        test_plan_statistics1 = Plan.statistics(test_plan1)
+        test_camp2.refugees.add(refugee2)
+        test_plan_statistics2 = Plan.statistics(test_plan2)
+        test_dictionary = {'camp1': {'num_of_refugees': 6,
+                                     'num_of_volunteers': 2,
+                                     'num_volunteers_vs_standard': '2:1'}}
+        self.assertDictEqual(test_dictionary, test_plan_statistics1)
