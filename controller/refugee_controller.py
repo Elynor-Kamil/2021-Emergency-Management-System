@@ -1,11 +1,11 @@
 ###---- Manage Refugee Menu ----
 from datetime import date
+from controller.controller_error import ControllerError
 from enum import Enum
 from typing import Type
 from models.plan import Plan
 from models.camp import Camp
 from models.refugee import Refugee
-from controller.controller_error import ControllerError
 
 
 def list_medical_condition_types() -> Type[Enum]:

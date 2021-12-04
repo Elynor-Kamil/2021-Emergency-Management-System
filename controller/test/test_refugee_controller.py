@@ -86,6 +86,3 @@ class RefugeeControllerTest(unittest.TestCase):
         test_camp.refugees.add(refugee)
         refugee_str = rc.view_refugee(refugee)
         self.assertEqual(refugee_str, str(refugee))
-
-if __name__ == '__main__':
-    unittest.main()
