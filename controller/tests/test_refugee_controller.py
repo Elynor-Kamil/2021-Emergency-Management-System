@@ -1,8 +1,8 @@
 import unittest
 from datetime import date
 from models.camp import Camp
-from models.refugee import Refugee
 from models.plan import Plan
+from models.refugee import Refugee
 import controller.refugee_controller as rc
 
 
