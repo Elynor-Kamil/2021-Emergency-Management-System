@@ -9,6 +9,7 @@ class TestVolunteerController(unittest.TestCase):
 
     def setUp(self):
         Volunteer.delete_all()
+        Plan.delete_all()
         camp_1 = Camp(name='Camp-1')
         camp_2 = Camp(name='Camp-2')
         camp_3 = Camp(name='Camp-3')
@@ -27,45 +28,51 @@ class TestVolunteerController(unittest.TestCase):
 
     def test_create_volunteer(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
-        volunteer = vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        volunteer = vc.create_volunteer(username='dennis', password='root', firstname='Dennis', lastname='Yung',
                                         phone='+447519953189', camp=camp)
         self.assertIsInstance(volunteer, Volunteer)
 
     def test_create_volunteer_invalid_username(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
         with self.assertRaises(vc.ControllerError):
-            vc.create_volunteer(username='yun', password='root', firstname='Yunsy', lastname='Yin',
+            vc.create_volunteer(username='den', password='root', firstname='Dennis', lastname='Yung',
                                 phone='+447519953189', camp=camp)
 
     def test_create_volunteer_invalid_password(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
         with self.assertRaises(vc.ControllerError):
-            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Yin',
+            vc.create_volunteer(username='dennis', password='roo', firstname='Dennis', lastname='Yung',
                                 phone='+447519953189', camp=camp)
 
     def test_create_volunteer_invalid_firstname(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
         with self.assertRaises(vc.ControllerError):
-            vc.create_volunteer(username='yunsy', password='roo', firstname='Y', lastname='Yin',
+            vc.create_volunteer(username='dennis', password='root', firstname='D', lastname='Yung',
                                 phone='+447519953189', camp=camp)
 
     def test_create_volunteer_invalid_lastname(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
         with self.assertRaises(vc.ControllerError):
-            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Y',
+            vc.create_volunteer(username='dennis', password='root', firstname='Dennis', lastname='Y',
                                 phone='+447519953189', camp=camp)
 
     def test_create_volunteer_invalid_phone_without_international_code(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
         with self.assertRaises(vc.ControllerError):
-            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Yin',
+            vc.create_volunteer(username='dennis', password='root', firstname='Dennis', lastname='Yung',
                                 phone='07519953189', camp=camp)
 
     def test_create_volunteer_invalid_phone_too_short(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
         with self.assertRaises(vc.ControllerError):
-            vc.create_volunteer(username='yunsy', password='roo', firstname='Yunsy', lastname='Yin',
+            vc.create_volunteer(username='dennis', password='root', firstname='Dennis', lastname='Yung',
                                 phone='+44751', camp=camp)
+
+    def test_create_volunteer_duplicate_username(self):
+        camp = Plan.find(key='Plan-1').camps.get('Camp-1')
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+                                phone='+447519953189', camp=camp)
 
     def test_find_volunteer(self):
         volunteer = vc.find_volunteer('yunsy')

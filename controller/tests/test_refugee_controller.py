@@ -11,6 +11,9 @@ class RefugeeControllerTest(unittest.TestCase):
     Class for testing cases in create refugee function.
     """
 
+    def setUp(self):
+        Plan.delete_all()
+
     def test_create_refugee(self):
         """
         Test Refugee creation
@@ -83,3 +86,6 @@ class RefugeeControllerTest(unittest.TestCase):
         test_camp.refugees.add(refugee)
         refugee_str = rc.view_refugee(refugee)
         self.assertEqual(refugee_str, str(refugee))
+
+    def tearDown(self) -> None:
+        Plan.delete_all()

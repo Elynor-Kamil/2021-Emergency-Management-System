@@ -1,3 +1,4 @@
+from models.base.document import Document
 from models.volunteer import Volunteer
 from models.camp import Camp
 from controller.controller_error import ControllerError
@@ -21,6 +22,8 @@ def create_volunteer(username: str,
             Volunteer.InvalidLastnameException,
             Volunteer.InvalidPhoneException) as e:
         raise ControllerError(str(e))
+    except Document.DuplicateKeyError as e:
+        raise ControllerError(f"User {username} already exists. Please try again.")
 
 
 def find_volunteer(username: str) -> Volunteer:

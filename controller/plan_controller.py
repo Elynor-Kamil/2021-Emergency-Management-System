@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Iterable, Type
 
+from models.base.document import Document
 from models.plan import Plan
 from models.camp import Camp
 from controller import controller_error
@@ -29,11 +30,15 @@ def create_plan(plan_name: str, emergency_type: Plan.EmergencyType, description:
 
     TODO : once issue #38 is resolved, need to add exception for camps having the same name.
     """
+    if Plan.find(key=plan_name) is not None:
+        raise controller_error.ControllerError(f'Plan with name {plan_name} already exists.')
     try:
         return Plan(name=plan_name, emergency_type=emergency_type, description=description,
                     geographical_area=geographical_area, camps=camps)
     except Plan.MissingCampsError as e:
         raise controller_error.ControllerError(str(e))
+    except Document.DuplicateKeyError:
+        raise controller_error.ControllerError('Duplicate camp names are not allowed.')
 
 
 def list_plans() -> list:
