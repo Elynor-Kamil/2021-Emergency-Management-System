@@ -1,15 +1,7 @@
-from cmd import Cmd
-import sys
-from datetime import datetime
-
 from controller.controller_error import ControllerError
-from interfaces.cli import EmsShell
+from interfaces.cmd.cli import EmsShell
 
-from models.admin import Admin
-from models.camp import Camp
 from models.refugee import Refugee
-from models.user import User, require_role
-from models.volunteer import Volunteer
 from models.plan import Plan
 import controller.plan_controller as plan_controller
 import controller.refugee_controller as refugee_controller
@@ -25,7 +17,7 @@ class AdminShell(EmsShell):
                      "manage_refugee_profile": 4, "exit": "x"}
 
     def admin_menu(self) -> None:
-        print("\033[100m\033[4m\033[1m{}\033[0m ".format("Admin Menu"))
+        print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Admin Menu"))
         print("\033[1mWelcome to EMS. Please choose an option to continue:\033[0m\n"
               "[ 1 ] View my details\n"
               "[ 2 ] Manage an emergency plan (Create/Close/View)\n"
@@ -245,10 +237,10 @@ class ManageVolunteerMenu(AdminShell):
     ManageVolunteerMenu is the sub-class of command line interface for admin role.
     It will be launched when the admin choose #3 and enter do_manage_volunteer_account().
     """
-    admin_options = {"logout": 0, "create_volunteer": 1, "view_volunteer": 2,
-                     "edit_volunteer": 3, "deactivate_volunteer": 4, "reactivate_volunteer": 5,
-                     "delete_volunteer": 6,
-                     "return_main_menu": "r"}
+    manage_volunteer = {"logout": 0, "create_volunteer": 1, "view_volunteer": 2,
+                        "edit_volunteer": 3, "deactivate_volunteer": 4, "reactivate_volunteer": 5,
+                        "delete_volunteer": 6,
+                        "return_main_menu": "r"}
 
     def volunteer_menu(self) -> None:
         print("\n\033[100m\033[4m\033[1m{}\033[0m\n".format("Manage Volunteer Accounts"))
@@ -267,6 +259,17 @@ class ManageVolunteerMenu(AdminShell):
         Display manage volunteer menu.
         """
         self.volunteer_menu()
+
+    def precmd(self, option: str) -> str:
+        """
+        Transfer option numbers to function name for Admin Menu
+        """
+        if option.isdigit() and int(option) in list(self.manage_volunteer.values()):
+            return list(self.manage_volunteer.keys())[list(self.manage_volunteer.values()).index(int(option))]
+        elif option.upper() == 'R':
+            return list(self.manage_volunteer.keys())[list(self.manage_volunteer.values()).index(option.lower())]
+        else:
+            return "invalid_input"
 
     def return_previous_page(self) -> bool:
         while True:
@@ -357,7 +360,7 @@ class ManageVolunteerMenu(AdminShell):
         """
         #3 Edit a volunteer's details via EditVolunteerMenu
         """
-        from interfaces.edit_profile_cli import EditVolunteerMenu
+        from interfaces.cmd.edit_profile_cli import EditVolunteerMenu
         EditVolunteerMenu(self.user).cmdloop()
 
     def do_deactivate_volunteer(self, arg):
@@ -444,7 +447,7 @@ class ManageRefugeeMenu(AdminShell):
         """
         if option.isdigit() and int(option) in list(self.refugee_menu.values()):
             return list(self.refugee_menu.keys())[list(self.refugee_menu.values()).index(int(option))]
-        elif option.upper() == 'X':
+        elif option.upper() == 'R':
             return list(self.refugee_menu.keys())[list(self.refugee_menu.values()).index(option.lower())]
         else:
             return "invalid_input"
@@ -455,6 +458,35 @@ class ManageRefugeeMenu(AdminShell):
         #1 Create a refugee profile
         """
         print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new refugee profile"))
+
+        # STEP 1: validate if plan exists
+        while True:
+            plan = input("Enter the plan that the refugee belongs to (or press # to exit): ")
+            if plan == '#':
+                ManageRefugeeMenu(self.user).cmdloop()
+                break
+            try:
+                find_plan = plan_controller.find_plan(plan)
+                plan = find_plan
+                break
+            except ControllerError:
+                print(f"\033[31m * Plan {plan} not found. Please re-enter plan name. \033[00m")
+                continue
+
+        # STEP 2: validate if camp exists
+        while True:
+            camp = input("Enter the camp that the new refugee belongs to (or press # to exit): ")
+            if camp == '#':
+                ManageRefugeeMenu(self.user).cmdloop()
+                break
+            try:
+                find_camp = plan_controller.find_camp(plan=plan, camp_name=camp)
+                camp = find_camp
+                break
+            except ControllerError:
+                print(f"\033[31m * Camp {camp} not found. Please re-enter camp name. \033[00m")
+                continue
+
         r_firstname = input("Enter refugee's first name: ")
         r_lastname = input("Enter refugee's last name: ")
         r_camp = input("Enter refugee's camp: ")
@@ -480,7 +512,8 @@ class ManageRefugeeMenu(AdminShell):
             try:
                 refugee = refugee_controller.create_refugee(firstname=r_firstname, lastname=r_lastname, camp=r_camp,
                                                             num_of_family_member=num_of_family_member,
-                                                            medical_condition_type=medical_condition)
+                                                            medical_condition_type=medical_condition,
+                                                            starting_date=None)
                 print("\x1b[6;30;42m success! \x1b[0m\r")
                 print(f"Refugee {r_firstname} {r_lastname} created. Refugee ID: {refugee.user_id}.")
                 print(f"Please note down refugee ID as it is required when viewing refugee profile.")

@@ -1,9 +1,4 @@
-from cmd import Cmd
-
-from interfaces.cli import EmsShell
-from models.admin import Admin
-from models.user import User, require_role
-from models.volunteer import Volunteer
+from interfaces.cmd.cli import EmsShell
 
 
 class VolunteerShell(EmsShell):
@@ -51,5 +46,5 @@ class VolunteerShell(EmsShell):
         """
         #2: Enter ManageRefugeeMenu for further actions
         """
-        from interfaces.admin_cli import ManageRefugeeMenu
+        from interfaces.cmd.admin_cli import ManageRefugeeMenu
         ManageRefugeeMenu(self.user).cmdloop

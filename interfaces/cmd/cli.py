@@ -21,8 +21,8 @@ class EmsShell(Cmd):
         Prompts the user for a username and password to login to EMS.
         Loop until the user enters a valid username and password.
         """
-        from interfaces.admin_cli import AdminShell
-        from interfaces.volunteer_cli import VolunteerShell
+        from interfaces.cmd.admin_cli import AdminShell
+        from interfaces.cmd.volunteer_cli import VolunteerShell
 
         while self.user is None:
             username = input('Username: ')

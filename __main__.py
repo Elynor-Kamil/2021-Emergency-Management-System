@@ -1,4 +1,4 @@
-from interfaces.cli import EmsShell
+from interfaces.cmd.cli import EmsShell
 from models.admin import Admin
 
 if __name__ == '__main__':

@@ -1,6 +1,13 @@
+import sys
+
+from models.admin import Admin
+from models.user import User
+from models.volunteer import Volunteer
+
+
 class BaseMenu:
     menu_items = []
-    welcome_message = "Welcome to the menu!"
+    welcome_message = "\033[96m{}\033[0m".format("Welcome to EMS, please enter your details.")
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -53,52 +60,36 @@ class BaseMenu:
 
 
 class LoginPage:
+    def __init__(self, user=None) -> object:
+        self.user = user
 
     def run(self):
+        from interfaces.AdminMenu import AdminMenu
+        from interfaces.VolunteerMenu import VolunteerMenu
         # login
-        if isinstance(user, Admin):
-            AdminMenu().run()
-        elif isinstance(user, Volunteer):
-            VolunteerMenu().run()
-        else:
-            print('Invalid user type, please contact administrator')
-
-
-class DemoMenu(BaseMenu):
-    user = None
-
-    def do_demo(self):
-        """Prints 'Hello World'"""
-        print('Hello World')
-
-    def do_greeting(self):
-        """Personalised greeting"""
-        if self.user:
-            print(f'Hello {self.user}')
-        else:
-            print('Please login first')
-
-    def do_login(self):
-        """Login"""
-        user = input('Enter your name: ')
-        self.user = user
-        print('Logged in')
-
-    def do_mange_plans(self):
-        """Manage plans"""
-        print('You are back to demo menu')
-        self.print_menu()
-
-    def logout(self):
-        """Logout"""
-        print('Logged out')
-
-    @classmethod
-    def named_operations(cls):
-        return super().named_operations() | {
-            'O': cls.logout
-        }
+        while self.user is None:
+            username = input('Username: ')
+            password = input('Password: ')
+            try:
+                user = User.find(username)
+                if not user:
+                    print("\033[31m {}\033[00m".format('** Account not found.'))
+                    continue
+                self.user = user.login(password)
+                self.prompt = f'{self.user.username}> '
+                print(f'\033[1mWelcome {self.user.username}. Your role is {self.user.__class__.__name__}.\033[0m\n')
+                if isinstance(self.user, Admin):
+                    AdminMenu().run()
+                elif isinstance(self.user, Volunteer):
+                    if self.user.account_activated == True:
+                        VolunteerMenu().run()
+                    else:
+                        print("\033[31m {}\033[00m".format("** Your account is deactivated. Please contact admin."))
+                        sys.exit()
+            except (KeyError, User.InvalidPassword):
+                print("\033[31m {}\033[00m".format("** Invalid username or password. Please try again."))
 
 
 if __name__ == '__main__':
-    DemoMenu().run()
+    Admin.configure_initial_user()
+    LoginPage().run()
