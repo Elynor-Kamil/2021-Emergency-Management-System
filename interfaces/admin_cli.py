@@ -209,9 +209,10 @@ class PlanMenu(AdminShell):
         """
         while True:
             plan = input("Enter the plan name: ")
-            find_plan = plan_controller.find_plan(plan)
             try:
-                plan_controller.view_plan_statistics(find_plan)
+                find_plan = plan_controller.find_plan(plan)
+                print("\033[100m\033[4m\033[1m{}\033[0m\n".format("View Plan statistics"))
+                print(plan_controller.view_plan_statistics(find_plan))
                 self.return_previous_page()
                 break
             except ControllerError:
