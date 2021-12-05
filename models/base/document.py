@@ -289,13 +289,13 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         try:
             with open(cls._persistence_path, 'rb') as f:
                 cls.__objects = cls.Unpickler(f).load()
+                cls.__data_loaded = cls.__name__
                 for key in cls.__objects:
                     # Restore deferred references to referees
                     cls.__objects[key] = cls.__restore_reference(cls.__objects[key])
                     # Load all indices referring to this document to relink referrers
                     cls.__restore_referrer(cls.__objects[key])
             # Mark as loaded with this class, so that subclasses will load their own data
-            cls.__data_loaded = cls.__name__
         except FileNotFoundError:
             cls.__objects = {}
 
