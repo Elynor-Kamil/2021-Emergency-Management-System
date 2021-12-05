@@ -223,6 +223,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     """
 
     __objects = None
+    __data_loaded = None
 
     class Pickler(pickle.Pickler):
         """
@@ -293,6 +294,8 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
                     cls.__objects[key] = cls.__restore_reference(cls.__objects[key])
                     # Load all indices referring to this document to relink referrers
                     cls.__restore_referrer(cls.__objects[key])
+            # Mark as loaded with this class, so that subclasses will load their own data
+            cls.__data_loaded = cls.__name__
         except FileNotFoundError:
             cls.__objects = {}
 
@@ -332,9 +335,9 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
     @classmethod
     def check_and_load_data(cls):
         """
-        Check if the index is loaded, if not, load it.
+        Check if the index of the current class is loaded, if not, load it.
         """
-        if cls.__objects is None:
+        if cls.__data_loaded != cls.__name__:
             cls.reload()
 
     @classmethod
