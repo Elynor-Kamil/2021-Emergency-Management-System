@@ -298,6 +298,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
             # Mark as loaded with this class, so that subclasses will load their own data
         except FileNotFoundError:
             cls.__objects = {}
+            cls.__data_loaded = cls.__name__
 
     @classmethod
     def __restore_reference(cls, value):
