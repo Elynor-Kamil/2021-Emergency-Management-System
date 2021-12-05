@@ -16,26 +16,25 @@ class RefugeeControllerTest(unittest.TestCase):
         Test Refugee creation
         """
         test_camp = Camp(name='camp1')
-        test_plan = Plan(name='test_plan',
-                         emergency_type=Plan.EmergencyType.EARTHQUAKE,
-                         description='Test emergency plan',
-                         geographical_area='London',
-                         camps=[test_camp])
-        new_refugee = rc.create_refugee("James", "Bond", test_camp, 6, date(2020, 1, 1), {Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER})
+        Plan(name='test_plan',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[test_camp])
+        new_refugee = rc.create_refugee("James", "Bond", test_camp, 6, date(2020, 1, 1),
+                                        [Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         self.assertIsInstance(new_refugee, Refugee)
-
-
 
     def test_find_and_return_refugee(self):
         """
         Test case where refugee specified is found in the file.
         """
         test_camp = Camp(name='camp1')
-        test_plan = Plan(name='test_plan',
-                         emergency_type=Plan.EmergencyType.EARTHQUAKE,
-                         description='Test emergency plan',
-                         geographical_area='London',
-                         camps=[test_camp])
+        Plan(name='test_plan',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[test_camp])
         refugee = Refugee(firstname="Tom",
                           lastname="Bond",
                           num_of_family_member=600,
@@ -46,44 +45,36 @@ class RefugeeControllerTest(unittest.TestCase):
         retrieved_refugee = rc.find_refugee(refugee_id)
         self.assertEqual(refugee, retrieved_refugee)
 
-
-    def test_find_refugee_return_no_refugee(self):
+    def test_find_nonexistent_refugee(self):
         """
         Test case where refugee specified is not found in the file.
         """
         test_camp = Camp(name='camp1')
-        test_plan = Plan(name='test_plan1',
-                             emergency_type=Plan.EmergencyType.EARTHQUAKE,
-                             description='Test emergency plan',
-                             geographical_area='London',
-                             camps=[test_camp])
+        Plan(name='test_plan1',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[test_camp])
         refugee1 = Refugee(firstname="Tom",
-                               lastname="Bond",
-                               num_of_family_member=600,
-                               starting_date=date(2020, 1, 2),
-                               medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+                           lastname="Bond",
+                           num_of_family_member=600,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
         refugee_user_id = 1111111111
         with self.assertRaises(rc.ControllerError):
-            refugee = rc.find_refugee(refugee_user_id)
-
-    def test_find_refugee_return_error(self):
-        """
-        Test case where plan or camp do not exist in the file.
-        """
-        with self.assertRaises(rc.ControllerError):
-            refugee = rc.find_refugee(11111111111)
+            rc.find_refugee(refugee_user_id)
 
     def test_view_refugee_return_value(self):
         """
         Test case where refugee view is same as the refugee specified.
         """
         test_camp = Camp(name='camp1')
-        test_plan = Plan(name='test_plan',
-                         emergency_type=Plan.EmergencyType.EARTHQUAKE,
-                         description='Test emergency plan',
-                         geographical_area='London',
-                         camps=[test_camp])
+        Plan(name='test_plan',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[test_camp])
         refugee = Refugee(firstname="Terry",
                           lastname="Bimble",
                           num_of_family_member=2,

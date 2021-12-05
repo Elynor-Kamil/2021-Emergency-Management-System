@@ -1,8 +1,7 @@
-###---- Manage Refugee Menu ----
 from datetime import date
 from controller.controller_error import ControllerError
 from enum import Enum
-from typing import Type
+from typing import Type, Iterable
 from models.camp import Camp
 from models.plan import Plan
 from models.refugee import Refugee
@@ -20,7 +19,7 @@ def create_refugee(firstname: str,
                    camp: Camp,
                    num_of_family_member: int,
                    starting_date: date,
-                   medical_condition_type: Refugee.MedicalCondition) -> Refugee:
+                   medical_condition_type: Iterable[Refugee.MedicalCondition]) -> Refugee:
     """
     Function to create and save refugee data.
     """
@@ -43,15 +42,12 @@ def find_refugee(refugee_id: int) -> Refugee:
     """
     Function to find if refugee exists and returns the refugee class profile. Raise error if no such refugee, camp and plan exist .
     """
-    try:
-        for plan in Plan.all():
-            for camp in plan.camps:
-                refugee = camp.refugees.get(refugee_id)
-                if refugee:
-                    return refugee
-        raise ControllerError(f"Invalid refugee_id: {refugee_id}. The refugee is not found.")
-    except:
-        raise ControllerError("Invalid plan and camp. Plan and camp are not found.")
+    for plan in Plan.all():
+        for camp in plan.camps:
+            refugee = camp.refugees.get(refugee_id)
+            if refugee:
+                return refugee
+    raise ControllerError(f"Invalid refugee_id: {refugee_id}. The refugee is not found.")
 
 
 def view_refugee(refugee: Refugee) -> str:
