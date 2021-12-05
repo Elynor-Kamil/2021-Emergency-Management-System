@@ -49,24 +49,30 @@ class RefugeeControllerTest(unittest.TestCase):
 
     def test_find_refugee_return_no_refugee(self):
         """
-        Test case where refugee specified is found in the file.
+        Test case where refugee specified is not found in the file.
         """
-        with self.assertRaises(rc.ControllerError):
-            test_camp = Camp(name='camp1')
-            test_plan = Plan(name='test_plan1',
+        test_camp = Camp(name='camp1')
+        test_plan = Plan(name='test_plan1',
                              emergency_type=Plan.EmergencyType.EARTHQUAKE,
                              description='Test emergency plan',
                              geographical_area='London',
                              camps=[test_camp])
-            refugee1 = Refugee(firstname="Tom",
+        refugee1 = Refugee(firstname="Tom",
                                lastname="Bond",
                                num_of_family_member=600,
                                starting_date=date(2020, 1, 2),
                                medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
-            test_camp.refugees.add(refugee1)
-            refugee_user_id = 1111111111
+        test_camp.refugees.add(refugee1)
+        refugee_user_id = 1111111111
+        with self.assertRaises(rc.ControllerError):
             refugee = rc.find_refugee(refugee_user_id)
 
+    def test_find_refugee_return_error(self):
+        """
+        Test case where plan or camp do not exist in the file.
+        """
+        with self.assertRaises(rc.ControllerError):
+            refugee = rc.find_refugee(11111111111)
 
     def test_view_refugee_return_value(self):
         """
