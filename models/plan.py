@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from enum import Enum
 from typing import Iterable, Union
+import math
 
 from models.base.document import IndexedDocument
 from models.base.field import Field, ReferenceDocumentsField
@@ -11,6 +12,7 @@ class Plan(IndexedDocument):
     """
     An emergency plan consisting of camps.
     """
+    TARGET_REFUGEE_VOLUNTEER_RATIO = 20  # The target ratio of refugee volunteers to volunteers.
 
     name = Field(primary_key=True)
     emergency = Field()
@@ -132,3 +134,27 @@ class Plan(IndexedDocument):
         Get the read only status of the plan.
         """
         return self.__is_closed
+
+    def statistics(self):
+        """
+        Review the plan data and return each camp in the plan with total active volunteers and total refugees.
+        :return: {'Camp': {'num_of_refugees': int, 'num_of_volunteers': int, 'num_volunteers_vs_standard': int}}
+        """
+        statistics = {}
+        for camp in self.camps:
+            num_of_volunteers = camp.count_volunteers()
+            num_of_refugees = camp.count_refugees()
+            num_volunteers_vs_standard = self.__get_num_of_volunteers_vs_standard(num_of_volunteers, num_of_refugees)
+            statistics[camp.name] = {'num_of_refugees': num_of_refugees,
+                                     'num_of_volunteers': num_of_volunteers,
+                                     'num_volunteers_vs_standard': num_volunteers_vs_standard}
+        return statistics
+
+    @classmethod
+    def __get_num_of_volunteers_vs_standard(cls, num_of_volunteers, num_of_refugees) -> str:
+        """
+        Function to find number of volunteers:ideal number of volunteers ratio by ideal 1:20 volunteer number ratio.
+        """
+        ideal_volunteers_num = int(math.ceil(num_of_refugees / cls.TARGET_REFUGEE_VOLUNTEER_RATIO))
+
+        return f"{num_of_volunteers}:{ideal_volunteers_num}"
