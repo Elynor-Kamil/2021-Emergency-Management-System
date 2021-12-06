@@ -11,6 +11,9 @@ class PlanTest(unittest.TestCase):
     Test Plan class
     """
 
+    def setUp(self) -> None:
+        Plan.delete_all()
+
     def test_create_plan(self):
         """
         Test Plan creation
@@ -48,7 +51,7 @@ class PlanTest(unittest.TestCase):
                     camps=[camp_1])
         plan.open_camps(camp_2, camp_3)
         self.assertListEqual([camp_1, camp_2, camp_3], list(plan.camps))
-        plan.open_camps(camp_3, camp_4)
+        plan.open_camps(camp_4)
         self.assertListEqual([camp_1, camp_2, camp_3, camp_4], list(plan.camps))
 
     def test_close_camps(self):

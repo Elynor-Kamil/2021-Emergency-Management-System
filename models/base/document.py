@@ -72,6 +72,10 @@ class Document(metaclass=MetaDocument):
         def __init__(self, field_name):
             super().__init__(f"Primary key {field_name} not set")
 
+    class DuplicateKeyError(Exception):
+        def __init__(self, field_name, value):
+            super().__init__(f"Duplicate key {field_name}={value}")
+
     class ReferrerNotFound(Exception):
         def __init__(self, referrer_type=None, attribute_name=None):
             super().__init__(f"Instanced is not referenced by "
@@ -273,6 +277,9 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
         self.__class__.check_and_load_data()
         if not self._primary_key:
             raise Document.PrimaryKeyNotDefinedError(self)
+        key_value = kwargs.get(self._primary_key)
+        if self.__class__.find(key_value) is not None:
+            raise Document.DuplicateKeyError(self._primary_key, key_value)
         super().__init__(**kwargs)
         self.__class__.__objects[self.key] = self
 
