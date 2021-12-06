@@ -1,13 +1,11 @@
-import sys
-
+from interfaces.login import LoginPage
 from models.admin import Admin
-from models.user import User
-from models.volunteer import Volunteer
 
 
 class BaseMenu:
     menu_items = []
     welcome_message = "\033[96m{}\033[0m".format("Welcome to EMS, please enter your details.")
+    exit_message = None
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -16,6 +14,9 @@ class BaseMenu:
             if attr_name.startswith('do_') and callable(attr):
                 menu_items.append(attr)
         cls.menu_items = menu_items
+
+    def __init__(self, user):
+        self.user = user
 
     def print_menu(self):
         """Display available actions"""
@@ -26,11 +27,11 @@ class BaseMenu:
 
     def call_menu_item(self, user_input):
         if user_input in self.named_operations():
-            self.named_operations()[user_input](self)
+            return self.named_operations()[user_input](self)
         else:
             try:
                 user_input = int(user_input)
-                self.menu_items[user_input](self)
+                return self.menu_items[user_input](self)
             except (IndexError, ValueError):
                 print(f'Invalid input {user_input}')
 
@@ -54,42 +55,43 @@ class BaseMenu:
         self.print_menu()
         res = None
         while not res:
-            item = input('Select an action: ')
+            item = input(f'[{self.user.username}] Select an action: ')
             res = self.call_menu_item(item)
-        print('Bye!')
+        if self.exit_message:
+            print(self.exit_message)
 
 
-class LoginPage:
-    def __init__(self, user=None) -> object:
+class DemoMenu(BaseMenu):
+    user = None
+
+    def do_demo(self):
+        """Prints 'Hello World'"""
+        print('Hello World')
+
+    def do_greeting(self):
+        """Personalised greeting"""
+        if self.user:
+            print(f'Hello {self.user}')
+        else:
+            print('Please login first')
+
+    def do_login(self):
+        """Login"""
+        user = input('Enter your name: ')
         self.user = user
+        print('Logged in')
 
-    def run(self):
-        from interfaces.AdminMenu import AdminMenu
-        from interfaces.VolunteerMenu import VolunteerMenu
-        # login
-        while self.user is None:
-            username = input('Username: ')
-            password = input('Password: ')
-            try:
-                user = User.find(username)
-                if not user:
-                    print("\033[31m {}\033[00m".format('** Account not found.'))
-                    continue
-                self.user = user.login(password)
-                self.prompt = f'{self.user.username}> '
-                print(f'\033[1mWelcome {self.user.username}. Your role is {self.user.__class__.__name__}.\033[0m\n')
-                if isinstance(self.user, Admin):
-                    AdminMenu().run()
-                elif isinstance(self.user, Volunteer):
-                    if self.user.account_activated == True:
-                        VolunteerMenu().run()
-                    else:
-                        print("\033[31m {}\033[00m".format("** Your account is deactivated. Please contact admin."))
-                        sys.exit()
-            except (KeyError, User.InvalidPassword):
-                print("\033[31m {}\033[00m".format("** Invalid username or password. Please try again."))
+    def do_mange_plans(self):
+        """Manage plans"""
+        print('You are back to demo menu')
+        self.print_menu()
 
+    def logout(self):
+        """Logout"""
+        print('Logged out')
 
-if __name__ == '__main__':
-    Admin.configure_initial_user()
-    LoginPage().run()
+    @classmethod
+    def named_operations(cls):
+        return super().named_operations() | {
+            'O': cls.logout
+        }
