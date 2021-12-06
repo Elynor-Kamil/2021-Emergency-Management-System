@@ -33,7 +33,3 @@ class AdminMenu(BaseMenu):
     def exit_menu(self):
         """Logout"""
         return super().exit_menu()
-
-    @classmethod
-    def named_operations(cls):
-        return super().named_operations()
