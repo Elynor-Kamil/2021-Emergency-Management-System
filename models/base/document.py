@@ -235,7 +235,7 @@ class IndexedDocument(Document, metaclass=MetaIndexedDocument):
             self.base_class = base_class
 
         def persistent_id(self, obj):
-            if not isinstance(obj, self.base_class) and isinstance(obj, IndexedDocument):
+            if not type(obj) == self.base_class and isinstance(obj, IndexedDocument):
                 return obj.__module__, getattr(obj.__class__, '__qualname__', obj.__class__.__name__), obj.key
             else:
                 return None
