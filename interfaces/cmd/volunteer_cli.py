@@ -48,4 +48,4 @@ class VolunteerShell(EmsShell):
         #2: Enter ManageRefugeeMenu for further actions
         """
         from interfaces.cmd.admin_cli import ManageRefugeeMenu
-        ManageRefugeeMenu(self.user).cmdloop
+        ManageRefugeeMenu(self.user).cmdloop()

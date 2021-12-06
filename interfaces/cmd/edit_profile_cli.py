@@ -152,7 +152,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
 
         try:
             volunteer_controller.edit_camp(self.volunteer, camp, self.is_admin)
-            print(f"Updated successfully! New assigned camp is {self.volunteer.camp}.")
+            print(f"\x1b[6;30;42m success! \x1b[0m New assigned camp is {self.volunteer.camp}.")
         except ControllerError as e:
             print(f'Cannot change camp: {str(e)}')
 
@@ -172,7 +172,7 @@ class EditVolunteerMenu(ManageVolunteerMenu):
             break
         volunteer = volunteer_controller.edit_availability(self.volunteer, availability)
         status = 'available' if volunteer.availability else 'unavailable'
-        print(f"Updated successfully! Volunteer {volunteer.firstname} is now {status}.")
+        print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {volunteer.firstname} is now {status}.")
         self.return_previous_page()
 
     def do_return_menu(self, arg):

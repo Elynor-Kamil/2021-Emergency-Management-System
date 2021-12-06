@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from controller.controller_error import ControllerError
 from interfaces.cmd.cli import EmsShell
+from interfaces.cmd.volunteer_cli import VolunteerShell
+from models.admin import Admin
 
 from models.refugee import Refugee
 from models.plan import Plan
@@ -60,7 +64,7 @@ class AdminShell(EmsShell):
         while True:
             option = input("Enter R to return back to the previous menu.\n > ")
             if option.upper() == 'R':
-                AdminShell(self.user).cmdloop()
+                self.__class__(self.user).cmdloop()
             else:
                 print("\033[31m {}\033[00m".format("** Invalid input. Enter R to return back to main menu."))
                 continue
@@ -130,14 +134,15 @@ class PlanMenu(AdminShell):
         """
         self.plan_menu()
 
-    def return_previous_page(self):
-        while True:
-            option = input("Enter R to return back to the previous menu.\n > ")
-            if option.upper() == 'R':
-                PlanMenu(self.user).cmdloop()
-            else:
-                print("\033[31m {}\033[00m".format("** Invalid input. Enter R to return back to main menu."))
-                continue
+    #
+    # def return_previous_page(self):
+    #     while True:
+    #         option = input("Enter R to return back to the previous menu.\n > ")
+    #         if option.upper() == 'R':
+    #             PlanMenu(self.user).cmdloop()
+    #         else:
+    #             print("\033[31m {}\033[00m".format("** Invalid input. Enter R to return back to main menu."))
+    #             continue
 
     # ----- basic commands -----
     def do_create_plan(self, arg):
@@ -426,6 +431,10 @@ class ManageRefugeeMenu(AdminShell):
     refugee_menu = {"logout": 0, "create_refugee": 1, "view_refugee": 2,
                     "return_main_menu": "r"}
 
+    def __init__(self, user):
+        self.is_admin = isinstance(user, Admin)
+        super().__init__(user)
+
     def plan_menu(self) -> None:
         print("\n\033[100m\033[4m\033[1mManage Refugee Profile\033[0m\n"
               "[ 1 ] Create a refugee profile\n"
@@ -457,38 +466,40 @@ class ManageRefugeeMenu(AdminShell):
         """
         print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new refugee profile"))
 
-        # STEP 1: validate if plan exists
-        while True:
-            plan = input("Enter the plan that the refugee belongs to (or press # to exit): ")
-            if plan == '#':
-                ManageRefugeeMenu(self.user).cmdloop()
-                break
-            try:
-                find_plan = plan_controller.find_plan(plan)
-                plan = find_plan
-                break
-            except ControllerError:
-                print(f"\033[31m * Plan {plan} not found. Please re-enter plan name. \033[00m")
-                continue
+        if self.is_admin:
+            while True:
+                plan_name = input("Enter the name of the plan the refugee belongs to (or press # to exit): ")
+                if plan_name == '#':
+                    return
+                try:
+                    plan = plan_controller.find_plan(plan_name)
+                    break
+                except ControllerError:
+                    print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
+                    continue
 
-        # STEP 2: validate if camp exists
-        while True:
-            camp = input("Enter the camp that the new refugee belongs to (or press # to exit): ")
-            if camp == '#':
-                ManageRefugeeMenu(self.user).cmdloop()
-                break
-            try:
-                find_camp = plan_controller.find_camp(plan=plan, camp_name=camp)
-                r_camp = find_camp
-                break
-            except ControllerError:
-                print(f"\033[31m * Camp {camp} not found. Please re-enter camp name. \033[00m")
-                continue
+            while True:
+                camp_name = input("Enter the name of the camp the refugee belongs to (or press # to exit): ")
+                if camp_name == '#':
+                    return
+                try:
+                    camp = plan_controller.find_camp(plan=plan, camp_name=camp_name)
+                    break
+                except ControllerError:
+                    print(f"\033[31m * Camp {camp_name} not found. Please re-enter camp name. \033[00m")
+                    continue
+        else:
+            camp = self.user.camp
 
         # STEP 3: get refugee info
         r_firstname = input("Enter refugee's first name: ")
         r_lastname = input("Enter refugee's last name: ")
-        num_of_family_member = int(input("Enter the number of family members:"))
+        while True:
+            try:
+                num_of_family_member = int(input("Enter the number of family members:"))
+                break
+            except ValueError:
+                print('Please input a valid integer')
 
         # STEP 4: handle medical_condition
         print("Enter refugee's medical condition from the list")
@@ -514,11 +525,11 @@ class ManageRefugeeMenu(AdminShell):
         # STEP 5: Create refugee
         while True:
             try:
-                refugee = refugee_controller.create_refugee(firstname=r_firstname, lastname=r_lastname, camp=r_camp,
+                refugee = refugee_controller.create_refugee(firstname=r_firstname, lastname=r_lastname, camp=camp,
                                                             num_of_family_member=num_of_family_member,
                                                             medical_condition_type=r_conditions,
-                                                            starting_date=None)
-                print(f"\x1b[6;30;42m success! \x1b[0m\r "
+                                                            starting_date=datetime.today().date())
+                print(f"\x1b[6;30;42m success! \x1b[0m "
                       f"Refugee {r_firstname} {r_lastname} created. Refugee ID: {refugee.user_id}")
                 print(f"Please note down refugee ID as it is required when viewing refugee profile.\n")
                 self.return_previous_page()
@@ -532,18 +543,27 @@ class ManageRefugeeMenu(AdminShell):
         #2 View a refugee profile
         """
         while True:
+            user_input = input("Enter the refugee's ID to view (or # to exit): ")
+            if user_input == "#":
+                return
             try:
-                refugee_id = int(input("Enter the refugee's ID to view: "))
+                refugee_id = int(user_input)
                 try:
-                    find_refugee = refugee_controller.find_refugee(refugee_id)
-                    print(refugee_controller.view_refugee(find_refugee))
+                    refugee = refugee_controller.find_refugee(refugee_id)
+                    if not self.is_admin and refugee.camp != self.user.camp:
+                        print(f"{refugee_id} not found. Please check and re-enter.")
+                        continue
+                    print(refugee_controller.view_refugee(refugee))
                     self.return_previous_page()
                     break
                 except ControllerError:
                     print(f"{refugee_id} not found. Please check and re-enter.")
                     continue
             except ValueError:
-                print(f'\033[31m* Invalid refugee ID {refugee_id}. Please check and re-enter.\033[00m')
+                print(f'\033[31m* Invalid refugee ID {user_input}. Please check and re-enter.\033[00m')
 
     def do_return_main_menu(self, arg):
-        AdminShell(self.user).cmdloop()
+        if self.is_admin:
+            AdminShell(self.user).cmdloop()
+        else:
+            VolunteerShell(self.user).cmdloop()
