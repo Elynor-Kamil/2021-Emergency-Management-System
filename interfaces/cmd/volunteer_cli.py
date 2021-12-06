@@ -39,8 +39,9 @@ class VolunteerShell(EmsShell):
         """
         #1: Edit volunteer's details (name, phone, camp, availability)
         """
+        from interfaces.cmd.edit_profile_cli import EditVolunteerMenu
         is_admin = False
-        pass  # link to EditVolunteerMenu
+        EditVolunteerMenu(self.user).cmdloop()
 
     def do_manage_refugee_profile(self, arg):
         """

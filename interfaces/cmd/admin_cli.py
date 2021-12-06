@@ -165,7 +165,7 @@ class PlanMenu(AdminShell):
         e_geo_area = input("Enter geographical area: ")
         while True:
             camps_input = input("Enter camp names (use comma to separate camps): ")
-            camp_names = camps_input.split(",")
+            camp_names = camps_input.replace(', ', ',').split(",")
             if camp_names == '':
                 print("\033[31m {}\033[00m".format("** Camp name cannot be empty."))
                 continue
@@ -181,8 +181,8 @@ class PlanMenu(AdminShell):
                                         description=e_description,
                                         geographical_area=e_geo_area,
                                         camps=camps)
-            print("\x1b[6;30;42m success! \x1b[0m\t")
-            print(f"Plan {e_name} created.")
+            print(f"\x1b[6;30;42m success! \x1b[0m\t Plan {e_name} created.")
+
             self.return_previous_page()
         except ControllerError:
             print("\033[31m {}\033[00m".format("** Unable to create an emergency plan. Press R to return and retry."))
@@ -329,8 +329,7 @@ class ManageVolunteerMenu(AdminShell):
                                                       firstname=firstname,
                                                       lastname=lastname,
                                                       phone=phone, camp=camp)
-                print("\x1b[6;30;42m success! \x1b[0m")
-                print(f"Volunteer {username} created.")
+                print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} created.\n")
                 self.return_previous_page()
                 break
             except ControllerError as e:
@@ -374,8 +373,7 @@ class ManageVolunteerMenu(AdminShell):
             try:
                 find_volunteer = volunteer_controller.find_volunteer(username)
                 volunteer_controller.deactivate_volunteer(find_volunteer)
-                print("\x1b[6;30;42m success! \x1b[0m")
-                print(f"Volunteer {username} deactivated.")
+                print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} deactivated.\n")
                 self.return_previous_page()
                 break
             except ControllerError:
@@ -393,8 +391,7 @@ class ManageVolunteerMenu(AdminShell):
             try:
                 find_volunteer = volunteer_controller.find_volunteer(username)
                 volunteer_controller.reactivate_volunteer(find_volunteer)
-                print("\x1b[6;30;42m success! \x1b[0m")
-                print(f"Volunteer {username} reactivated.")
+                print(f"\x1b[6;30;42m success! \x1b[0mVolunteer {username} reactivated.\n")
                 self.return_previous_page()
                 break
             except ControllerError:
@@ -481,42 +478,48 @@ class ManageRefugeeMenu(AdminShell):
                 break
             try:
                 find_camp = plan_controller.find_camp(plan=plan, camp_name=camp)
-                camp = find_camp
+                r_camp = find_camp
                 break
             except ControllerError:
                 print(f"\033[31m * Camp {camp} not found. Please re-enter camp name. \033[00m")
                 continue
 
+        # STEP 3: get refugee info
         r_firstname = input("Enter refugee's first name: ")
         r_lastname = input("Enter refugee's last name: ")
-        r_camp = input("Enter refugee's camp: ")
         num_of_family_member = int(input("Enter the number of family members:"))
 
-        # handle medical_condition
+        # STEP 4: handle medical_condition
         print("Enter refugee's medical condition from the list")
-        medical_condition_types = refugee_controller.list_medical_condition_types()
-        medical_dict = {t.value: t for t in medical_condition_types}  # create a dictionary for Enum
-        for key in medical_dict.keys():
-            print(f'- {key}')
-        while True:
-            medical_condition = input("Enter refugee's medical condition from the list")
-            try:
-                in_medical_condition = medical_dict[medical_condition]
-                medical_condition: Refugee.MedicalCondition = in_medical_condition
-                break
-            except KeyError:
-                print(f'\033[31m* Type {medical_condition} is not on the list.\033[00m')
-                continue
+        medical_condition_types = list(refugee_controller.list_medical_condition_types())
+        for i, option in enumerate(medical_condition_types):
+            print(f'[ {i} ] {option.value}')
 
+        while True:
+            medical_input = input("Enter refugee's medical condition from the list "
+                                  "(use comma to separate multiple inputs): ")
+            medical_conditions = medical_input.replace(', ', ',').split(",")
+            r_conditions = []
+            for condition in medical_conditions:
+                try:
+                    r_condition = medical_condition_types[int(condition)]
+                    r_conditions.append(r_condition)
+                except (IndexError, ValueError):
+                    print(f'\033[31m* Type {condition} is not on the list.\033[00m')
+                    break
+            else:
+                break
+
+        # STEP 5: Create refugee
         while True:
             try:
                 refugee = refugee_controller.create_refugee(firstname=r_firstname, lastname=r_lastname, camp=r_camp,
                                                             num_of_family_member=num_of_family_member,
-                                                            medical_condition_type=medical_condition,
+                                                            medical_condition_type=r_conditions,
                                                             starting_date=None)
-                print("\x1b[6;30;42m success! \x1b[0m\r")
-                print(f"Refugee {r_firstname} {r_lastname} created. Refugee ID: {refugee.user_id}.")
-                print(f"Please note down refugee ID as it is required when viewing refugee profile.")
+                print(f"\x1b[6;30;42m success! \x1b[0m\r "
+                      f"Refugee {r_firstname} {r_lastname} created. Refugee ID: {refugee.user_id}")
+                print(f"Please note down refugee ID as it is required when viewing refugee profile.\n")
                 self.return_previous_page()
                 break
             except ControllerError:
