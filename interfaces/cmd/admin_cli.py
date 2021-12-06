@@ -192,7 +192,8 @@ class PlanMenu(AdminShell):
         """
         #2 List out all the existing plans
         """
-        plan_controller.list_plans()
+        for plan in plan_controller.list_plans():
+            print(f'Plan "{plan.name}" - {plan.emergency.value}')
         self.return_previous_page()
 
     def do_view_plan(self, arg):
@@ -535,7 +536,7 @@ class ManageRefugeeMenu(AdminShell):
                 refugee_id = int(input("Enter the refugee's ID to view: "))
                 try:
                     find_refugee = refugee_controller.find_refugee(refugee_id)
-                    refugee_controller.view_refugee(find_refugee)
+                    print(refugee_controller.view_refugee(find_refugee))
                     self.return_previous_page()
                     break
                 except ControllerError:

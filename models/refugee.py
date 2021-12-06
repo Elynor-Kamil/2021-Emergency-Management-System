@@ -120,7 +120,7 @@ class Refugee(Document):
                f"Number of Family Member: {self.num_of_family_member}\n" \
                f"Camp: {self.camp}\n" \
                f"Creation Date: {self.starting_date}\n" \
-               f"Medical Condition: {self.medical_condition_type}\n"
+               f"Medical Condition: {', '.join([condition.value for condition in self.medical_condition_type])}\n"
 
     class InvalidNumOfFamilyMemberException(Exception):
         """
