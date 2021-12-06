@@ -4,7 +4,7 @@ from models.admin import Admin
 
 class BaseMenu:
     menu_items = []
-    welcome_message = "\033[96m{}\033[0m".format("Welcome to EMS, please enter your details.")
+    welcome_message = None
     exit_message = None
 
     def __init_subclass__(cls, **kwargs):
@@ -21,9 +21,9 @@ class BaseMenu:
     def print_menu(self):
         """Display available actions"""
         for i, item in enumerate(self.menu_items):
-            print(f'[{i}] {item.__doc__}')
+            print(f'[ {i} ] {item.__doc__}')
         for key, value in self.named_operations().items():
-            print(f'[{key}] {value.__doc__}')
+            print(f'[ {key} ] {value.__doc__}')
 
     def call_menu_item(self, user_input):
         if user_input in self.named_operations():
@@ -50,15 +50,18 @@ class BaseMenu:
         pass
 
     def run(self):
-        print(self.welcome_message)
-        self.before_run()
-        self.print_menu()
+        if self.welcome_message:
+            print(self.welcome_message)
+        if self.before_run():  # return True in before_run to exit menu
+            return
         res = None
         while not res:
+            self.print_menu()
             item = input(f'[{self.user.username}] Select an action: ')
-            res = self.call_menu_item(item)
+            res = self.call_menu_item(item)  # return True in function to exit menu
         if self.exit_message:
             print(self.exit_message)
+            return
 
 
 class DemoMenu(BaseMenu):

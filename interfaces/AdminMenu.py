@@ -21,17 +21,14 @@ class AdminMenu(BaseMenu):
     def do_manage_plan(self):
         """Manage an emergency plan (Create/Close/View)"""
         ManagePlanMenu(self.user).run()
-        self.print_menu()
 
     def do_manage_volunteer_account(self):
         """Manage volunteer accounts and profile (Create/Edit/Deactivate/Delete)"""
         ManageVolunteerMenu(self.user).run()
-        self.print_menu()
 
     def do_manage_refugee_profile(self):
         """Manage Refugee Profile"""
         ManageRefugeeMenu(self.user).run()
-        self.print_menu()
 
     def exit_menu(self):
         """Logout"""

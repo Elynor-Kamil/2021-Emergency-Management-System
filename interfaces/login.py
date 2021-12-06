@@ -13,6 +13,7 @@ class LoginPage:
         from interfaces.AdminMenu import AdminMenu
         from interfaces.VolunteerMenu import VolunteerMenu
         # login
+        print("\033[96mWelcome to EMS, please enter your details.\033[0m")
         while self.user is None:
             username = input('Username: ')
             password = input('Password: ')
