@@ -10,8 +10,8 @@ class LoginPage:
         self.user = user
 
     def run(self):
-        from interfaces.AdminMenu import AdminMenu
-        from interfaces.volunteer import VolunteerMenu
+        from interfaces.admin_menu import AdminMenu
+        from interfaces.volunteer_menu import VolunteerMenu
         # login
         print("\033[96mWelcome to EMS, please enter your details.\033[0m")
         while self.user is None:

@@ -1,6 +1,6 @@
-from interfaces.ManagePlanMenu import ManagePlanMenu
-from interfaces.ManageRefugeeMenu import ManageRefugeeMenu
-from interfaces.ManageVolunteerMenu import ManageVolunteerMenu
+from interfaces.manage_plan import ManagePlanMenu
+from interfaces.manage_refugee import ManageRefugeeMenu
+from interfaces.manage_volunteer import ManageVolunteerMenu
 from interfaces.base_menu import BaseMenu
 
 

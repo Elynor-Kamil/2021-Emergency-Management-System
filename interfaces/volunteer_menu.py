@@ -1,6 +1,6 @@
 from interfaces.base_menu import BaseMenu
 from interfaces.edit_volunteer import EditVolunteerMenu
-from interfaces.ManageRefugeeMenu import ManageRefugeeMenu
+from interfaces.manage_refugee import ManageRefugeeMenu
 
 
 class VolunteerMenu(BaseMenu):
