@@ -94,6 +94,7 @@ class TestVolunteerController(unittest.TestCase):
 
     def test_reactivate_volunteer(self):
         volunteer = Volunteer.find('yunsy')
+        volunteer = vc.deactivate_volunteer(volunteer)
         volunteer = vc.reactivate_volunteer(volunteer)
         self.assertTrue(volunteer.account_activated)
 

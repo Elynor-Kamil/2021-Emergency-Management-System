@@ -57,7 +57,7 @@ def view_plan_statistics(plan: Plan) -> str:
 
     plan_statistics = plan.statistics()
     plan_name = str(plan.name)
-    plan_info = f"Plan name: {plan_name}\n"
+    plan_info = f"\nPlan name: {plan_name}\n"
     statistics = ""
 
     for camp in plan_statistics.items():
