@@ -60,7 +60,7 @@ def view_plan_statistics(plan: Plan) -> str:
     plan_name = str(plan.name)
     if plan.is_closed:
         plan_info = f"\nPlan name: '{plan_name}' (closed)\n" \
-                    f"Close Date: '{plan.close_date}'\n"
+                    f"Close Date: {plan.close_date}\n"
     else:
         plan_info = f"\nPlan name: '{plan_name}'\n"
 
@@ -72,7 +72,7 @@ def view_plan_statistics(plan: Plan) -> str:
                                                                          statistics_info['num_of_volunteers'], \
                                                                          statistics_info['num_volunteers_vs_standard']
 
-        statistics += f"Camp name: {camp_name}\n" \
+        statistics += f"Camp name: '{camp_name}'\n" \
                       f"Number of refugees: {num_of_refugees}\n" \
                       f"Number of volunteers: {num_of_volunteers}\n" \
                       f"Number of volunteers vs standard: {num_volunteers_vs_standard}\n\n"
