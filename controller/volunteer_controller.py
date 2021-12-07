@@ -11,19 +11,22 @@ def create_volunteer(username: str,
                      lastname: str,
                      phone: str,
                      camp: Camp) -> Volunteer:
-    try:
-        volunteer = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
-                              phone=phone)
-        camp.volunteers.add(volunteer)
-        return volunteer
-    except (Volunteer.InvalidUsernameException,
-            Volunteer.InvalidPasswordException,
-            Volunteer.InvalidFirstnameException,
-            Volunteer.InvalidLastnameException,
-            Volunteer.InvalidPhoneException) as e:
-        raise ControllerError(str(e))
-    except Document.DuplicateKeyError as e:
-        raise ControllerError(f"User {username} already exists. Please try again.")
+    if camp.plan.is_closed:
+        raise ControllerError(f"Plan {camp.plan.name} is closed. Please choose another plan.")
+    else:
+        try:
+            volunteer = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
+                                  phone=phone)
+            camp.volunteers.add(volunteer)
+            return volunteer
+        except (Volunteer.InvalidUsernameException,
+                Volunteer.InvalidPasswordException,
+                Volunteer.InvalidFirstnameException,
+                Volunteer.InvalidLastnameException,
+                Volunteer.InvalidPhoneException) as e:
+            raise ControllerError(str(e))
+        except Document.DuplicateKeyError as e:
+            raise ControllerError(f"User {username} already exists. Please try again.")
 
 
 def find_volunteer(username: str) -> Volunteer:
@@ -70,21 +73,24 @@ def edit_phone(volunteer: Volunteer, phone: str) -> Volunteer:
 
 def edit_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> Volunteer:
     old_camp = volunteer.camp
-    if is_admin:
-        old_camp.volunteers.remove(volunteer)
-        old_camp.save()
-        camp.volunteers.add(volunteer)
-        camp.save()
-        return volunteer
+    if camp.plan.is_closed:
+        raise ControllerError(f"Plan {camp.plan.name} is closed. Please choose another plan.")
     else:
-        if old_camp.plan == camp.plan:
+        if is_admin:
             old_camp.volunteers.remove(volunteer)
             old_camp.save()
             camp.volunteers.add(volunteer)
             camp.save()
             return volunteer
         else:
-            raise ControllerError(f"Invalid camp: {camp}. You can only select a camp under the same plan.")
+            if old_camp.plan == camp.plan:
+                old_camp.volunteers.remove(volunteer)
+                old_camp.save()
+                camp.volunteers.add(volunteer)
+                camp.save()
+                return volunteer
+            else:
+                raise ControllerError(f"Invalid camp: {camp}. You can only select a camp under the same plan.")
 
 
 def edit_availability(volunteer: Volunteer, availability: bool) -> Volunteer:
