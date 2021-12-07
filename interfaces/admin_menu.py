@@ -5,8 +5,8 @@ from interfaces.base_menu import BaseMenu
 
 
 class AdminMenu(BaseMenu):
-    welcome_message = f'\n\033[100m\033[4m\033[1mAdmin Menu\033[0m \n' \
-                      f'\033[1mWelcome to EMS. Please choose an option to continue:\033[0m\n'
+    welcome_message = f'\033[1mWelcome to EMS. Please choose an option to continue:\033[0m'
+    title = f'\n\033[100m\033[4m\033[1mAdmin Menu\033[0m \n'
 
     @property
     def exit_message(self):
@@ -14,9 +14,11 @@ class AdminMenu(BaseMenu):
 
     def do_profile(self):
         """View my details"""
-        print("\n\033[100m\033[4m\033[1m{}\033[0m\n".format("Your details:") +
+        print("\n\033[4m\033[1m{}\033[0m\n".format("Your details:") +
               f'Username: {self.user.username}\n'
               f'Role: {self.user.__class__.__name__}\n')
+        print("Return to main menu..")
+        return
 
     def do_manage_plan(self):
         """Manage an emergency plan (Create/Close/View)"""

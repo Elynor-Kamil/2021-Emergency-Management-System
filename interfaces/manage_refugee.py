@@ -6,6 +6,7 @@ from datetime import datetime
 
 
 class ManageRefugeeMenu(BaseMenu):
+    title = f'\n\033[100m\033[4m\033[1mManage Refugee Menu\033[0m \n'
 
     @property
     def is_admin(self):

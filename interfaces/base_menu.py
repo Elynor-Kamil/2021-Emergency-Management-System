@@ -5,6 +5,7 @@ from models.admin import Admin
 class BaseMenu:
     menu_items = []
     welcome_message = None
+    title = None
     exit_message = None
 
     def __init_subclass__(cls, **kwargs):
@@ -33,7 +34,7 @@ class BaseMenu:
                 user_input = int(user_input)
                 return self.menu_items[user_input](self)
             except (IndexError, ValueError):
-                print(f'Invalid input {user_input}')
+                print(f'\033[31m* Invalid input {user_input}. Please enter an option from the menu.\033[00m')
 
     def exit_menu(self):
         """Exit the menu"""
@@ -56,45 +57,11 @@ class BaseMenu:
             return
         res = None
         while not res:
+            if self.title:
+                print(self.title)
             self.print_menu()
-            item = input(f'[{self.user.username}] Select an action: ')
+            item = input(f'({self.user.username}) Select an action: ')
             res = self.call_menu_item(item)  # return True in function to exit menu
         if self.exit_message:
             print(self.exit_message)
             return
-
-
-class DemoMenu(BaseMenu):
-    user = None
-
-    def do_demo(self):
-        """Prints 'Hello World'"""
-        print('Hello World')
-
-    def do_greeting(self):
-        """Personalised greeting"""
-        if self.user:
-            print(f'Hello {self.user}')
-        else:
-            print('Please login first')
-
-    def do_login(self):
-        """Login"""
-        user = input('Enter your name: ')
-        self.user = user
-        print('Logged in')
-
-    def do_mange_plans(self):
-        """Manage plans"""
-        print('You are back to demo menu')
-        self.print_menu()
-
-    def logout(self):
-        """Logout"""
-        print('Logged out')
-
-    @classmethod
-    def named_operations(cls):
-        return super().named_operations() | {
-            'O': cls.logout
-        }

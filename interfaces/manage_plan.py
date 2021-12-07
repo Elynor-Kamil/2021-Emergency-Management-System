@@ -5,7 +5,7 @@ from models.plan import Plan
 
 
 class ManagePlanMenu(BaseMenu):
-    welcome_message = '\n** Manage Emergency Plans **\n'
+    title = f'\n\033[100m\033[4m\033[1mManage Plan Menu\033[0m \n'
 
     def do_create_plan(self):
         """Create a plan"""
