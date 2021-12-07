@@ -20,7 +20,7 @@ class ManageVolunteerMenu(BaseMenu):
                 plan = find_plan
                 break
             except ControllerError:
-                print(f"\033[31m * Plan {plan} not found. Please re-enter plan name. \033[00m")
+                print(f"\033[31m * Plan {plan.name} not found. Please re-enter plan name. \033[00m")
                 continue
 
         # STEP 2: validate if camp exists
