@@ -4,7 +4,7 @@ from interfaces.base_menu import BaseMenu
 
 
 class ManagePlanMenu(BaseMenu):
-    title = f'\n\033[100m\033[4m\033[1mManage Plan Menu\033[0m \n'
+    title = f'\n\033[100m\033[4m\033[1mManage Plan Menu\033[0m'
 
     def do_create_plan(self):
         """Create a plan"""
@@ -68,7 +68,7 @@ class ManagePlanMenu(BaseMenu):
                 return
             try:
                 find_plan = plan_controller.find_plan(plan_name)
-                print("\033[100m\033[4m\033[1m{}\033[0m\n".format("View Plan statistics"))
+                print("\n\033[100m\033[4m\033[1m{}\033[0m".format("View Plan statistics"))
                 print(plan_controller.view_plan_statistics(find_plan))
                 return
             except ControllerError:
