@@ -6,6 +6,16 @@ from models.volunteer import Volunteer
 from datetime import date
 
 
+class CampTest(unittest.TestCase):
+
+    def setUp(self):
+        Plan.delete_all()
+
+    def test_camp_empty_name(self):
+        with self.assertRaises(Camp.InvalidName):
+            Camp(name='')
+
+
 class VolunteerInCampTest(unittest.TestCase):
     """
     Class for testing cases involving volunteer counts in plan statistics.

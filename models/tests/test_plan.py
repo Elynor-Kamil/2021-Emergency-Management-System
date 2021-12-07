@@ -36,6 +36,14 @@ class PlanTest(unittest.TestCase):
                  geographical_area='',
                  camps=[])
 
+    def test_empty_name(self):
+        with self.assertRaises(Plan.InvalidName):
+            Plan(name='',
+                 emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                 description='Test emergency plan',
+                 geographical_area='',
+                 camps=[Camp(name='TestCamp')])
+
     def test_open_camps(self):
         """
         Test Plan opening camps

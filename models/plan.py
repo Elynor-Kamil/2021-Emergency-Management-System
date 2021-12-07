@@ -52,6 +52,11 @@ class Plan(IndexedDocument):
         def __init__(self, camp):
             super().__init__(f'Camp {camp} is not in the emergency plan.')
 
+    class InvalidName(Exception):
+
+        def __init__(self, name):
+            super().__init__(f'Invalid name: "{name}"')
+
     def __init__(self,
                  name: str,
                  emergency_type: EmergencyType,
@@ -69,6 +74,8 @@ class Plan(IndexedDocument):
 
         if not camps:
             raise self.MissingCampsError()
+        if not name:
+            raise self.InvalidName(name)
         super().__init__(name=name,
                          emergency=emergency_type,
                          description=description,

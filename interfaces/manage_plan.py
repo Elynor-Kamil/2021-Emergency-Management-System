@@ -33,9 +33,6 @@ class ManagePlanMenu(BaseMenu):
         while True:
             camps_input = input("Enter camp names (use comma to separate camps): ")
             camp_names = camps_input.replace(', ', ',').split(",")
-            if camp_names == '':
-                print("\033[31m {}\033[00m".format("** Camp name cannot be empty."))
-                continue
             try:
                 camps = [plan_controller.create_camps(name) for name in camp_names]
                 break

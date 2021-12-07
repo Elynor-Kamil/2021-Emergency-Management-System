@@ -100,6 +100,14 @@ class PlanControllerTest(unittest.TestCase):
                            geographical_area='',
                            camps=[])
 
+    def test_empty_plan_name(self):
+        with self.assertRaises(pc.controller_error.ControllerError):
+            pc.create_plan(plan_name='',
+                           emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                           description='Test emergency plan',
+                           geographical_area='',
+                           camps=[Camp(name='TestCamp')])
+
     def test_create_plan_duplicate_plan(self):
         pc.create_plan(plan_name='My Plan',
                        emergency_type=Plan.EmergencyType.EARTHQUAKE,
@@ -126,6 +134,13 @@ class PlanControllerTest(unittest.TestCase):
         Test that camps are added to plan correctly.
         """
         self.assertIsInstance(pc.create_camps('Camp 1'), Camp)
+
+    def test_create_camp_with_empty_name(self):
+        """
+        Test that camps are added to plan correctly.
+        """
+        with self.assertRaises(pc.controller_error.ControllerError):
+            pc.create_camps('')
 
     def test_list_plans_controller(self):
         """

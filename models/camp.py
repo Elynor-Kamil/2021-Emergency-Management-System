@@ -9,6 +9,16 @@ class Camp(Document):
     volunteers = ReferenceDocumentsField(data_type=Volunteer)
     refugees = ReferenceDocumentsField(data_type=Refugee)
 
+    class InvalidName(Exception):
+
+        def __init__(self, name):
+            super().__init__(f'Invalid name: "{name}"')
+
+    def __init__(self, name: str):
+        if not name:
+            raise self.InvalidName(name)
+        super().__init__(name=name)
+
     def __str__(self):
         return self.name
 
