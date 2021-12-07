@@ -84,7 +84,6 @@ class EditVolunteerMenu(BaseMenu):
         while True:
             phone = input("Please enter new phone number (or press # to exit this page):")
             if phone == '#':
-                EditVolunteerMenu(self.user).cmdloop()
                 return
             try:
                 volunteer_controller.edit_phone(self.volunteer, phone)
