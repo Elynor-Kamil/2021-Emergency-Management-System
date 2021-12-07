@@ -17,6 +17,9 @@ class VolunteerMenu(BaseMenu):
 
     def do_manage_refugee_profile(self):
         """Manage refugees"""
+        if self.user.camp.plan.is_closed:
+            print("\033[31m {}\033[00m".format("** The plan you are assigned to is closed. Please contact admin."))
+            return
         ManageRefugeeMenu(self.user).run()
 
     def exit_menu(self):

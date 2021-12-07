@@ -33,10 +33,7 @@ class LoginPage:
                         print("\033[31m {}\033[00m".format("** Your account is deactivated. Please contact admin."))
                         sys.exit()
                     try:
-                        if user.camp.plan.is_closed:
-                            print("\033[31m {}\033[00m".format(
-                                "** The plan you are assigned to is closed. Please contact admin."))
-                            sys.exit()
+                        user.camp
                     except Document.ReferrerNotFound:
                         print("\033[31m {}\033[00m".format(
                             "** You are not assigned to any camp. Please contact admin."))
