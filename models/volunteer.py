@@ -84,7 +84,8 @@ class Volunteer(User):
     def __str__(self):
         self.status = 'available' if self.availability else 'unavailable'
         try:
-            camp_str = f"Camp '{self.camp.name}' in Plan '{self.camp.plan.name}'"
+            camp_str = f"Camp '{self.camp.name}' in Plan '{self.camp.plan.name}' " \
+                       f"{'(Closed)' if self.camp.plan.is_closed else ''}"
         except Document.ReferrerNotFound:
             camp_str = 'not assigned'
         return f"{super().__str__()}\n" \
