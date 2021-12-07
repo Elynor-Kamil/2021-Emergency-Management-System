@@ -60,7 +60,7 @@ class ManagePlanMenu(BaseMenu):
         if not plan_controller.list_plans():
             print("No existing plan.")
         for plan in plan_controller.list_plans():
-            print(plan)
+            print(plan, '\n')
         return
 
     def do_view_plan(self):

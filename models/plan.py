@@ -92,7 +92,7 @@ class Plan(IndexedDocument):
                    f"Close Date: '{self.__close_date}'"
         else:
             return f"Plan '{self.name}'\n" \
-                   f"Emergency Type: '{self.emergency.value.capitalize()}'\n"
+                   f"Emergency Type: '{self.emergency.value.capitalize()}'"
 
     def open_camps(self, *camps: Camp) -> None:
         """
