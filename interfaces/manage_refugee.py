@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 class ManageRefugeeMenu(BaseMenu):
-    title = f'\n\033[100m\033[4m\033[1mManage Refugee Menu\033[0m \n'
+    title = f'\n\033[100m\033[4m\033[1mManage Refugee Menu\033[0m'
 
     @property
     def is_admin(self):
@@ -46,7 +46,7 @@ class ManageRefugeeMenu(BaseMenu):
         r_lastname = input("Enter refugee's last name: ")
         while True:
             try:
-                num_of_family_member = int(input("Enter the number of family members:"))
+                num_of_family_member = int(input("Enter the number of family members (including the refugee):"))
                 break
             except ValueError:
                 print('Please input a valid integer')
@@ -86,8 +86,8 @@ class ManageRefugeeMenu(BaseMenu):
                       f"Refugee {r_firstname} {r_lastname} created.\n \033[1mRefugee ID: {refugee.user_id}\033[0m")
                 print(f"\033[1m* Please note down refugee ID as it is required when viewing refugee profile.\033[0m\n")
                 return
-            except ControllerError:
-                print(f'\033[31m* Failed to create a refugee profile for {r_firstname} {r_lastname}. '
+            except ControllerError as e:
+                print(f'\033[31m* Fail: {e}. '
                       f'Please check and retry.\033[00m')
                 return
 

@@ -5,8 +5,7 @@ from interfaces.edit_volunteer import EditVolunteerMenu
 
 
 class ManageVolunteerMenu(BaseMenu):
-    title = f'\n\033[100m\033[4m\033[1mManage Volunteer Menu\033[0m \n'
-
+    title = f'\n\033[100m\033[4m\033[1mManage Volunteer Menu\033[0m'
     def do_create_volunteer(self):
         """Create a volunteer"""
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))
@@ -65,6 +64,7 @@ class ManageVolunteerMenu(BaseMenu):
                 return
             try:
                 find_volunteer = volunteer_controller.find_volunteer(username)
+                print("\n\033[4m\033[1mVolunteer Profile\033[0m")
                 print(volunteer_controller.view_volunteer_profile(find_volunteer))
                 return
             except ControllerError:

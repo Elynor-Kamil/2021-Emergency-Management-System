@@ -6,7 +6,7 @@ from models.volunteer import Volunteer
 
 
 class EditVolunteerMenu(BaseMenu):
-    title = f'\n\033[100m\033[4m\033[1mEdit Volunteer Profile\033[0m \n'
+    title = f'\n\033[100m\033[4m\033[1mEdit Volunteer Profile\033[0m'
     volunteer = None
 
     @property

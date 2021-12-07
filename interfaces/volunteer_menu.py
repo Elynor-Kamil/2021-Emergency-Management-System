@@ -4,7 +4,7 @@ from interfaces.manage_refugee import ManageRefugeeMenu
 
 
 class VolunteerMenu(BaseMenu):
-    title = f'\n\033[100m\033[4m\033[1mVolunteer Menu\033[0m \n'
+    title = f'\n\033[100m\033[4m\033[1mVolunteer Menu\033[0m'
     welcome_message = f'\033[1mWelcome to EMS. Please choose an option to continue:\033[0m\n'
 
     @property
