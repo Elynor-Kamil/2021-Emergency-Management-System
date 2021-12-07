@@ -73,7 +73,7 @@ def edit_phone(volunteer: Volunteer, phone: str) -> Volunteer:
 def edit_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> Volunteer:
     old_camp = volunteer.camp
     if camp.plan.is_closed:
-        raise ControllerError(f"Plan '{camp.plan.name}' is closed.")
+        raise ControllerError(f"Plan '{camp.plan.name}' of camp '{camp}' is closed.")
     if is_admin:
         old_camp.volunteers.remove(volunteer)
         old_camp.save()
