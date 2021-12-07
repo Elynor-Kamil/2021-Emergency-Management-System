@@ -23,7 +23,7 @@ class BaseMenu:
         self.user = user
 
     def print_menu(self):
-        """Display available actions"""
+        """Show the menu again"""
         for i, item in enumerate(self.menu_items):
             print(f'[ {i} ] {item.__doc__}')
         for key, value in self.named_operations().items():

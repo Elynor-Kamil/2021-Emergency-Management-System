@@ -85,10 +85,14 @@ class ManagePlanMenu(BaseMenu):
                 return
             try:
                 find_plan = plan_controller.find_plan(plan_name)
-            except ControllerError:
+            except ControllerError as e:
                 print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
                 continue
-            plan_controller.close_plan(find_plan)
-            print("\x1b[6;30;42m success! \x1b[0m\t")
-            print(f"Plan {plan_name} Closed.")
-            return
+            try:
+                plan_controller.close_plan(find_plan)
+                print("\x1b[6;30;42m success! \x1b[0m\t")
+                print(f"Plan {plan_name} Closed.")
+                return
+            except:
+                print(f"\033[31m * Plan {plan_name} is already closed.\033[00m")
+                return

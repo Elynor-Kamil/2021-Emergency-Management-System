@@ -80,12 +80,13 @@ class ManageRefugeeMenu(BaseMenu):
                                                             medical_condition_type=r_conditions,
                                                             starting_date=datetime.today().date())
                 print(f"\x1b[6;30;42m success! \x1b[0m "
-                      f"Refugee {r_firstname} {r_lastname} created. Refugee ID: {refugee.user_id}")
-                print(f"Please note down refugee ID as it is required when viewing refugee profile.\n")
+                      f"Refugee {r_firstname} {r_lastname} created.\n \033[1mRefugee ID: {refugee.user_id}\033[0m")
+                print(f"\033[1m* Please note down refugee ID as it is required when viewing refugee profile.\033[0m\n")
                 return
             except ControllerError:
-                print(f'\033[31m* Failed to create a refugee profile for\033[00m {r_firstname} {r_lastname}')
-                continue
+                print(f'\033[31m* Failed to create a refugee profile for {r_firstname} {r_lastname}. '
+                      f'Please check and retry.\033[00m')
+                return
 
     def do_view_refugee(self):
         """View a refugee profile"""

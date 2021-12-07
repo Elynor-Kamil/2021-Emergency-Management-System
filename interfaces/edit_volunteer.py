@@ -35,7 +35,7 @@ class EditVolunteerMenu(BaseMenu):
             return
 
     def print_menu(self):
-        print("\n\033[100m\033[4m\033[1m{}\033[0m".format("Edit Volunteer Profile"))
+        """Show volunteer's profile again"""
         print(
             f"You're editing {self.volunteer.username}'s profile. Select the information to edit :\n"
             f"[ 0 ] First name: {self.volunteer.firstname}\n"
@@ -44,7 +44,7 @@ class EditVolunteerMenu(BaseMenu):
             f"[ 3 ] Camp: {self.volunteer.camp}\n"
             f"[ 4 ] Availability: {self.volunteer.availability}")
         for key, value in self.named_operations().items():
-            print(f'[{key}] {value.__doc__}')
+            print(f'[ {key} ] {value.__doc__}')
 
     def do_edit_firstname(self):
         print(f"Original first name is {self.volunteer.firstname}.")
@@ -93,7 +93,7 @@ class EditVolunteerMenu(BaseMenu):
                 continue
 
     def do_edit_camp(self):
-        print(f"Original assigned camp is {self.volunteer.camp} for Plan {self.volunteer.camp.plan}.")
+        print(f"Original assigned camp is {self.volunteer.camp} for Plan {self.volunteer.camp.plan.name}.")
         if self.is_admin:
             while True:
                 plan_name = input("Enter the name of the new plan (or press # to exit): ")

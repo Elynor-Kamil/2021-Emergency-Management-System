@@ -86,8 +86,8 @@ class ManageVolunteerMenu(BaseMenu):
                 volunteer_controller.deactivate_volunteer(find_volunteer)
                 print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} deactivated.\n")
                 return
-            except ControllerError:
-                print(f"\033[31m* Volunteer {username} not found. Please check and re-enter.\033[00m")
+            except ControllerError as e:
+                print(f"\033[31m* Error: {e}\033[00m")
                 continue
 
     def do_reactivate_volunteer(self):
@@ -99,10 +99,10 @@ class ManageVolunteerMenu(BaseMenu):
             try:
                 find_volunteer = volunteer_controller.find_volunteer(username)
                 volunteer_controller.reactivate_volunteer(find_volunteer)
-                print(f"\x1b[6;30;42m success! \x1b[0mVolunteer {username} reactivated.\n")
+                print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} is now reactivated.\n")
                 return
-            except ControllerError:
-                print(f"\033[31m* Volunteer {username} not found. Please check and re-enter.\033[00m")
+            except ControllerError as e:
+                print(f"\033[31m* Error: {e}\033[00m")
                 continue
 
     def do_delete_volunteer(self):

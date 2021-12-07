@@ -94,12 +94,16 @@ def edit_availability(volunteer: Volunteer, availability: bool) -> Volunteer:
 
 
 def deactivate_volunteer(volunteer: Volunteer) -> Volunteer:
+    if volunteer.account_activated == False:
+        raise ControllerError(f"Volunteer {volunteer.username} is already deactivated.")
     volunteer.account_activated = False
     volunteer.save()
     return volunteer
 
 
 def reactivate_volunteer(volunteer: Volunteer) -> Volunteer:
+    if volunteer.account_activated == True:
+        raise ControllerError(f"Volunteer {volunteer.username} is already active.")
     volunteer.account_activated = True
     volunteer.save()
     return volunteer
