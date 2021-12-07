@@ -17,6 +17,7 @@ class LoginPage:
         # login
         print("\033[96mWelcome to EMS, please enter your details.\033[0m")
         while self.user is None:
+            print("\n\033[100m\033[4m\033[1mLog in\033[0m")
             username = input('Username: ')
             password = input('Password: ')
             try:

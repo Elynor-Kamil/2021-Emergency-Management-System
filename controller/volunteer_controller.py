@@ -93,6 +93,7 @@ def edit_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> Volunteer:
 
 def edit_availability(volunteer: Volunteer, availability: bool) -> Volunteer:
     volunteer.availability = availability
+
     volunteer.save()
     return volunteer
 

@@ -38,19 +38,18 @@ class EditVolunteerMenu(BaseMenu):
         """Show volunteer's profile again"""
         if self.is_admin:
             print(f"You're editing {self.volunteer.username}'s profile.")
-
         print(f"Select the information to edit :\n"
               f"[ 0 ] First name: {self.volunteer.firstname}\n"
               f"[ 1 ] Last name: {self.volunteer.lastname}\n"
               f"[ 2 ] Phone number: {self.volunteer.phone}\n"
               f"[ 3 ] Camp: {self.volunteer.camp}\n"
-              f"[ 4 ] Availability: {self.volunteer.availability}")
+              f"[ 4 ] Availability: {self.volunteer.status}")
 
         for key, value in self.named_operations().items():
             print(f'[ {key} ] {value.__doc__}')
 
     def do_edit_firstname(self):
-        print(f"Original first name is {self.volunteer.firstname}.")
+        print(f"\nOriginal first name is {self.volunteer.firstname}.")
         while True:
             firstname = input("Please enter new first name (or press # to exit this page):")
             if firstname == '#':
@@ -65,7 +64,7 @@ class EditVolunteerMenu(BaseMenu):
                 continue
 
     def do_edit_lastname(self):
-        print(f"Original last name is {self.volunteer.lastname}.")
+        print(f"\nOriginal last name is {self.volunteer.lastname}.")
         while True:
             lastname = input("Please enter new last name (or press # to exit this page):")
             if lastname == '#':
@@ -79,7 +78,7 @@ class EditVolunteerMenu(BaseMenu):
                 continue
 
     def do_edit_phone(self):
-        print(f"Original phone number is {self.volunteer.phone}.")
+        print(f"\nOriginal phone number is {self.volunteer.phone}.")
         print("(Phone number should include country code with a + sign.")
         while True:
             phone = input("Please enter new phone number (or press # to exit this page):")
@@ -95,7 +94,7 @@ class EditVolunteerMenu(BaseMenu):
                 continue
 
     def do_edit_camp(self):
-        print(f"Original assigned camp is {self.volunteer.camp} for Plan {self.volunteer.camp.plan.name}.")
+        print(f"\nOriginal assigned camp is {self.volunteer.camp} for Plan {self.volunteer.camp.plan.name}.")
         if self.is_admin:
             while True:
                 plan_name = input("Enter the name of the new plan (or press # to exit): ")
@@ -129,7 +128,7 @@ class EditVolunteerMenu(BaseMenu):
             print(f'\033[31mCannot change camp: {str(e)}')
 
     def do_edit_availability(self):
-        print(f"Original availability is {self.volunteer.availability}.")
+        print(f"\nOriginal availability is {self.volunteer.status}.")
         while True:
             print('[1] - Available\n'
                   '[0] - Unavailable')
@@ -143,6 +142,6 @@ class EditVolunteerMenu(BaseMenu):
                 continue
             break
         volunteer = volunteer_controller.edit_availability(self.volunteer, availability)
-        status = 'available' if volunteer.availability else 'unavailable'
-        print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {volunteer.firstname} is now {status}.")
+        volunteer.status = 'available' if volunteer.availability else 'unavailable'
+        print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {volunteer.firstname} is now {volunteer.status}.")
         return

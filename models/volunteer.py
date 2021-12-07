@@ -82,16 +82,17 @@ class Volunteer(User):
         return self.find_referred_by(referrer_type=Camp)
 
     def __str__(self):
+        self.status = 'available' if self.availability else 'unavailable'
         try:
-            camp_str = f'{self.camp} @ {self.camp.plan}'
+            camp_str = f'{self.camp} in {self.camp.plan}'
         except Document.ReferrerNotFound:
             camp_str = 'not assigned'
         return f"{super().__str__()}\n" \
                f"Account activated: {self.account_activated}\n" \
                f"Name: {self.firstname} {self.lastname}\n" \
-               f"Camp: {camp_str}\n" \
+               f"Camp/Plan: {camp_str}\n" \
                f"Phone Number: {self.phone}\n" \
-               f"Availability: {self.availability}\n" \
+               f"Availability: {self.status}\n" \
                f"Date joined: {self.__creation_date}\n"
 
     class InvalidUsernameException(Exception):

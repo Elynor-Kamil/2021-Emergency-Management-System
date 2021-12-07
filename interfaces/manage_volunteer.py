@@ -51,7 +51,7 @@ class ManageVolunteerMenu(BaseMenu):
                 print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} created.\n")
                 return
             except ControllerError as e:
-                print(f'\033[31mFailed to create volunteer \033[00m{username} due to the following reasons:')
+                print(f'\033[31mFailed to create volunteer {username} due to the following reasons:\033[00m')
                 print(f'\033[31m* {e.message} \033[00m')
                 return
 
