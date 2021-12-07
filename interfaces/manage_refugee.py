@@ -104,6 +104,7 @@ class ManageRefugeeMenu(BaseMenu):
                     if not self.is_admin and refugee.camp != self.user.camp:
                         print(f"\033[31m* {refugee_id} not found. Please check and re-enter.\033[00m")
                         continue
+                    print(f"\n\033[100m\033[4m\033[1mView refugee profile\033[0m")
                     print(refugee_controller.view_refugee(refugee))
                     return
                 except ControllerError:

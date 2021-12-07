@@ -8,7 +8,7 @@ class ManageVolunteerMenu(BaseMenu):
     title = f'\n\033[100m\033[4m\033[1mManage Volunteer Menu\033[0m'
     def do_create_volunteer(self):
         """Create a volunteer"""
-        print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))
+        print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))
         # STEP 1: validate if plan exists
         while True:
             plan_name = input("Enter the plan that the new volunteer belongs to (or press # to exit): ")
