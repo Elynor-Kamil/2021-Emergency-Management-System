@@ -95,7 +95,7 @@ def close_plan(plan: Plan):
     Inputted plan will be changed to read-only by changing the __is_closed flag in Plan class.
     """
     if plan.is_closed:
-        raise controller_error.ControllerError("Plan is already closed.")
+        raise controller_error.ControllerError(f"Plan {plan.name} is already closed.")
     else:
         plan.close()
         plan.save()
