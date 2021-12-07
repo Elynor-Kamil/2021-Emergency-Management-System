@@ -11,6 +11,12 @@ class VolunteerMenu(BaseMenu):
     def exit_message(self):
         return f'Logged out of {self.user.username}!'
 
+    def do_profile(self):
+        """View my details"""
+        print("\n\033[4m\033[1m{}\033[0m\n".format("Your details:") +
+              f'{self.user}\n')
+        return
+
     def do_edit_details(self):
         """Edit my details"""
         EditVolunteerMenu(self.user).run()

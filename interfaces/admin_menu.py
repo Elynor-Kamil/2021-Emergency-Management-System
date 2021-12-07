@@ -15,9 +15,7 @@ class AdminMenu(BaseMenu):
     def do_profile(self):
         """View my details"""
         print("\n\033[4m\033[1m{}\033[0m\n".format("Your details:") +
-              f'Username: {self.user.username}\n'
-              f'Role: {self.user.__class__.__name__}\n')
-        print("Return to main menu..")
+              f'{self.user}\n')
         return
 
     def do_manage_plan(self):
