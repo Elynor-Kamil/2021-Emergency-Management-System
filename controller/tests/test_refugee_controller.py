@@ -4,7 +4,6 @@ from models.camp import Camp
 from models.plan import Plan
 from models.refugee import Refugee
 import controller.refugee_controller as rc
-import controller.plan_controller as pc
 
 
 class RefugeeControllerTest(unittest.TestCase):
@@ -36,7 +35,7 @@ class RefugeeControllerTest(unittest.TestCase):
                     description='Test emergency plan',
                     geographical_area='London',
                     camps=[test_camp])
-        pc.close_plan(plan)
+        plan.close()
         with self.assertRaises(rc.ControllerError):
             rc.create_refugee("James", "Bond", test_camp, 6, date(2020, 1, 1),
                               [Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])

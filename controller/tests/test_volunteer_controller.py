@@ -3,7 +3,6 @@ import controller.volunteer_controller as vc
 from models.plan import Plan
 from models.camp import Camp
 from models.volunteer import Volunteer
-import controller.plan_controller as pc
 
 
 class TestVolunteerController(unittest.TestCase):
@@ -40,7 +39,7 @@ class TestVolunteerController(unittest.TestCase):
                     description='Test',
                     geographical_area='',
                     camps=[camp_4])
-        pc.close_plan(plan)
+        plan.close()
         camp = Plan.find(key='Plan-3').camps.get('Camp-4')
         with self.assertRaises(vc.ControllerError):
             vc.create_volunteer(username='den', password='root', firstname='Dennis', lastname='Yung',
@@ -173,7 +172,7 @@ class TestVolunteerController(unittest.TestCase):
                     description='Test',
                     geographical_area='',
                     camps=[camp_4])
-        pc.close_plan(plan)
+        plan.close()
         camp = Plan.find(key='Plan-3').camps.get('Camp-4')
         with self.assertRaises(vc.ControllerError):
             vc.edit_camp(volunteer=volunteer, camp=camp, is_admin=True)
