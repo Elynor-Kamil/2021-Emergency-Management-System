@@ -58,9 +58,9 @@ class EditVolunteerMenu(BaseMenu):
                 volunteer_controller.edit_firstname(self.volunteer, firstname)
                 print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's first name is changed to {self.volunteer.firstname}")
                 return
-            except ControllerError:
+            except ControllerError as e:
                 print(
-                    f"\033[31m** Invalid first name {firstname}. First name should have at least 2 characters.\033[00m")
+                    f"\033[31m** Fail: {e} \033[00m")
                 continue
 
     def do_edit_lastname(self):
@@ -73,8 +73,8 @@ class EditVolunteerMenu(BaseMenu):
                 volunteer_controller.edit_lastname(self.volunteer, lastname)
                 print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's last name is changed to {self.volunteer.lastname}")
                 return
-            except ControllerError:
-                print(f"\033[31m** Invalid last name {lastname}. Last name should have at least 2 characters.\033[00m")
+            except ControllerError as e:
+                print(f"\033[31m** Fail: {e}\033[00m")
                 continue
 
     def do_edit_phone(self):
@@ -88,9 +88,8 @@ class EditVolunteerMenu(BaseMenu):
                 volunteer_controller.edit_phone(self.volunteer, phone)
                 print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's phone number is changed to {self.volunteer.phone}")
                 return
-            except ControllerError:
-                print(f"\033[31m** Invalid phone number {phone}. "
-                      f"Phone number should include country code with a + sign.\033[00m")
+            except ControllerError as e:
+                print(f"\033[31m** Fail: {e}\033[00m")
                 continue
 
     def do_edit_camp(self):

@@ -86,7 +86,7 @@ class ManageVolunteerMenu(BaseMenu):
                 print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} deactivated.\n")
                 return
             except ControllerError as e:
-                print(f"\033[31m* Error: {e}\033[00m")
+                print(f"\033[31m* Fail: {e}\033[00m")
                 continue
 
     def do_reactivate_volunteer(self):
@@ -101,7 +101,7 @@ class ManageVolunteerMenu(BaseMenu):
                 print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} is now reactivated.\n")
                 return
             except ControllerError as e:
-                print(f"\033[31m* Error: {e}\033[00m")
+                print(f"\033[31m* Fail: {e}\033[00m")
                 continue
 
     def do_delete_volunteer(self):

@@ -37,7 +37,7 @@ class ManagePlanMenu(BaseMenu):
                 camps = [plan_controller.create_camps(name) for name in camp_names]
                 break
             except ControllerError as e:
-                print("\033[31m {}\033[00m".format(f"** Failed to create camps: {e}. \nPlease check and re-enter"))
+                print(f"\033[31m* Failed to create camps: {e}.\033[00m")
                 continue
         try:
             plan_controller.create_plan(plan_name=e_name,
@@ -47,8 +47,8 @@ class ManagePlanMenu(BaseMenu):
                                         camps=camps)
             print(f"\x1b[6;30;42m success! \x1b[0m\t Plan {e_name} created.")
             return
-        except ControllerError:
-            print("\033[31m {}\033[00m".format("** Unable to create an emergency plan."))
+        except ControllerError as e:
+            print(f"\033[31m* Unable to create an emergency plan: {e}\033[00m")
             return
 
     def do_list_plans(self):
