@@ -45,7 +45,7 @@ class ManagePlanMenu(BaseMenu):
                                         description=e_description,
                                         geographical_area=e_geo_area,
                                         camps=camps)
-            print(f"\x1b[6;30;42m success! \x1b[0m\t Plan {e_name} created.")
+            print(f"\x1b[6;30;42m success! \x1b[0m\t Plan '{e_name}' created.")
             return
         except ControllerError as e:
             print(f"\033[31m* Unable to create an emergency plan: {e}\033[00m")
@@ -55,7 +55,7 @@ class ManagePlanMenu(BaseMenu):
         """List out all the existing plans"""
         print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Existing Plans"))
         if not plan_controller.list_plans():
-            print("No existing plan.")
+            print("\033[31m * No existing plan. \033[00m")
         for plan in plan_controller.list_plans():
             print(plan, '\n')
         return
@@ -89,7 +89,7 @@ class ManagePlanMenu(BaseMenu):
             try:
                 plan_controller.close_plan(find_plan)
                 print("\x1b[6;30;42m success! \x1b[0m\t")
-                print(f"Plan {plan_name} Closed.")
+                print(f"Plan '{plan_name}' Closed.")
                 return
             except ControllerError as e:
                 print(f"\033[31m * Failed to close plan: {e}\033[00m")
