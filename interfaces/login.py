@@ -1,6 +1,7 @@
 import sys
 
 from models.admin import Admin
+from models.base.document import Document
 from models.user import User
 from models.volunteer import Volunteer
 
@@ -30,6 +31,15 @@ class LoginPage:
                 elif isinstance(self.user, Volunteer):
                     if not self.user.account_activated:
                         print("\033[31m {}\033[00m".format("** Your account is deactivated. Please contact admin."))
+                        sys.exit()
+                    try:
+                        if user.camp.plan.is_closed:
+                            print("\033[31m {}\033[00m".format(
+                                "** The plan you are assigned to is closed. Please contact admin."))
+                            sys.exit()
+                    except Document.ReferrerNotFound:
+                        print("\033[31m {}\033[00m".format(
+                            "** You are not assigned to any camp. Please contact admin."))
                         sys.exit()
                     VolunteerMenu(self.user).run()
                 else:
