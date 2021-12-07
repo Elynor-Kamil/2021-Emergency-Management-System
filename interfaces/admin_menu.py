@@ -10,7 +10,7 @@ class AdminMenu(BaseMenu):
 
     @property
     def exit_message(self):
-        return f'Logged out of {self.user.username}!'
+        return f'\033[94mLogged out of {self.user.username}!\033[0m'
 
     def do_profile(self):
         """View my details"""
