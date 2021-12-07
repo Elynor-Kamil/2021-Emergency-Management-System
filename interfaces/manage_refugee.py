@@ -25,7 +25,7 @@ class ManageRefugeeMenu(BaseMenu):
                     plan = plan_controller.find_plan(plan_name)
                     break
                 except ControllerError:
-                    print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
+                    print(f"\033[31m * Plan '{plan_name}' not found. Please re-enter plan name. \033[00m")
                     continue
 
             while True:
@@ -70,7 +70,7 @@ class ManageRefugeeMenu(BaseMenu):
                     r_condition = medical_condition_types[int(condition)]
                     r_conditions.append(r_condition)
                 except (IndexError, ValueError):
-                    print(f'\033[31m* "{condition}" is not on the list.\033[00m')
+                    print(f"\033[31m* '{condition}' is not on the list.\033[00m")
                     break
             else:
                 break

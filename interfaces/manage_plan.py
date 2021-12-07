@@ -25,7 +25,7 @@ class ManagePlanMenu(BaseMenu):
                 emergency_type = emergency_types[emergency_id]
                 break
             except (IndexError, ValueError):
-                print(f'\033[31m* Type {emergency_input} is not on the list.\033[00m')
+                print(f"\033[31m* '{emergency_input}' is not on the list.\033[00m")
                 continue
 
         e_description = input("Enter description: ")
@@ -72,7 +72,7 @@ class ManagePlanMenu(BaseMenu):
                 print(plan_controller.view_plan_statistics(find_plan))
                 return
             except ControllerError:
-                print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
+                print(f"\033[31m * Plan '{plan_name}' not found. Please re-enter plan name. \033[00m")
                 continue
 
     def do_close_plan(self):
@@ -84,7 +84,7 @@ class ManagePlanMenu(BaseMenu):
             try:
                 find_plan = plan_controller.find_plan(plan_name)
             except ControllerError:
-                print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
+                print(f"\033[31m * Plan '{plan_name}' not found. Please re-enter plan name. \033[00m")
                 continue
             try:
                 plan_controller.close_plan(find_plan)

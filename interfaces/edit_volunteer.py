@@ -93,7 +93,7 @@ class EditVolunteerMenu(BaseMenu):
                 continue
 
     def do_edit_camp(self):
-        print(f"\nOriginal assigned camp is {self.volunteer.camp} for Plan {self.volunteer.camp.plan.name}.")
+        print(f"\nOriginal assigned camp is '{self.volunteer.camp}' for Plan '{self.volunteer.camp.plan.name}'.")
         if self.is_admin:
             while True:
                 plan_name = input("Enter the name of the new plan (or press # to exit): ")
@@ -103,7 +103,7 @@ class EditVolunteerMenu(BaseMenu):
                     plan = plan_controller.find_plan(plan_name)
                     break
                 except ControllerError:
-                    print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
+                    print(f"\033[31m * Plan '{plan_name}' not found. Please re-enter plan name. \033[00m")
                     continue
         else:
             plan = self.volunteer.camp.plan
