@@ -36,13 +36,16 @@ class EditVolunteerMenu(BaseMenu):
 
     def print_menu(self):
         """Show volunteer's profile again"""
-        print(
-            f"You're editing {self.volunteer.username}'s profile. Select the information to edit :\n"
-            f"[ 0 ] First name: {self.volunteer.firstname}\n"
-            f"[ 1 ] Last name: {self.volunteer.lastname}\n"
-            f"[ 2 ] Phone number: {self.volunteer.phone}\n"
-            f"[ 3 ] Camp: {self.volunteer.camp}\n"
-            f"[ 4 ] Availability: {self.volunteer.availability}")
+        if self.is_admin:
+            print(f"You're editing {self.volunteer.username}'s profile.")
+
+        print(f"Select the information to edit :\n"
+              f"[ 0 ] First name: {self.volunteer.firstname}\n"
+              f"[ 1 ] Last name: {self.volunteer.lastname}\n"
+              f"[ 2 ] Phone number: {self.volunteer.phone}\n"
+              f"[ 3 ] Camp: {self.volunteer.camp}\n"
+              f"[ 4 ] Availability: {self.volunteer.availability}")
+
         for key, value in self.named_operations().items():
             print(f'[ {key} ] {value.__doc__}')
 

@@ -57,6 +57,8 @@ class ManagePlanMenu(BaseMenu):
 
     def do_list_plans(self):
         """List out all the existing plans"""
+        if plan_controller.list_plans() == None:
+            print("No existing plan.")
         print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Existing Plans"))
         for plan in plan_controller.list_plans():
             print(plan)
