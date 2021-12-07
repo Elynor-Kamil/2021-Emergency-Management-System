@@ -12,7 +12,7 @@ def create_volunteer(username: str,
                      phone: str,
                      camp: Camp) -> Volunteer:
     if camp.plan.is_closed:
-        raise ControllerError(f"Plan {camp.plan.name} is closed. Please choose another plan.")
+        raise ControllerError(f"Plan {camp.plan.name} is closed.")
     try:
         volunteer = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
                               phone=phone)
@@ -73,7 +73,7 @@ def edit_phone(volunteer: Volunteer, phone: str) -> Volunteer:
 def edit_camp(volunteer: Volunteer, camp: Camp, is_admin: bool) -> Volunteer:
     old_camp = volunteer.camp
     if camp.plan.is_closed:
-        raise ControllerError(f"Plan {camp.plan.name} is closed. Please choose another plan.")
+        raise ControllerError(f"Plan {camp.plan.name} is closed.")
     if is_admin:
         old_camp.volunteers.remove(volunteer)
         old_camp.save()
