@@ -59,7 +59,10 @@ class ManageRefugeeMenu(BaseMenu):
 
         while True:
             medical_input = input("Enter refugee's medical condition from the list "
-                                  "(use comma to separate multiple inputs): ")
+                                  "(leave empty for none, use comma to separate multiple inputs): ")
+            if medical_input == '':
+                r_conditions = []
+                break
             medical_conditions = medical_input.replace(', ', ',').split(",")
             r_conditions = []
             for condition in medical_conditions:
