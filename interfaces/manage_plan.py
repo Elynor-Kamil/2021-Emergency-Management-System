@@ -1,7 +1,6 @@
 from controller import plan_controller
 from controller.controller_error import ControllerError
 from interfaces.base_menu import BaseMenu
-from models.plan import Plan
 
 
 class ManagePlanMenu(BaseMenu):
@@ -87,7 +86,7 @@ class ManagePlanMenu(BaseMenu):
                 return
             try:
                 find_plan = plan_controller.find_plan(plan_name)
-            except ControllerError as e:
+            except ControllerError:
                 print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
                 continue
             try:
@@ -95,6 +94,6 @@ class ManagePlanMenu(BaseMenu):
                 print("\x1b[6;30;42m success! \x1b[0m\t")
                 print(f"Plan {plan_name} Closed.")
                 return
-            except:
-                print(f"\033[31m * Plan {plan_name} is already closed.\033[00m")
+            except ControllerError as e:
+                print(f"\033[31m * Failed to close plan: {e}\033[00m")
                 return

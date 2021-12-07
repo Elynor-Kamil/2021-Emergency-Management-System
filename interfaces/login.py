@@ -9,6 +9,7 @@ from models.volunteer import Volunteer
 class LoginPage:
     def __init__(self, user=None):
         self.user = user
+        self.prompt = '> '
 
     def run(self):
         from interfaces.admin_menu import AdminMenu
@@ -33,7 +34,7 @@ class LoginPage:
                         print("\033[31m {}\033[00m".format("** Your account is deactivated. Please contact admin."))
                         sys.exit()
                     try:
-                        user.camp
+                        self.user.camp()
                     except Document.ReferrerNotFound:
                         print("\033[31m {}\033[00m".format(
                             "** You are not assigned to any camp. Please contact admin."))

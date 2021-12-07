@@ -1,7 +1,3 @@
-from interfaces.login import LoginPage
-from models.admin import Admin
-
-
 class BaseMenu:
     menu_items = []
     welcome_message = None
