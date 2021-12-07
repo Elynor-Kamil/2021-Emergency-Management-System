@@ -118,9 +118,11 @@ class Refugee(Document):
     def __str__(self):
         return f"Refugee family {self.firstname} {self.lastname} located in {self.camp}.\n" \
                f"Number of Family Member: {self.num_of_family_member}\n" \
-               f"Camp: {self.camp}\n" \
+               f"Camp: {self.camp.name}\n" \
+               f"Plan: {self.camp.plan.name}\n" \
                f"Creation Date: {self.starting_date}\n" \
-               f"Medical Condition: {', '.join([condition.value for condition in self.medical_condition_type])}\n"
+               f"Medical Condition: " \
+               f"{', '.join([condition.value for condition in self.medical_condition_type]) or 'None'}\n"
 
     class InvalidNumOfFamilyMemberException(Exception):
         """

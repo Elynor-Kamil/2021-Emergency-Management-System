@@ -47,5 +47,6 @@ if __name__ == '__main__':
 
     r = Refugee(firstname='Refugee', lastname='One', num_of_family_member=4, starting_date=date(2021, 5, 4))
     camps1[0].refugees.add(r)
+    print(f'Refugee 1 id: {r.user_id}')
 
     print('Sample data generated successfully')
