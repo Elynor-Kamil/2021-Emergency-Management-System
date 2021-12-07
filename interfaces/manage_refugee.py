@@ -1,9 +1,15 @@
 from controller import plan_controller, refugee_controller
 from controller.controller_error import ControllerError
 from interfaces.base_menu import BaseMenu
+from models.admin import Admin
+from datetime import datetime
 
 
 class ManageRefugeeMenu(BaseMenu):
+
+    @property
+    def is_admin(self):
+        return isinstance(self.user, Admin)
 
     def do_create_refugee(self):
         """Create a refugee profile"""
@@ -80,10 +86,8 @@ class ManageRefugeeMenu(BaseMenu):
                 print(f'\033[31m* Failed to create a refugee profile for\033[00m {r_firstname} {r_lastname}')
                 continue
 
-    def do_view_refugee(self, arg):
-        """
-        #2 View a refugee profile
-        """
+    def do_view_refugee(self):
+        """View a refugee profile"""
         while True:
             user_input = input("Enter the refugee's ID to view (or # to exit): ")
             if user_input == "#":
