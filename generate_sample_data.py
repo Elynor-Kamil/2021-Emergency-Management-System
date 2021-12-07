@@ -45,12 +45,15 @@ if __name__ == '__main__':
     camps1[1].volunteers.add(v2)
     camps2[0].volunteers.add(v3)
 
-    r1 = Refugee(firstname='Refugee', lastname='One', num_of_family_member=4, starting_date=date(2021, 5, 4))
+    r1 = Refugee(firstname='Refugee', lastname='One', num_of_family_member=54, starting_date=date(2021, 5, 4))
     camps1[0].refugees.add(r1)
-    r2 = Refugee(firstname='Refugee', lastname='Two', num_of_family_member=1, starting_date=date(2020, 7, 16),
+    r2 = Refugee(firstname='Refugee', lastname='Two', num_of_family_member=203, starting_date=date(2020, 7, 16),
                  medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.DIABETES])
-    camps1[0].refugees.add(r2)
+    camps1[1].refugees.add(r2)
+    r3 = Refugee(firstname='Refugee', lastname='Three', num_of_family_member=325, starting_date=date(2020, 3, 21))
+    camps2[0].refugees.add(r3)
     print(f'Refugee 1 id: {r1.user_id}')
     print(f'Refugee 2 id: {r2.user_id}')
+    print(f'Refugee 3 id: {r3.user_id}')
 
     print('Sample data generated successfully')

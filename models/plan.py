@@ -164,10 +164,10 @@ class Plan(IndexedDocument):
         return statistics
 
     @classmethod
-    def __get_num_of_volunteers_vs_standard(cls, num_of_volunteers, num_of_refugees) -> str:
+    def __get_num_of_volunteers_vs_standard(cls, num_of_volunteers, num_of_refugees) -> int:
         """
         Function to find number of volunteers:ideal number of volunteers ratio by ideal 1:20 volunteer number ratio.
         """
         ideal_volunteers_num = int(math.ceil(num_of_refugees / cls.TARGET_REFUGEE_VOLUNTEER_RATIO))
 
-        return f"{num_of_volunteers}:{ideal_volunteers_num}"
+        return num_of_volunteers-ideal_volunteers_num

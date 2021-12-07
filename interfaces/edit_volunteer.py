@@ -38,19 +38,18 @@ class EditVolunteerMenu(BaseMenu):
         """Show volunteer's profile again"""
         if self.is_admin:
             print(f"You're editing {self.volunteer.username}'s profile.")
-
         print(f"Select the information to edit :\n"
               f"[ 0 ] First name: {self.volunteer.firstname}\n"
               f"[ 1 ] Last name: {self.volunteer.lastname}\n"
               f"[ 2 ] Phone number: {self.volunteer.phone}\n"
               f"[ 3 ] Camp: {self.volunteer.camp}\n"
-              f"[ 4 ] Availability: {self.volunteer.availability}")
+              f"[ 4 ] Availability: {self.volunteer.status}")
 
         for key, value in self.named_operations().items():
             print(f'[ {key} ] {value.__doc__}')
 
     def do_edit_firstname(self):
-        print(f"Original first name is {self.volunteer.firstname}.")
+        print(f"\nOriginal first name is {self.volunteer.firstname}.")
         while True:
             firstname = input("Please enter new first name (or press # to exit this page):")
             if firstname == '#':
@@ -59,13 +58,13 @@ class EditVolunteerMenu(BaseMenu):
                 volunteer_controller.edit_firstname(self.volunteer, firstname)
                 print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's first name is changed to {self.volunteer.firstname}")
                 return
-            except ControllerError:
+            except ControllerError as e:
                 print(
-                    f"\033[31m** Invalid first name {firstname}. First name should have at least 2 characters.\033[00m")
+                    f"\033[31m** Fail: {e} \033[00m")
                 continue
 
     def do_edit_lastname(self):
-        print(f"Original last name is {self.volunteer.lastname}.")
+        print(f"\nOriginal last name is {self.volunteer.lastname}.")
         while True:
             lastname = input("Please enter new last name (or press # to exit this page):")
             if lastname == '#':
@@ -74,12 +73,12 @@ class EditVolunteerMenu(BaseMenu):
                 volunteer_controller.edit_lastname(self.volunteer, lastname)
                 print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's last name is changed to {self.volunteer.lastname}")
                 return
-            except ControllerError:
-                print(f"\033[31m** Invalid last name {lastname}. Last name should have at least 2 characters.\033[00m")
+            except ControllerError as e:
+                print(f"\033[31m** Fail: {e}\033[00m")
                 continue
 
     def do_edit_phone(self):
-        print(f"Original phone number is {self.volunteer.phone}.")
+        print(f"\nOriginal phone number is {self.volunteer.phone}.")
         print("(Phone number should include country code with a + sign.")
         while True:
             phone = input("Please enter new phone number (or press # to exit this page):")
@@ -89,13 +88,12 @@ class EditVolunteerMenu(BaseMenu):
                 volunteer_controller.edit_phone(self.volunteer, phone)
                 print(f"\x1b[6;30;42msuccess!\x1b[0m Volunteer's phone number is changed to {self.volunteer.phone}")
                 return
-            except ControllerError:
-                print(f"\033[31m** Invalid phone number {phone}. "
-                      f"Phone number should include country code with a + sign.\033[00m")
+            except ControllerError as e:
+                print(f"\033[31m** Fail: {e}\033[00m")
                 continue
 
     def do_edit_camp(self):
-        print(f"Original assigned camp is {self.volunteer.camp} for Plan {self.volunteer.camp.plan.name}.")
+        print(f"\nOriginal assigned camp is '{self.volunteer.camp}' for Plan '{self.volunteer.camp.plan.name}'.")
         if self.is_admin:
             while True:
                 plan_name = input("Enter the name of the new plan (or press # to exit): ")
@@ -105,7 +103,7 @@ class EditVolunteerMenu(BaseMenu):
                     plan = plan_controller.find_plan(plan_name)
                     break
                 except ControllerError:
-                    print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
+                    print(f"\033[31m * Plan '{plan_name}' not found. Please re-enter plan name. \033[00m")
                     continue
         else:
             plan = self.volunteer.camp.plan
@@ -126,10 +124,10 @@ class EditVolunteerMenu(BaseMenu):
             volunteer_controller.edit_camp(self.volunteer, camp, self.is_admin)
             print(f"\x1b[6;30;42m success! \x1b[0m New assigned camp is {self.volunteer.camp}.")
         except ControllerError as e:
-            print(f'\033[31mCannot change camp: {str(e)}')
+            print(f'\033[31mCannot change camp: {str(e)} \033[00m')
 
     def do_edit_availability(self):
-        print(f"Original availability is {self.volunteer.availability}.")
+        print(f"\nOriginal availability is {self.volunteer.status}.")
         while True:
             print('[1] - Available\n'
                   '[0] - Unavailable')
@@ -143,6 +141,6 @@ class EditVolunteerMenu(BaseMenu):
                 continue
             break
         volunteer = volunteer_controller.edit_availability(self.volunteer, availability)
-        status = 'available' if volunteer.availability else 'unavailable'
-        print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {volunteer.firstname} is now {status}.")
+        volunteer.status = 'available' if volunteer.availability else 'unavailable'
+        print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {volunteer.firstname} is now {volunteer.status}.")
         return

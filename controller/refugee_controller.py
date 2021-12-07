@@ -1,9 +1,8 @@
 from datetime import date
-from controller.controller_error import ControllerError
 from enum import Enum
 from typing import Type, Iterable
 
-from models.base.document import Document
+from controller.controller_error import ControllerError
 from models.camp import Camp
 from models.plan import Plan
 from models.refugee import Refugee
@@ -26,7 +25,7 @@ def create_refugee(firstname: str,
     Function to create and save refugee data.
     """
     if camp.plan.is_closed:
-        raise ControllerError(f"Plan {camp.plan.name} is closed. Please choose another plan.")
+        raise ControllerError(f"Plan '{camp.plan.name}' of the camp '{camp.name}' is closed")
     try:
         new_refugee = Refugee(firstname=firstname,
                               lastname=lastname,

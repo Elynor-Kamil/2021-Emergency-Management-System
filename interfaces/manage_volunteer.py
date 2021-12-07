@@ -18,7 +18,7 @@ class ManageVolunteerMenu(BaseMenu):
                 plan = plan_controller.find_plan(plan_name)
                 break
             except ControllerError:
-                print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
+                print(f"\033[31m * Plan '{plan_name}' not found. Please re-enter plan name. \033[00m")
                 continue
 
         # STEP 2: validate if camp exists
@@ -51,7 +51,7 @@ class ManageVolunteerMenu(BaseMenu):
                 print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} created.\n")
                 return
             except ControllerError as e:
-                print(f'\033[31mFailed to create volunteer \033[00m{username} due to the following reasons:')
+                print(f'\033[31mFailed to create volunteer {username} due to the following reasons:\033[00m')
                 print(f'\033[31m* {e.message} \033[00m')
                 return
 
@@ -86,7 +86,7 @@ class ManageVolunteerMenu(BaseMenu):
                 print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} deactivated.\n")
                 return
             except ControllerError as e:
-                print(f"\033[31m* Error: {e}\033[00m")
+                print(f"\033[31m* Fail: {e}\033[00m")
                 continue
 
     def do_reactivate_volunteer(self):
@@ -101,7 +101,7 @@ class ManageVolunteerMenu(BaseMenu):
                 print(f"\x1b[6;30;42m success! \x1b[0m Volunteer {username} is now reactivated.\n")
                 return
             except ControllerError as e:
-                print(f"\033[31m* Error: {e}\033[00m")
+                print(f"\033[31m* Fail: {e}\033[00m")
                 continue
 
     def do_delete_volunteer(self):

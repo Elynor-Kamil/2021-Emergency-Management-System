@@ -192,7 +192,7 @@ class PlanTest(unittest.TestCase):
         test_plan_statistics = test_plan.statistics()
         test_dictionary = {'camp1': {'num_of_refugees': 600,
                                      'num_of_volunteers': 3,
-                                     'num_volunteers_vs_standard': '3:30'}
+                                     'num_volunteers_vs_standard': -27}
                            }
         self.assertDictEqual(test_dictionary, test_plan_statistics)
 
@@ -238,7 +238,7 @@ class PlanTest(unittest.TestCase):
         test_camp2.refugees.add(refugee2)
         test_dictionary = {'camp1': {'num_of_refugees': 6,
                                      'num_of_volunteers': 2,
-                                     'num_volunteers_vs_standard': '2:1'}}
+                                     'num_volunteers_vs_standard': 1}}
         self.assertDictEqual(test_dictionary, test_plan_statistics1)
 
     def tearDown(self):
