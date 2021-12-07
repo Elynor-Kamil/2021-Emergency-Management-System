@@ -11,15 +11,14 @@ class ManageVolunteerMenu(BaseMenu):
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))
         # STEP 1: validate if plan exists
         while True:
-            plan = input("Enter the plan that the new volunteer belongs to (or press # to exit): ")
-            if plan == '#':
+            plan_name = input("Enter the plan that the new volunteer belongs to (or press # to exit): ")
+            if plan_name == '#':
                 return
             try:
-                find_plan = plan_controller.find_plan(plan)
-                plan = find_plan
+                plan = plan_controller.find_plan(plan_name)
                 break
             except ControllerError:
-                print(f"\033[31m * Plan {plan.name} not found. Please re-enter plan name. \033[00m")
+                print(f"\033[31m * Plan {plan_name} not found. Please re-enter plan name. \033[00m")
                 continue
 
         # STEP 2: validate if camp exists

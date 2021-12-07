@@ -126,7 +126,7 @@ class EditVolunteerMenu(BaseMenu):
             volunteer_controller.edit_camp(self.volunteer, camp, self.is_admin)
             print(f"\x1b[6;30;42m success! \x1b[0m New assigned camp is {self.volunteer.camp}.")
         except ControllerError as e:
-            print(f'Cannot change camp: {str(e)}')
+            print(f'\033[31mCannot change camp: {str(e)}')
 
     def do_edit_availability(self):
         print(f"Original availability is {self.volunteer.availability}.")
