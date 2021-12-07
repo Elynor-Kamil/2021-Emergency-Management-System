@@ -18,8 +18,11 @@ def create_camps(name: str) -> Camp:
     """
     Create new camp.
     """
-    camp = Camp(name=name)
-    return camp
+    try:
+        camp = Camp(name=name)
+        return camp
+    except Camp.InvalidName as e:
+        raise controller_error.ControllerError(str(e))
 
 
 def create_plan(plan_name: str, emergency_type: Plan.EmergencyType, description: str,
@@ -27,15 +30,13 @@ def create_plan(plan_name: str, emergency_type: Plan.EmergencyType, description:
                 camps: Iterable[Camp]) -> Plan:
     """
     Creates plan given relevant inputs.
-
-    TODO : once issue #38 is resolved, need to add exception for camps having the same name.
     """
     if Plan.find(key=plan_name) is not None:
         raise controller_error.ControllerError(f'Plan with name {plan_name} already exists.')
     try:
         return Plan(name=plan_name, emergency_type=emergency_type, description=description,
                     geographical_area=geographical_area, camps=camps)
-    except Plan.MissingCampsError as e:
+    except (Plan.MissingCampsError, Plan.InvalidName) as e:
         raise controller_error.ControllerError(str(e))
     except Document.DuplicateKeyError:
         raise controller_error.ControllerError('Duplicate camp names are not allowed.')
