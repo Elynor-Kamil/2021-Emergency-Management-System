@@ -12,7 +12,7 @@ def create_volunteer(username: str,
                      phone: str,
                      camp: Camp) -> Volunteer:
     if camp.plan.is_closed:
-        raise ControllerError(f"Plan {camp.plan.name} is closed.")
+        raise ControllerError(f"Plan {camp.plan.name} is closed")
     try:
         volunteer = Volunteer(username=username, password=password, firstname=firstname, lastname=lastname,
                               phone=phone)

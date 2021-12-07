@@ -49,7 +49,7 @@ class ManageRefugeeMenu(BaseMenu):
                 num_of_family_member = int(input("Enter the number of family members (including the refugee):"))
                 break
             except ValueError:
-                print('Please input a valid integer')
+                print('\033[31m* Please input a valid integer\033[00m')
 
         # STEP 4: handle medical_condition
         print("Enter refugee's medical condition from the list")
@@ -70,7 +70,7 @@ class ManageRefugeeMenu(BaseMenu):
                     r_condition = medical_condition_types[int(condition)]
                     r_conditions.append(r_condition)
                 except (IndexError, ValueError):
-                    print(f'\033[31m* Type {condition} is not on the list.\033[00m')
+                    print(f'\033[31m* "{condition}" is not on the list.\033[00m')
                     break
             else:
                 break
@@ -87,7 +87,7 @@ class ManageRefugeeMenu(BaseMenu):
                 print(f"\033[1m* Please note down refugee ID as it is required when viewing refugee profile.\033[0m\n")
                 return
             except ControllerError as e:
-                print(f'\033[31m* Fail: {e}. '
+                print(f'\033[31m* Failed to create refugee: {e}. '
                       f'Please check and retry.\033[00m')
                 return
 
