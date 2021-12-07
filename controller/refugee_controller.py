@@ -25,19 +25,22 @@ def create_refugee(firstname: str,
     """
     Function to create and save refugee data.
     """
-    try:
-        new_refugee = Refugee(firstname=firstname,
-                              lastname=lastname,
-                              num_of_family_member=num_of_family_member,
-                              starting_date=starting_date,
-                              medical_condition_type=medical_condition_type)
-        camp.refugees.add(new_refugee)
-        return new_refugee
-    except (Refugee.InvalidNameException,
-            Refugee.InvalidNumOfFamilyMemberException,
-            Refugee.InvalidStartingDateException,
-            Refugee.InvalidCampException) as e:
-        raise ControllerError(str(e))
+    if camp.plan.is_closed:
+        raise ControllerError(f"Plan {camp.plan.name} is closed. Please choose another plan.")
+    else:
+        try:
+            new_refugee = Refugee(firstname=firstname,
+                                  lastname=lastname,
+                                  num_of_family_member=num_of_family_member,
+                                  starting_date=starting_date,
+                                  medical_condition_type=medical_condition_type)
+            camp.refugees.add(new_refugee)
+            return new_refugee
+        except (Refugee.InvalidNameException,
+                Refugee.InvalidNumOfFamilyMemberException,
+                Refugee.InvalidStartingDateException,
+                Refugee.InvalidCampException) as e:
+            raise ControllerError(str(e))
 
 
 def find_refugee(refugee_id: int) -> Refugee:
