@@ -10,7 +10,9 @@ class ManagePlanMenu(BaseMenu):
     def do_create_plan(self):
         """Create a plan"""
         print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new emergency plan"))
-        e_name = input("Enter emergency plan name: ")
+        e_name = input("Enter emergency plan name (or press # to exit): ")
+        if e_name == '#':
+            return
         # -- handle emergency type
         print("Enter a emergency type from the list")
         emergency_types = list(plan_controller.list_emergency_types())
@@ -50,7 +52,7 @@ class ManagePlanMenu(BaseMenu):
             print(f"\x1b[6;30;42m success! \x1b[0m\t Plan {e_name} created.")
             return
         except ControllerError:
-            print("\033[31m {}\033[00m".format("** Unable to create an emergency plan. Press R to return and retry."))
+            print("\033[31m {}\033[00m".format("** Unable to create an emergency plan."))
             return
 
     def do_list_plans(self):

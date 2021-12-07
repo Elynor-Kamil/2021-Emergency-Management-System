@@ -36,6 +36,8 @@ class BaseMenu:
         else:
             try:
                 user_input = int(user_input)
+                if user_input < 0:
+                    raise self.InvalidAction
                 return self.menu_items[user_input](self)
             except (IndexError, ValueError):
                 raise self.InvalidAction
