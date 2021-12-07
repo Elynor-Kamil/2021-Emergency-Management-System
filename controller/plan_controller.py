@@ -75,7 +75,7 @@ def view_plan_statistics(plan: Plan) -> str:
         statistics += f"Camp name: '{camp_name}'\n" \
                       f"Number of refugees: {num_of_refugees}\n" \
                       f"Number of volunteers: {num_of_volunteers}\n" \
-                      f"Number of volunteers vs standard: {num_volunteers_vs_standard}\n\n"
+                      f"VS recommended number of volunteers: {num_volunteers_vs_standard:+d}\n\n"
 
     return plan_info + statistics
 
