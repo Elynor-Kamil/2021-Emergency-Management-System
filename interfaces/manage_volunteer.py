@@ -6,7 +6,7 @@ from models.admin import Admin
 
 
 class ManageVolunteerMenu(BaseMenu):
-
+    title = f'\n\033[100m\033[4m\033[1mManage Volunteer Menu\033[0m \n'
     def do_create_volunteer(self):
         """Create a volunteer"""
         print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new volunteer account"))

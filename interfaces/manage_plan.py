@@ -9,7 +9,7 @@ class ManagePlanMenu(BaseMenu):
 
     def do_create_plan(self):
         """Create a plan"""
-        print("\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new emergency plan"))
+        print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Create a new emergency plan"))
         e_name = input("Enter emergency plan name: ")
         # -- handle emergency type
         print("Enter a emergency type from the list")
@@ -18,7 +18,7 @@ class ManagePlanMenu(BaseMenu):
             print(f'[ {i} ] {option.value}')
 
         while True:
-            emergency_input = input("Enter a emergency type number from the list")
+            emergency_input = input("Enter a emergency type number from the list: ")
             try:
                 emergency_id = int(emergency_input)
                 emergency_type = emergency_types[emergency_id]
@@ -38,8 +38,8 @@ class ManagePlanMenu(BaseMenu):
             try:
                 camps = [plan_controller.create_camps(name) for name in camp_names]
                 break
-            except ControllerError:
-                print("\033[31m {}\033[00m".format("** Failed to create camps. Please check and re-enter"))
+            except ControllerError as e:
+                print("\033[31m {}\033[00m".format(f"** Failed to create camps: {e}. \nPlease check and re-enter"))
                 continue
         try:
             plan_controller.create_plan(plan_name=e_name,
@@ -55,8 +55,9 @@ class ManagePlanMenu(BaseMenu):
 
     def do_list_plans(self):
         """List out all the existing plans"""
+        print("\n\033[100m\033[4m\033[1m{}\033[0m ".format("Existing Plans"))
         for plan in plan_controller.list_plans():
-            print(f'Plan "{plan.name}" - {plan.emergency.value}')
+            print(plan)
         return
 
     def do_view_plan(self):
@@ -87,5 +88,5 @@ class ManagePlanMenu(BaseMenu):
                 continue
             plan_controller.close_plan(find_plan)
             print("\x1b[6;30;42m success! \x1b[0m\t")
-            print(f"Plan {plan_name} deleted.")
+            print(f"Plan {plan_name} Closed.")
             return

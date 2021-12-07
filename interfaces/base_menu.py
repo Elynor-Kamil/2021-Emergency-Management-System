@@ -8,6 +8,9 @@ class BaseMenu:
     title = None
     exit_message = None
 
+    class InvalidAction(Exception):
+        pass
+
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         menu_items = []
@@ -27,6 +30,7 @@ class BaseMenu:
             print(f'[ {key} ] {value.__doc__}')
 
     def call_menu_item(self, user_input):
+        user_input = user_input.upper()  # make it case insensitive
         if user_input in self.named_operations():
             return self.named_operations()[user_input](self)
         else:
@@ -34,7 +38,7 @@ class BaseMenu:
                 user_input = int(user_input)
                 return self.menu_items[user_input](self)
             except (IndexError, ValueError):
-                print(f'\033[31m* Invalid input {user_input}. Please enter an option from the menu.\033[00m')
+                raise self.InvalidAction
 
     def exit_menu(self):
         """Exit the menu"""
@@ -51,17 +55,22 @@ class BaseMenu:
         pass
 
     def run(self):
-        if self.welcome_message:
-            print(self.welcome_message)
         if self.before_run():  # return True in before_run to exit menu
             return
         res = None
         while not res:
             if self.title:
                 print(self.title)
+            if self.welcome_message:
+                print(self.welcome_message)
             self.print_menu()
-            item = input(f'({self.user.username}) Select an action: ')
-            res = self.call_menu_item(item)  # return True in function to exit menu
+            while True:
+                item = input(f'({self.user.username}) Select an action: ')
+                try:
+                    res = self.call_menu_item(item)  # return True in function to exit menu
+                    break
+                except self.InvalidAction:
+                    print(f'\033[31m* Invalid input {item}. Please enter an option from the menu.\033[00m')
         if self.exit_message:
             print(self.exit_message)
             return

@@ -6,7 +6,7 @@ from interfaces.base_menu import BaseMenu
 
 class AdminMenu(BaseMenu):
     welcome_message = f'\033[1mWelcome to EMS. Please choose an option to continue:\033[0m'
-    title = f'\n\033[100m\033[4m\033[1mAdmin Menu\033[0m \n'
+    title = f'\n\033[100m\033[4m\033[1mAdmin Menu\033[0m'
 
     @property
     def exit_message(self):
