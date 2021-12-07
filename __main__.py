@@ -1,7 +1,7 @@
-from interfaces.cmd.cli import EmsShell
+from interfaces.login import LoginPage
 from models.admin import Admin
 
 if __name__ == '__main__':
     Admin.configure_initial_user()
 
-    EmsShell().cmdloop()
+    LoginPage().run()
