@@ -57,7 +57,12 @@ def view_plan_statistics(plan: Plan) -> str:
 
     plan_statistics = plan.statistics()
     plan_name = str(plan.name)
-    plan_info = f"\nPlan name: {plan_name}\n"
+    if plan.is_closed:
+        plan_info = f"\nPlan name: '{plan_name}' (closed)\n" \
+                    f"Close Date: '{plan.close_date}'\n"
+    else:
+        plan_info = f"\nPlan name: '{plan_name}'\n"
+
     statistics = ""
 
     for camp in plan_statistics.items():
@@ -89,8 +94,11 @@ def close_plan(plan: Plan):
     Use find_plan in combination with this function when admin requests for a plan to be closed.
     Inputted plan will be changed to read-only by changing the __is_closed flag in Plan class.
     """
-    plan.close()
-    plan.save()
+    if plan.is_closed:
+        raise controller_error.ControllerError(f"Plan {plan.name} is already closed.")
+    else:
+        plan.close()
+        plan.save()
 
 
 def find_camp(plan: Plan, camp_name: str) -> Camp:

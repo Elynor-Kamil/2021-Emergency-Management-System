@@ -23,7 +23,7 @@ class PlanTest(unittest.TestCase):
                     description='Test emergency plan',
                     geographical_area='',
                     camps=[Camp(name='TestCamp')])
-        self.assertEqual("Plan 'My Plan'", str(plan))
+        self.assertEqual("Plan 'My Plan'\nEmergency Type: 'Earthquake'\n", str(plan))
 
     def test_missing_camps(self):
         """

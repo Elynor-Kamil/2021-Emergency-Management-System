@@ -28,6 +28,18 @@ class RefugeeControllerTest(unittest.TestCase):
                                         [Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         self.assertIsInstance(new_refugee, Refugee)
 
+    def test_create_refugee_closed_plan(self):
+        test_camp = Camp(name='camp1')
+        plan = Plan(name='test_plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='London',
+                    camps=[test_camp])
+        plan.close()
+        with self.assertRaises(rc.ControllerError):
+            rc.create_refugee("James", "Bond", test_camp, 6, date(2020, 1, 1),
+                              [Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+
     def test_find_and_return_refugee(self):
         """
         Test case where refugee specified is found in the file.

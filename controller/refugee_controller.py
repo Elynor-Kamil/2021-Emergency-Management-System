@@ -25,6 +25,8 @@ def create_refugee(firstname: str,
     """
     Function to create and save refugee data.
     """
+    if camp.plan.is_closed:
+        raise ControllerError(f"Plan {camp.plan.name} is closed. Please choose another plan.")
     try:
         new_refugee = Refugee(firstname=firstname,
                               lastname=lastname,

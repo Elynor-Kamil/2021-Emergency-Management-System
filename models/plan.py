@@ -86,7 +86,13 @@ class Plan(IndexedDocument):
         return self.__start_date  # Name mangling to access private field
 
     def __str__(self):
-        return f"Plan '{self.name}'"
+        if self.__is_closed:
+            return f"Plan: '{self.name}' (closed)\n" \
+                   f"Emergency Type: '{self.emergency.value.capitalize()}'\n" \
+                   f"Close Date: '{self.__close_date}'"
+        else:
+            return f"Plan '{self.name}'\n" \
+                   f"Emergency Type: '{self.emergency.value.capitalize()}'\n"
 
     def open_camps(self, *camps: Camp) -> None:
         """

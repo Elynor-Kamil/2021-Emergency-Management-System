@@ -32,6 +32,19 @@ class TestVolunteerController(unittest.TestCase):
                                         phone='+447519953189', camp=camp)
         self.assertIsInstance(volunteer, Volunteer)
 
+    def test_create_volunteer_closed_plan(self):
+        camp_4 = Camp(name='Camp-4')
+        plan = Plan(name='Plan-3',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test',
+                    geographical_area='',
+                    camps=[camp_4])
+        plan.close()
+        camp = Plan.find(key='Plan-3').camps.get('Camp-4')
+        with self.assertRaises(vc.ControllerError):
+            vc.create_volunteer(username='den', password='root', firstname='Dennis', lastname='Yung',
+                                phone='+447519953189', camp=camp)
+
     def test_create_volunteer_invalid_username(self):
         camp = Plan.find(key='Plan-1').camps.get('Camp-1')
         with self.assertRaises(vc.ControllerError):
@@ -150,6 +163,19 @@ class TestVolunteerController(unittest.TestCase):
         camp = Plan.find(key='Plan-1').camps.get('Camp-2')
         volunteer = vc.edit_camp(volunteer=volunteer, camp=camp, is_admin=False)
         self.assertEqual(str(volunteer.camp), 'Camp-2')
+
+    def test_edit_camp_closed_plan(self):
+        volunteer = Volunteer.find('yunsy')
+        camp_4 = Camp(name='Camp-4')
+        plan = Plan(name='Plan-3',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test',
+                    geographical_area='',
+                    camps=[camp_4])
+        plan.close()
+        camp = Plan.find(key='Plan-3').camps.get('Camp-4')
+        with self.assertRaises(vc.ControllerError):
+            vc.edit_camp(volunteer=volunteer, camp=camp, is_admin=True)
 
     def test_edit_camp_under_different_plan_by_volunteer(self):
         volunteer = Volunteer.find('yunsy')

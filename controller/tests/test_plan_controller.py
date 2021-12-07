@@ -12,6 +12,7 @@ import controller.plan_controller as pc
 class PlanControllerTest(unittest.TestCase):
     def setUp(self):
         Plan.delete_all()
+        Volunteer.delete_all()
 
     def test_close_plan_controller(self):
         """
@@ -24,6 +25,19 @@ class PlanControllerTest(unittest.TestCase):
                     camps=[Camp(name='TestCamp')])
         pc.close_plan(plan)
         self.assertTrue(plan.is_closed)
+
+    def test_closed_plan_error_controller(self):
+        """
+        Test that if a plan is already closed then you cannot close it again.
+        """
+        plan = Plan(name='My Plan',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='',
+                    camps=[Camp(name='TestCamp')])
+        pc.close_plan(plan)
+        with self.assertRaises(pc.controller_error.ControllerError):
+            pc.close_plan(plan)
 
     def test_initialised_plan_no_close_date(self):
         """
@@ -40,7 +54,6 @@ class PlanControllerTest(unittest.TestCase):
         """
         Test plan closure date is set to today's date when plan is closed.
         """
-        self.setUp()
         plan = Plan(name='My Plan',
                     emergency_type=Plan.EmergencyType.EARTHQUAKE,
                     description='Test emergency plan',
@@ -139,22 +152,22 @@ class PlanControllerTest(unittest.TestCase):
         expected = [Plan.find('First Plan'), Plan.find('Second Plan'), Plan.find('Third Plan')]
         self.assertListEqual(expected, pc.list_plans())
 
-    def test_view_plan_statistics_returns_str(self):
+    def test_view_open_plan_statistics_returns_str(self):
         """
         Test to confirm that view_plan_statistics function returns str
         when it combines intermediate variables statistics and plan_info.
         :return: str
         """
-        Plan(name='test_plan1',
-             emergency_type=Plan.EmergencyType.EARTHQUAKE,
-             description='Test emergency plan',
-             geographical_area='London',
-             camps=[Camp(name='camp1')])
-        volunteer_a = Volunteer(username='yunsy', password='root', firstname='Yunsy', lastname='Yin',
+        plan = Plan(name='test_plan1',
+                    emergency_type=Plan.EmergencyType.EARTHQUAKE,
+                    description='Test emergency plan',
+                    geographical_area='London',
+                    camps=[Camp(name='camp1')])
+        volunteer_a = Volunteer(username='shalaka', password='root', firstname='Shalaka', lastname='Yerawadekar',
                                 phone='+447519953189')
-        volunteer_b = Volunteer(username='paul', password='root', firstname='Paul', lastname='Shoemaker',
+        volunteer_b = Volunteer(username='shal', password='root', firstname='John', lastname='Shoemaker',
                                 phone='+447519955439')
-        volunteer_c = Volunteer(username='gerald', password='root', firstname='Gerald', lastname='Smith',
+        volunteer_c = Volunteer(username='shalakay', password='root', firstname='Elle', lastname='Smith',
                                 phone='+447511111111')
         test_plan = Plan.find('test_plan1')
         test_camp = test_plan.camps.get('camp1')
@@ -165,6 +178,36 @@ class PlanControllerTest(unittest.TestCase):
                            starting_date=date(2020, 1, 2),
                            medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
         test_camp.refugees.add(refugee1)
+        test_view_plan_statistics = pc.view_plan_statistics(test_plan)
+        self.assertEqual(type(test_view_plan_statistics), str)
+
+    def test_view_closed_plan_statistics_returns_str(self):
+        """
+        Test to confirm that view_plan_statistics function returns str
+        when it combines intermediate variables statistics and plan_info.
+        :return: str
+        """
+        Plan(name='test_plan1',
+             emergency_type=Plan.EmergencyType.EARTHQUAKE,
+             description='Test emergency plan',
+             geographical_area='London',
+             camps=[Camp(name='camp1')])
+        volunteer_a = Volunteer(username='shalaka', password='root', firstname='Shalaka', lastname='Yerawadekar',
+                                phone='+447519953189')
+        volunteer_b = Volunteer(username='shal', password='root', firstname='John', lastname='Shoemaker',
+                                phone='+447519955439')
+        volunteer_c = Volunteer(username='shalakay', password='root', firstname='Elle', lastname='Smith',
+                                phone='+447511111111')
+        test_plan = Plan.find('test_plan1')
+        test_camp = test_plan.camps.get('camp1')
+        test_camp.volunteers.add(volunteer_a, volunteer_b, volunteer_c)
+        refugee1 = Refugee(firstname="Tom",
+                           lastname="Bond",
+                           num_of_family_member=600,
+                           starting_date=date(2020, 1, 2),
+                           medical_condition_type=[Refugee.MedicalCondition.HIV, Refugee.MedicalCondition.CANCER])
+        test_camp.refugees.add(refugee1)
+        pc.close_plan(test_plan)
         test_view_plan_statistics = pc.view_plan_statistics(test_plan)
         self.assertEqual(type(test_view_plan_statistics), str)
 
@@ -186,3 +229,11 @@ class PlanControllerTest(unittest.TestCase):
                     camps=[camp])
         with self.assertRaises(ControllerError):
             pc.find_camp(plan, 'NonExistentCamp')
+
+    def tearDown(self):
+        """
+        Function to delete stored data after a test has finished running
+        to avoid corrupting other tests
+        """
+        Plan.delete_all()
+        Volunteer.delete_all()
